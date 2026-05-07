@@ -19,11 +19,13 @@ Use this checklist before tagging or publishing `v0.1.0`.
 - [ ] Open `./Open-Threadsmith-App.command` and confirm the front door loads, explains the daily entry path, and still makes first-run connection understandable
 - [ ] Open `./Launch-Threadsmith.command "/path/to/project"` and confirm explicit project entry still works
 - [ ] Confirm README screenshot still matches the current product surface
+- [ ] Fresh clone the public repository and confirm `npm ci`, `npm run test`, `npm run build`, and `npm run verify:launchers` pass
 
 ## Release Artifacts
 
 - [ ] `CHANGELOG.md` includes `v0.1.0`
 - [ ] `docs/releases/threadsmith-v0.1.0.md` is ready to reuse as GitHub release copy
+- [ ] `docs/releases/public-sync-strategy.md` explains how the private working repo exports to the public release repo
 - [ ] `README.md` points to the current `Codex-only` release surface honestly, including default routing and product boundary
 - [ ] `docs/guides/usage-and-llm-configuration.md` explains launch modes, daily workflow, truth writeback, and current LLM/provider limits
 - [ ] `docs/architecture/threadsmith-truth-boundary.md` still matches the current `.threadsmith` boundary

@@ -1,5 +1,5 @@
 {
-  "currentClaim": "Threadsmith 已完成 public web release v0.1：独立 public snapshot 已发布到 Teddy-creator/threadsmith-control-deck，v0.1.0 tag 与 GitHub Release 已创建；当前 private repo 保持私有。",
+  "currentClaim": "Threadsmith 已完成 public web release v0.1 与 post-release fresh-clone smoke：独立 public repo 已发布，新用户 clone 后可完成安装、测试、构建和 launcher dry-run；private/public 同步策略已记录。",
   "doneWhenChecklist": [
     {
       "id": "internal-docs-untracked",
@@ -25,6 +25,16 @@
       "id": "verification-green",
       "label": "测试、构建、E2E、launcher 验证与 self-host smoke 均通过",
       "status": "pass"
+    },
+    {
+      "id": "fresh-clone-smoke",
+      "label": "public repo fresh clone 后 npm ci / test / build / launcher dry-run 通过",
+      "status": "pass"
+    },
+    {
+      "id": "sync-strategy-documented",
+      "label": "private working repo 到 public release repo 的同步策略已记录",
+      "status": "pass"
     }
   ],
   "implementationStatus": "ready-for-review",
@@ -32,7 +42,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "后续需要决定 private working repo 与 public release repo 的长期同步策略。"
+    "长期是否转向 public repo 主开发仍未决定；当前推荐继续 private working repo -> public snapshot。"
   ],
   "finalState": "accepted"
 }

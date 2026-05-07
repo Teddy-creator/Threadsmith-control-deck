@@ -42,6 +42,7 @@ Threadsmith 是一个面向 AI coding workflow 的 **web control deck**。
 - Changelog: [CHANGELOG.md](CHANGELOG.md)
 - Release notes: [docs/releases/threadsmith-v0.1.0.md](docs/releases/threadsmith-v0.1.0.md)
 - Release checklist: [docs/checklists/release-v0.1.0.md](docs/checklists/release-v0.1.0.md)
+- Public sync strategy: [docs/releases/public-sync-strategy.md](docs/releases/public-sync-strategy.md)
 - Usage and LLM configuration: [docs/guides/usage-and-llm-configuration.md](docs/guides/usage-and-llm-configuration.md)
 - Truth boundary: [docs/architecture/threadsmith-truth-boundary.md](docs/architecture/threadsmith-truth-boundary.md)
 
