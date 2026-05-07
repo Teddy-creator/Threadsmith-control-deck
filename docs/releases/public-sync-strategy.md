@@ -3,7 +3,7 @@
 Threadsmith currently uses two repositories on purpose:
 
 - private working repository: `Teddy-creator/Threadsmith`
-- public release repository: `Teddy-creator/threadsmith-control-deck`
+- public release repository: `Teddy-creator/Threadsmith-control-deck`
 
 The private repository remains the development workspace. The public repository is a clean release surface with a fresh public history.
 
@@ -26,7 +26,7 @@ The public repository should stay boring:
 3. Export a clean snapshot into a separate public repository directory.
 4. Reinitialize or update the public repository from that snapshot.
 5. Run the public release verification matrix from the public snapshot.
-6. Push `main` to `Teddy-creator/threadsmith-control-deck`.
+6. Push `main` to `Teddy-creator/Threadsmith-control-deck`.
 7. Tag and publish releases from the public repository.
 8. Keep the private repository private.
 
@@ -88,7 +88,7 @@ After pushing public `main`, verify the public user path from a clean clone:
 
 ```bash
 rm -rf /tmp/threadsmith-public-fresh-smoke
-git clone https://github.com/Teddy-creator/threadsmith-control-deck.git /tmp/threadsmith-public-fresh-smoke
+git clone https://github.com/Teddy-creator/Threadsmith-control-deck.git /tmp/threadsmith-public-fresh-smoke
 cd /tmp/threadsmith-public-fresh-smoke
 npm ci
 npm run test

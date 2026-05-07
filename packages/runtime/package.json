@@ -6,11 +6,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Teddy-creator/threadsmith-control-deck.git"
+    "url": "git+https://github.com/Teddy-creator/Threadsmith-control-deck.git"
   },
-  "homepage": "https://github.com/Teddy-creator/threadsmith-control-deck#readme",
+  "homepage": "https://github.com/Teddy-creator/Threadsmith-control-deck#readme",
   "bugs": {
-    "url": "https://github.com/Teddy-creator/threadsmith-control-deck/issues"
+    "url": "https://github.com/Teddy-creator/Threadsmith-control-deck/issues"
   },
   "type": "module",
   "exports": "./src/index.ts",

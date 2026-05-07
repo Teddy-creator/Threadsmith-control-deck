@@ -18,8 +18,8 @@ Threadsmith 是一个本地运行的 web control deck。它负责展示和维护
 安装依赖：
 
 ```bash
-git clone https://github.com/Teddy-creator/threadsmith-control-deck.git
-cd threadsmith-control-deck
+git clone https://github.com/Teddy-creator/Threadsmith-control-deck.git
+cd Threadsmith-control-deck
 npm ci
 ```
 
