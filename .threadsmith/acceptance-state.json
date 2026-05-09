@@ -4,31 +4,31 @@
     {
       "id": "skill-v2-entry",
       "label": "SKILL.md 明确 sync / drive / recover 三种入口",
-      "status": "passed"
+      "status": "pass"
     },
     {
       "id": "runtime-contract",
       "label": "runtime contract 明确 Context Packet / Role Packet 优先级",
-      "status": "passed"
+      "status": "pass"
     },
     {
       "id": "role-contracts",
       "label": "role contracts 声明 required inputs / allowed writes / forbidden writes / completion artifacts",
-      "status": "passed"
+      "status": "pass"
     },
     {
       "id": "action-contracts",
       "label": "action contracts 覆盖 sync / drive / recover / stop-and-ask / writeback failure",
-      "status": "passed"
+      "status": "pass"
     },
     {
       "id": "installed-skill-sync",
       "label": "repo skill 已同步到本机 /Users/cloud/.codex/skills/threadsmith",
-      "status": "passed"
+      "status": "pass"
     }
   ],
-  "implementationStatus": "done",
-  "reviewStatus": "passed",
+  "implementationStatus": "ready-for-review",
+  "reviewStatus": "ready-for-verification",
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
