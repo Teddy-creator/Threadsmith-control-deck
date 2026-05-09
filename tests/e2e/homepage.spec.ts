@@ -95,7 +95,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   const inspectorPanel = page.locator(".inspector-panel");
   await expect(inspectorPanel.getByText("项目工作台")).toBeVisible();
   await expect(
-    inspectorPanel.getByText(/Threadsmith v0\.2\.0 Context OS 已完成.*Control Deck Context Surface v1 本地验收/)
+    inspectorPanel.getByText(/Threadsmith v0\.2\.0 Context OS 已完成.*Context sync action surface 本地验收/)
   ).toBeVisible();
   await expect(
     inspectorPanel.getByRole("combobox", { name: "指挥入口" })
@@ -105,14 +105,14 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("阶段工作台", { exact: true })).toBeVisible();
   await expect(inspectorPanel.getByRole("heading", { name: "Context 状态" })).toBeVisible();
   await expect(
-    inspectorPanel.getByText("Control Deck Context Surface v1").first()
+    inspectorPanel.getByText("Context sync action surface").first()
   ).toBeVisible();
 
   await page.getByRole("button", { name: "验收", exact: true }).click();
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "Threadsmith v0.2.0 Control Deck Context Surface v1 is implemented: contextRecovery is visible on the homepage and phase workbench without changing the overall visual system."
+      "Threadsmith v0.2.0 Context sync action surface is implemented: Context 状态 now explains how to handle recovery signals and can open backed hygiene / handoff action previews without pretending sync-context has a true regeneration engine."
     ).first()
   ).toBeVisible();
 });
