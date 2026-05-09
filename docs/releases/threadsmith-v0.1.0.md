@@ -22,6 +22,20 @@ Install dependencies:
 npm ci
 ```
 
+Start on any platform:
+
+```bash
+npm run start
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5173/?appHome=1
+```
+
+On macOS, you can also use the launcher shortcuts.
+
 Open the normal launcher:
 
 ```bash
@@ -39,6 +53,8 @@ Open a specific project directly:
 ```bash
 ./Launch-Threadsmith.command "/path/to/your-project"
 ```
+
+Windows / Linux users should use the `npm run start` path and connect projects from the front door.
 
 ## Recommended Usage
 

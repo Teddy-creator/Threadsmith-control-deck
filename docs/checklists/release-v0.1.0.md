@@ -11,15 +11,20 @@ Use this checklist before tagging or publishing `v0.1.0`.
 - [ ] `npm run test:e2e`
 - [ ] `npm run verify:launchers`
 - [ ] `npm run verify:release`
+- [ ] `git diff --check`
 
 ## Manual Environment-dependent Checks
 
+- [ ] Confirm [LICENSE](../../LICENSE) exists and README points to the MIT license
+- [ ] Fresh clone the public repository and confirm `npm ci`, `npm run test`, `npm run build`, and `npm run verify:launchers` pass
+- [ ] In a fresh clone, run `npm run start`, open the front door, then stop the dev server manually
+- [ ] Open `http://127.0.0.1:5173/?appHome=1` after `npm run start` and confirm the cross-platform front door works
+- [ ] If testing on Windows / Linux, confirm the npm startup path works without macOS `.command` files
 - [ ] `npm run smoke:self-host`
   Default runs inside an isolated runtime workspace; use `npm run smoke:self-host -- .` only if you intentionally want smoke to touch the current project root truth.
 - [ ] Open `./Open-Threadsmith-App.command` and confirm the front door loads, explains the daily entry path, and still makes first-run connection understandable
 - [ ] Open `./Launch-Threadsmith.command "/path/to/project"` and confirm explicit project entry still works
 - [ ] Confirm README screenshot still matches the current product surface
-- [ ] Fresh clone the public repository and confirm `npm ci`, `npm run test`, `npm run build`, and `npm run verify:launchers` pass
 
 ## Release Artifacts
 
