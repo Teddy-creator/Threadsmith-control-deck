@@ -23,20 +23,32 @@ npm ci
 
 ## 本地启动
 
+跨平台启动：
+
+```bash
+npm run start
+```
+
+然后打开：
+
+```text
+http://127.0.0.1:5173/?appHome=1
+```
+
 开发 control deck：
 
 ```bash
 npm run dev
 ```
 
-使用产品入口：
+macOS 使用产品入口：
 
 ```bash
 ./Launch-Threadsmith.command
 ./Open-Threadsmith-App.command
 ```
 
-显式打开某个项目：
+macOS 显式打开某个项目：
 
 ```bash
 ./Launch-Threadsmith.command "/path/to/your-project"

@@ -28,6 +28,7 @@
     "packages/*"
   ],
   "scripts": {
+    "start": "npm run dev --workspace @threadsmith/control-deck -- --host 127.0.0.1 --port 5173",
     "dev": "npm run dev --workspace @threadsmith/control-deck",
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",

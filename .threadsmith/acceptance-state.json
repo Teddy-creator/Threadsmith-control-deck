@@ -1,40 +1,35 @@
 {
-  "currentClaim": "Threadsmith public repo open-source surface is ready: issue and PR templates, SECURITY.md, CODE_OF_CONDUCT.md, README open-source入口, CONTRIBUTING guidance, public snapshot sync, and release verification are complete.",
+  "currentClaim": "Threadsmith open-source onboarding polish has a focused branch: cross-platform npm startup, macOS launcher guidance, $threadsmith boundary docs, release notes, contributing docs, and release checklist are aligned for human review before merge.",
   "doneWhenChecklist": [
     {
-      "id": "internal-docs-untracked",
-      "label": "内部过程文档已从公开 tracked surface 移除并加入忽略",
+      "id": "branch-created",
+      "label": "从 main 开 release/open-source-onboarding-polish 分支，不直接改 main",
       "status": "pass"
     },
     {
-      "id": "runtime-artifacts-untracked",
-      "label": "committed .threadsmith 不再跟踪 bridge 草稿、phase-reset 草稿或旧运行痕迹",
+      "id": "cross-platform-start",
+      "label": "新增并验证跨平台 npm run start 路径",
       "status": "pass"
     },
     {
-      "id": "public-copy-honest",
-      "label": "README、release notes、changelog 与 checklist 使用 web control deck / front door 的准确边界",
+      "id": "docs-aligned",
+      "label": "README、usage guide、release notes、CONTRIBUTING 与 release checklist 对齐新用户上手路径",
       "status": "pass"
     },
     {
-      "id": "sensitive-scan-clean",
-      "label": "tracked 文件敏感信息与本地路径扫描通过",
+      "id": "skill-boundary-clear",
+      "label": "$threadsmith skill 的使用边界与无 skill 时的可用范围已说明",
       "status": "pass"
     },
     {
-      "id": "verification-green",
-      "label": "测试、构建、E2E、launcher 验证与 self-host smoke 均通过",
+      "id": "lightweight-verification",
+      "label": "git diff check、unit tests、build、launcher verification 与 npm start smoke 通过",
       "status": "pass"
     },
     {
-      "id": "fresh-clone-smoke",
-      "label": "public repo fresh clone 后 npm ci / test / build / launcher dry-run 通过",
-      "status": "pass"
-    },
-    {
-      "id": "sync-strategy-documented",
-      "label": "private working repo 到 public release repo 的同步策略已记录",
-      "status": "pass"
+      "id": "human-review",
+      "label": "README Quick Start 仍需用户人眼验收后再 squash/merge 到 main",
+      "status": "unknown"
     }
   ],
   "implementationStatus": "ready-for-review",
