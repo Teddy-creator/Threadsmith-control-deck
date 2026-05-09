@@ -95,7 +95,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   const inspectorPanel = page.locator(".inspector-panel");
   await expect(inspectorPanel.getByText("项目工作台")).toBeVisible();
   await expect(
-    inspectorPanel.getByText(/v0\.2\.0 Context OS 主线/)
+    inspectorPanel.getByText(/v0\.2\.0 Context OS 的第一块地基/)
   ).toBeVisible();
   await expect(
     inspectorPanel.getByRole("combobox", { name: "指挥入口" })
@@ -111,7 +111,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "Threadsmith v0.2.0 Context Packet v1 is accepted locally: schema, builder, persistence API, runtime artifact boundary, full workspace tests, and build all pass."
+      "Threadsmith v0.2.0 Context Packet v1 is accepted on main: schema, builder, persistence API, runtime artifact boundary, PR review/merge, and main CI all pass."
     ).first()
   ).toBeVisible();
 });
