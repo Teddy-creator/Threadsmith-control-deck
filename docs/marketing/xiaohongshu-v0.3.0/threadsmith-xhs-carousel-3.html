@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Threadsmith Xiaohongshu 3-Image Carousel</title>
+    <style>
+      :root {
+        --ink: #211914;
+        --soft-ink: rgba(33, 25, 20, 0.7);
+        --muted: rgba(33, 25, 20, 0.52);
+        --paper: #f8efe1;
+        --cream: #fff9ee;
+        --orange: #f26a2e;
+        --gold: #ffb547;
+        --blue: #3768d2;
+        --green: #477b55;
+        --purple: #7256c8;
+        --line: rgba(53, 39, 28, 0.14);
+        --shadow: 0 28px 90px rgba(72, 50, 29, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #e8dece;
+        color: var(--ink);
+        font-family:
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Microsoft YaHei",
+          "Noto Sans CJK SC",
+          sans-serif;
+      }
+
+      .serif {
+        font-family:
+          "Songti SC",
+          "STSong",
+          "Noto Serif CJK SC",
+          "PingFang SC",
+          serif;
+      }
+
+      .stage {
+        display: grid;
+        grid-template-columns: repeat(3, 1080px);
+        gap: 44px;
+        padding: 44px;
+      }
+
+      .slide {
+        position: relative;
+        width: 1080px;
+        height: 1440px;
+        overflow: hidden;
+        border-radius: 64px;
+        background:
+          radial-gradient(circle at 10% 12%, rgba(255, 181, 71, 0.42), transparent 30%),
+          radial-gradient(circle at 102% 0%, rgba(55, 104, 210, 0.16), transparent 34%),
+          linear-gradient(145deg, #fff8ea 0%, #f5e6d0 56%, #ead6bc 100%);
+        box-shadow: var(--shadow);
+      }
+
+      .slide::before {
+        content: "";
+        position: absolute;
+        inset: 28px;
+        border: 1px solid rgba(50, 36, 25, 0.14);
+        border-radius: 46px;
+        pointer-events: none;
+      }
+
+      .slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.18;
+        background-image:
+          linear-gradient(rgba(80, 55, 34, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(80, 55, 34, 0.035) 1px, transparent 1px);
+        background-size: 44px 44px;
+        pointer-events: none;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        padding: 88px 86px 72px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        width: fit-content;
+        padding: 12px 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(242, 106, 46, 0.26);
+        background: rgba(255, 249, 238, 0.62);
+        color: #9b4b26;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+
+      .spark {
+        width: 13px;
+        height: 13px;
+        border-radius: 999px;
+        background: var(--orange);
+        box-shadow: 0 0 0 8px rgba(242, 106, 46, 0.13);
+      }
+
+      .brand {
+        margin-top: 52px;
+        color: var(--orange);
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        max-width: 860px;
+        font-family:
+          "Songti SC",
+          "STSong",
+          "Noto Serif CJK SC",
+          "PingFang SC",
+          serif;
+        font-weight: 700;
+        letter-spacing: 0.025em;
+      }
+
+      h1 {
+        margin-top: 34px;
+        font-size: 83px;
+        line-height: 1.13;
+      }
+
+      h2 {
+        margin-top: 42px;
+        font-size: 70px;
+        line-height: 1.14;
+      }
+
+      .subhead {
+        margin: 28px 0 0;
+        max-width: 760px;
+        color: var(--soft-ink);
+        font-size: 31px;
+        line-height: 1.56;
+        font-weight: 650;
+        letter-spacing: 0.015em;
+      }
+
+      .hero-visual {
+        position: relative;
+        margin-top: 56px;
+        height: 560px;
+      }
+
+      .orbit {
+        position: absolute;
+        inset: 0;
+        border-radius: 44px;
+        border: 1px solid rgba(33, 25, 20, 0.1);
+        background:
+          linear-gradient(180deg, rgba(255, 249, 238, 0.76), rgba(255, 249, 238, 0.28)),
+          radial-gradient(circle at 22% 20%, rgba(242, 106, 46, 0.16), transparent 28%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      .truth-core {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 300px;
+        height: 300px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #211914;
+        color: #fff3df;
+        box-shadow: 0 28px 80px rgba(33, 25, 20, 0.32);
+        text-align: center;
+      }
+
+      .truth-core strong {
+        display: block;
+        font-family:
+          "Songti SC",
+          "STSong",
+          "PingFang SC",
+          serif;
+        font-size: 45px;
+        line-height: 1.12;
+        letter-spacing: 0.045em;
+      }
+
+      .truth-core span {
+        display: block;
+        margin-top: 12px;
+        color: rgba(255, 243, 223, 0.66);
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .bubble {
+        position: absolute;
+        min-width: 204px;
+        padding: 19px 22px;
+        border-radius: 26px;
+        background: rgba(255, 249, 238, 0.88);
+        border: 1px solid var(--line);
+        box-shadow: 0 20px 46px rgba(72, 50, 29, 0.13);
+        font-size: 25px;
+        line-height: 1.22;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
+
+      .bubble small {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .b1 {
+        left: 44px;
+        top: 56px;
+      }
+
+      .b2 {
+        right: 44px;
+        top: 80px;
+      }
+
+      .b3 {
+        left: 82px;
+        bottom: 72px;
+      }
+
+      .b4 {
+        right: 78px;
+        bottom: 52px;
+      }
+
+      .mini-screen {
+        margin-top: 30px;
+        border-radius: 34px;
+        overflow: hidden;
+        border: 8px solid rgba(255, 255, 255, 0.72);
+        box-shadow: 0 22px 64px rgba(58, 39, 23, 0.2);
+        background: #090909;
+      }
+
+      .mini-screen img {
+        width: 100%;
+        display: block;
+      }
+
+      .pain-grid {
+        margin-top: 58px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .pain {
+        min-height: 126px;
+        display: grid;
+        grid-template-columns: 74px 1fr;
+        gap: 20px;
+        align-items: center;
+        padding: 24px;
+        border-radius: 30px;
+        background: rgba(255, 249, 238, 0.78);
+        border: 1px solid var(--line);
+      }
+
+      .mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 19px;
+        display: grid;
+        place-items: center;
+        color: white;
+        font-size: 27px;
+        font-weight: 900;
+      }
+
+      .orange {
+        background: var(--orange);
+      }
+
+      .blue {
+        background: var(--blue);
+      }
+
+      .green {
+        background: var(--green);
+      }
+
+      .purple {
+        background: var(--purple);
+      }
+
+      .pain strong {
+        display: block;
+        font-size: 31px;
+        line-height: 1.24;
+        letter-spacing: 0.015em;
+      }
+
+      .pain span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 23px;
+        line-height: 1.4;
+        font-weight: 650;
+      }
+
+      .callout {
+        margin-top: 42px;
+        padding: 34px 40px;
+        border-radius: 34px;
+        background: #211914;
+        color: #fff2dc;
+        font-family:
+          "Songti SC",
+          "STSong",
+          "PingFang SC",
+          serif;
+        font-size: 40px;
+        line-height: 1.26;
+        letter-spacing: 0.035em;
+        font-weight: 700;
+        box-shadow: 0 24px 66px rgba(33, 25, 20, 0.26);
+      }
+
+      .mechanism {
+        margin-top: 56px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .tile {
+        min-height: 238px;
+        padding: 28px;
+        border-radius: 34px;
+        background: rgba(255, 249, 238, 0.76);
+        border: 1px solid var(--line);
+      }
+
+      .tile .mark {
+        margin-bottom: 24px;
+      }
+
+      .tile strong {
+        display: block;
+        font-size: 29px;
+        line-height: 1.18;
+        letter-spacing: 0.01em;
+      }
+
+      .tile span {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 22px;
+        line-height: 1.42;
+        font-weight: 650;
+      }
+
+      .repo-box {
+        margin-top: 44px;
+        padding: 34px;
+        border-radius: 36px;
+        background: #211914;
+        color: #fff3df;
+        box-shadow: 0 24px 66px rgba(33, 25, 20, 0.26);
+      }
+
+      .repo-label {
+        color: rgba(255, 243, 223, 0.58);
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .repo-name {
+        margin-top: 10px;
+        color: #ffd08a;
+        font-size: 36px;
+        line-height: 1.16;
+        letter-spacing: -0.02em;
+        font-weight: 900;
+      }
+
+      .command {
+        margin-top: 22px;
+        padding: 22px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 243, 223, 0.86);
+        font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+        font-size: 21px;
+        line-height: 1.48;
+      }
+
+      .footer {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: rgba(33, 25, 20, 0.45);
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .footer strong {
+        color: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage">
+      <section class="slide" id="slide-1">
+        <div class="content">
+          <div class="kicker"><span class="spark"></span>AI coding workflow</div>
+          <div class="brand">Threadsmith</div>
+          <h1>vibe coding 很爽，但项目越做越乱怎么办？</h1>
+          <p class="subhead">我做了一个开源控制台，把 AI coding 的项目真相从聊天里搬出来。</p>
+          <div class="hero-visual">
+            <div class="orbit"></div>
+            <div class="bubble b1">目标<small>Project Brief</small></div>
+            <div class="bubble b2">阶段<small>Current Phase</small></div>
+            <div class="bubble b3">证据<small>Evidence</small></div>
+            <div class="bubble b4">验收<small>Acceptance</small></div>
+            <div class="truth-core"><div><strong>项目<br />真相层</strong><span>.threadsmith/</span></div></div>
+          </div>
+          <div class="footer"><strong>开源项目</strong><span>01 / 03</span></div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-2">
+        <div class="content">
+          <div class="kicker"><span class="spark"></span>为什么需要它</div>
+          <h2>问题不是 AI 不会写代码，是项目状态太容易散。</h2>
+          <p class="subhead">长线程一多，最先坏掉的往往不是代码，而是上下文、验收和下一步判断。</p>
+          <div class="pain-grid">
+            <div class="pain">
+              <div class="mark orange">1</div>
+              <div><strong>线程越长，背景越脏</strong><span>旧结论混进新判断，agent 开始顺着刚才的话讲。</span></div>
+            </div>
+            <div class="pain">
+              <div class="mark blue">2</div>
+              <div><strong>做到哪一步，只能翻聊天</strong><span>phase、Done when、证据和 closeout 没有稳定落点。</span></div>
+            </div>
+            <div class="pain">
+              <div class="mark green">3</div>
+              <div><strong>它说完成，你一验收还有 bug</strong><span>缺少独立 verification 和 acceptance 的项目视角。</span></div>
+            </div>
+          </div>
+          <div class="callout">Threadsmith 的核心：不是让 AI 记住更多，而是让上下文更干净。</div>
+          <div class="footer"><strong>Context OS</strong><span>02 / 03</span></div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-3">
+        <div class="content">
+          <div class="kicker"><span class="spark"></span>它怎么工作</div>
+          <h2>把长线程，压成角色刚好够用的上下文。</h2>
+          <div class="mechanism">
+            <div class="tile">
+              <div class="mark orange">T</div>
+              <strong>Project Truth</strong>
+              <span>目标、阶段、证据、验收写进 `.threadsmith/`。</span>
+            </div>
+            <div class="tile">
+              <div class="mark blue">C</div>
+              <strong>Context Packet</strong>
+              <span>把长聊天压成当前任务真正需要的信息。</span>
+            </div>
+            <div class="tile">
+              <div class="mark green">R</div>
+              <strong>Role Packet</strong>
+              <span>planner / executor / reviewer 各看各的。</span>
+            </div>
+            <div class="tile">
+              <div class="mark purple">S</div>
+              <strong>Skill Orchestrator</strong>
+              <span>发现本地 skills，缺失时回退到内置小协议。</span>
+            </div>
+          </div>
+          <div class="repo-box">
+            <div class="repo-label">GitHub 已开源</div>
+            <div class="repo-name">Teddy-creator / Threadsmith-control-deck</div>
+            <div class="command">git clone https://github.com/Teddy-creator/Threadsmith-control-deck.git<br />npm ci<br />npm run start</div>
+          </div>
+          <div class="footer"><strong>v0.3.0</strong><span>03 / 03</span></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
