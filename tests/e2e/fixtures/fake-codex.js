@@ -15,6 +15,9 @@ async function exists(filePath) {
   }
 }
 
+const READ_SMOKE_TARGET_COMMAND =
+  "node -e \"process.stdout.write(require('node:fs').readFileSync('smoke-target.txt', 'utf8'))\"";
+
 function getFlagValue(flag) {
   const index = process.argv.indexOf(flag);
   if (index === -1) {
@@ -92,13 +95,13 @@ async function buildLegacyResult({
     await writeFile(smokeTargetPath, `${targetMarker}\n`, "utf8");
     changedFiles.push(relative(projectRoot, smokeTargetPath).replace(/\\/g, "/"));
     verification.push({
-      command: "sed -n '1,40p' smoke-target.txt",
+      command: READ_SMOKE_TARGET_COMMAND,
       status: "passed"
     });
     evidenceRefs.push("smoke-target.txt");
   } else if (await exists(smokeTargetPath)) {
     verification.push({
-      command: "sed -n '1,40p' smoke-target.txt",
+      command: READ_SMOKE_TARGET_COMMAND,
       status: "failed"
     });
     evidenceRefs.push("smoke-target.txt");
@@ -192,9 +195,9 @@ async function buildScenarioResult({
       changedFiles.push(relativeSmokeTargetPath);
     }
 
-    if (!verification.some((item) => item?.command === "sed -n '1,40p' smoke-target.txt")) {
+    if (!verification.some((item) => item?.command === READ_SMOKE_TARGET_COMMAND)) {
       verification.push({
-        command: "sed -n '1,40p' smoke-target.txt",
+        command: READ_SMOKE_TARGET_COMMAND,
         status: "passed"
       });
     }

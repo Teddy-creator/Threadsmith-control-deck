@@ -48,7 +48,7 @@ function resolveSmokeTimeoutMs() {
 }
 
 function buildMarkerVerificationCommand(targetFilePath: string, markerValue: string) {
-  return `grep -Fqx -- ${JSON.stringify(markerValue)} ${JSON.stringify(targetFilePath)}`;
+  return `node -e "const fs=require('node:fs'); process.exit(fs.readFileSync(${JSON.stringify(targetFilePath)}, 'utf8').trim() === ${JSON.stringify(markerValue)} ? 0 : 1)"`;
 }
 
 async function waitForRunCompletion<T>(

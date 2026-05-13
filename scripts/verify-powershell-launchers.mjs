@@ -6,18 +6,38 @@ const launchers = [
   "Open-Threadsmith-App.ps1"
 ];
 
-const pwsh = process.env.THREADSMITH_PWSH_BIN || "pwsh";
-const pwshVersion = spawnSync(pwsh, ["-NoLogo", "-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"], {
-  encoding: "utf8"
-});
+const candidates = process.env.THREADSMITH_PWSH_BIN
+  ? [process.env.THREADSMITH_PWSH_BIN]
+  : ["pwsh", "powershell.exe"];
 
-if (pwshVersion.error || pwshVersion.status !== 0) {
-  console.log("PowerShell launcher syntax check skipped: pwsh was not found.");
-  console.log("Install PowerShell 7+ or set THREADSMITH_PWSH_BIN to enable local .ps1 validation.");
+function findPowerShell() {
+  for (const candidate of candidates) {
+    const version = spawnSync(
+      candidate,
+      ["-NoLogo", "-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"],
+      { encoding: "utf8" }
+    );
+
+    if (!version.error && version.status === 0) {
+      return {
+        command: candidate,
+        version: version.stdout.trim()
+      };
+    }
+  }
+
+  return null;
+}
+
+const powerShell = findPowerShell();
+
+if (!powerShell) {
+  console.log("PowerShell launcher syntax check skipped: no PowerShell executable was found.");
+  console.log("Install PowerShell or set THREADSMITH_PWSH_BIN to enable local .ps1 validation.");
   process.exit(0);
 }
 
-console.log(`PowerShell detected: ${pwshVersion.stdout.trim()}`);
+console.log(`PowerShell detected: ${powerShell.version}`);
 
 for (const launcher of launchers) {
   if (!existsSync(launcher)) {
@@ -26,7 +46,7 @@ for (const launcher of launchers) {
   }
 
   const result = spawnSync(
-    pwsh,
+    powerShell.command,
     [
       "-NoLogo",
       "-NoProfile",
@@ -49,7 +69,7 @@ for (const launcher of launchers) {
 }
 
 const dryRun = spawnSync(
-  pwsh,
+  powerShell.command,
   [
     "-NoLogo",
     "-NoProfile",

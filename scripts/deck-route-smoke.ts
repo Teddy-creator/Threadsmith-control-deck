@@ -108,7 +108,7 @@ async function seedThreadsmithTruth(projectRoot: string) {
     stopCondition:
       "The isolated smoke project has a succeeded latestRoute/latestRun and smoke-target.txt contains the expected marker.",
     verificationForThisPhase: [
-      "sed -n '1,40p' smoke-target.txt"
+      "node -e \"process.stdout.write(require('node:fs').readFileSync('smoke-target.txt', 'utf8'))\""
     ],
     activeOwners: ["executor"],
     blockedBy: []
@@ -187,7 +187,7 @@ async function createIsolatedSmokeProject() {
 
   await seedRepository(projectRoot);
   await seedThreadsmithTruth(projectRoot);
-  process.env.THREADSMITH_CODEX_BIN = fakeCodexPath;
+  process.env.THREADSMITH_CODEX_BIN = `${process.execPath} ${JSON.stringify(fakeCodexPath)}`;
 
   return projectRoot;
 }
