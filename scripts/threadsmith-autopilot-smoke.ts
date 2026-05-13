@@ -41,7 +41,7 @@ const fakeCodexPath = resolve(projectRoot, "tests/e2e/fixtures/fake-codex.js");
 const smokeMarker = "THREADSMITH_SMOKE_OK";
 const createdRoots: string[] = [];
 
-process.env.THREADSMITH_CODEX_BIN ??= fakeCodexPath;
+process.env.THREADSMITH_CODEX_BIN ??= `${process.execPath} ${JSON.stringify(fakeCodexPath)}`;
 process.env.THREADSMITH_CODEX_REASONING_EFFORT ??= "low";
 
 async function createProjectRoot(prefix: string) {

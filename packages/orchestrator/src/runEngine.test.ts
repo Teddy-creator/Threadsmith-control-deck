@@ -82,6 +82,7 @@ async function waitForRunEvent(
 
 afterEach(async () => {
   delete process.env.THREADSMITH_CODEX_REASONING_EFFORT;
+  delete process.env.THREADSMITH_CODEX_BIN;
   await Promise.all(
     createdRoots.splice(0).map(async (projectRoot) => {
       await import("node:fs/promises").then(({ rm }) =>
@@ -271,9 +272,39 @@ describe("startProjectRun", () => {
     );
   });
 
+  it("supports a quoted Codex command override with extra launcher arguments", async () => {
+    const projectRoot = await createProjectRoot();
+    const { child } = createMockChild();
+    const spawnMock = vi.fn(() => child as any);
+    process.env.THREADSMITH_CODEX_BIN =
+      '"C:\\Program Files\\nodejs\\node.exe" "C:\\Tools With Spaces\\fake-codex.js"';
+
+    await startProjectRun({
+      projectRoot,
+      role: "executor",
+      provider: "codex",
+      runId: "run-command-override",
+      startedAt: "2026-04-09T00:05:00.000Z",
+      spawnProcess: spawnMock as any
+    });
+
+    expect(spawnMock).toHaveBeenCalledWith(
+      "C:\\Program Files\\nodejs\\node.exe",
+      expect.arrayContaining([
+        "C:\\Tools With Spaces\\fake-codex.js",
+        "exec",
+        "--cd",
+        projectRoot
+      ]),
+      expect.objectContaining({
+        cwd: projectRoot
+      })
+    );
+  });
+
   it("classifies fallback verification success as reporting-stage failure when codex closes without JSON", async () => {
     const projectRoot = await createProjectRoot();
-    await setPhaseVerification(projectRoot, ["printf smoke-ok"]);
+    await setPhaseVerification(projectRoot, ["node -e \"process.stdout.write('smoke-ok')\""]);
     const { child, emit } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
 
@@ -304,11 +335,10 @@ describe("startProjectRun", () => {
     expect(result.failureKind).toBe("rate-limit");
     expect(result.summary).toContain("任务主体已完成");
     expect(result.verification).toEqual([
-      {
-        command: "printf smoke-ok",
-        status: "passed",
-        summary: "smoke-ok"
-      }
+      expect.objectContaining({
+        command: "node -e \"process.stdout.write('smoke-ok')\"",
+        status: "passed"
+      })
     ]);
 
     await waitForRunEvent(

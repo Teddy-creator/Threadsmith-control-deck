@@ -3,10 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 
 const e2ePort = process.env.THREADSMITH_E2E_PORT ?? "4174";
 const e2eBaseUrl = `http://127.0.0.1:${e2ePort}`;
-process.env.THREADSMITH_CODEX_BIN ??= resolve(
-  process.cwd(),
-  "tests/e2e/fixtures/fake-codex.js"
-);
+process.env.THREADSMITH_CODEX_BIN ??= `${process.execPath} ${JSON.stringify(
+  resolve(process.cwd(), "tests/e2e/fixtures/fake-codex.js")
+)}`;
 
 export default defineConfig({
   testDir: "./tests/e2e",

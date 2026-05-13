@@ -35,6 +35,62 @@ export interface CodexCliLaunch {
   resultAppliedByLauncher?: boolean;
 }
 
+function splitCommandLine(value: string) {
+  const parts: string[] = [];
+  let current = "";
+  let quote: "'" | "\"" | null = null;
+
+  for (const char of value.trim()) {
+    if (quote) {
+      if (char === quote) {
+        quote = null;
+      } else {
+        current += char;
+      }
+      continue;
+    }
+
+    if (char === "'" || char === "\"") {
+      quote = char;
+      continue;
+    }
+
+    if (/\s/.test(char)) {
+      if (current) {
+        parts.push(current);
+        current = "";
+      }
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (current) {
+    parts.push(current);
+  }
+
+  return parts;
+}
+
+function resolveCodexCommand() {
+  const override = process.env.THREADSMITH_CODEX_BIN?.trim();
+
+  if (!override) {
+    return {
+      command: DEFAULT_CODEX_COMMAND,
+      args: [] as string[]
+    };
+  }
+
+  const [command, ...args] = splitCommandLine(override);
+
+  return {
+    command: command || DEFAULT_CODEX_COMMAND,
+    args
+  };
+}
+
 function readOptionalConfigOverrideArgs() {
   const reasoningEffort = process.env.THREADSMITH_CODEX_REASONING_EFFORT?.trim();
 
@@ -467,8 +523,7 @@ export async function launchCodexCliExecutor(
   const startedAt = options.startedAt ?? new Date().toISOString();
   const runDir = getRunDir(packet.projectRoot, packet.runId);
   const prompt = renderRolePrompt(packet);
-  const codexCommand =
-    process.env.THREADSMITH_CODEX_BIN?.trim() || DEFAULT_CODEX_COMMAND;
+  const codexCommand = resolveCodexCommand();
   const configOverrideArgs = readOptionalConfigOverrideArgs();
   const schemaPath = join(runDir, OUTPUT_SCHEMA_FILE_NAME);
   const resultPath = getRunFilePath(packet.projectRoot, packet.runId, AGENT_RUN_FILES.result);
@@ -493,30 +548,56 @@ export async function launchCodexCliExecutor(
     rejectCompletion = reject;
   });
 
-  const child = spawnProcess(
-    codexCommand,
-    [
-      "exec",
-      ...configOverrideArgs,
-      "--cd",
-      packet.projectRoot,
-      // Threadsmith can launch executor runs against connected project roots
-      // that are outside Codex's trusted repo list, including disposable smoke
-      // projects, so the bridge must opt into this explicitly.
-      "--skip-git-repo-check",
-      "--full-auto",
-      "--output-schema",
-      schemaPath,
-      "--output-last-message",
+  let child: ReturnType<SpawnProcess>;
+
+  try {
+    child = spawnProcess(
+      codexCommand.command,
+      [
+        ...codexCommand.args,
+        "exec",
+        ...configOverrideArgs,
+        "--cd",
+        packet.projectRoot,
+        // Threadsmith can launch executor runs against connected project roots
+        // that are outside Codex's trusted repo list, including disposable smoke
+        // projects, so the bridge must opt into this explicitly.
+        "--skip-git-repo-check",
+        "--full-auto",
+        "--output-schema",
+        schemaPath,
+        "--output-last-message",
+        resultPath,
+        "-"
+      ],
+      {
+        cwd: packet.projectRoot,
+        env: process.env,
+        stdio: ["pipe", "pipe", "pipe"]
+      }
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await writeFallbackFailureResult(
+      packet,
       resultPath,
-      "-"
-    ],
-    {
-      cwd: packet.projectRoot,
-      env: process.env,
-      stdio: ["pipe", "pipe", "pipe"]
-    }
-  );
+      `Codex CLI 启动失败：${message}`,
+      {
+        taskOutcome: "unknown",
+        failureStage: "cli-startup",
+        failureKind: "cli-startup",
+        blocker: `Codex CLI 启动失败：${message}`,
+        evidenceRefs: []
+      }
+    );
+    await applyAgentRunResult(packet.projectRoot, packet.runId);
+    const failedRecord = await readAgentRunRecord(packet.projectRoot, packet.runId);
+    return {
+      run: failedRecord,
+      completion: Promise.resolve(failedRecord),
+      resultAppliedByLauncher: true
+    };
+  }
 
   child.stdout?.pipe(stdoutStream);
   child.stderr?.pipe(stderrStream);

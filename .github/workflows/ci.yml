@@ -78,5 +78,24 @@ jobs:
       - name: Validate cross-platform launcher command
         run: npm run verify:launchers
 
+      - name: Install Playwright browser
+        run: npx playwright install chromium
+
+      - name: Run workspace tests
+        run: npm run test
+
       - name: Build workspace
         run: npm run build
+
+      - name: Run smoke e2e tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-artifacts-windows
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
