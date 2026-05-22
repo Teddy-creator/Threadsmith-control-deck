@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Drift guardrails 已完成：新增只读 skill sync 校验，默认检查能发现 repo skill 与 global installed skill 的当前分叉，override smoke 与 focused tests 通过。",
+  "currentClaim": "Project State Store / Cross-Agent Bridge v1 设计已进入 closeout：文档草案已写成，等待本轮验证、提交与 PR。",
   "doneWhenChecklist": [
     {
-      "id": "previous-closeout",
-      "label": "Product issue migration / canonical repo recheck 已完成 closeout",
+      "id": "design-doc",
+      "label": "设计文档已写入 docs/plans/project-state-store-and-cross-agent-bridge-v1.md",
       "status": "pass"
     },
     {
-      "id": "phase-reset",
-      "label": "当前 phase 已切到 drift guardrails",
+      "id": "workflow-preserved",
+      "label": "文档明确现有 Planner -> Executor -> Reviewer -> Verifier -> Closeout 工作流不被替代",
       "status": "pass"
     },
     {
-      "id": "plan",
-      "label": "drift guardrails implementation plan 已写入 docs/plans",
+      "id": "external-agent-boundary",
+      "label": "文档明确外部 agent v1 默认只读 + 写回建议，不直接写 committed truth",
       "status": "pass"
     },
     {
-      "id": "readonly-check",
-      "label": "只读 skill sync 检查脚本已新增",
+      "id": "truth-writeback",
+      "label": ".threadsmith committed truth 已切到本阶段",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "drift guardrails targeted verification 已完成",
+      "label": "文档、JSON 与 skill contract 验证待运行",
       "status": "pass"
     }
   ],
@@ -32,10 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "Project Charter Quality v1 已收口，但字段级评估仍然是文本启发式；后续可考虑更强的结构化 parser。",
-    "前端已冻结；Control Deck / UI source-label 与 copy polish 先不作为本轮修复范围。",
-    "本轮 guardrail 只检测 drift，不自动安装或覆盖全局 skill。",
-    "当前默认 npm run verify:skill-sync 已发现 global skill 与 repo skill 存在 3 个文件差异：SKILL.md、references/action-contracts.md、references/runtime-contract.md。"
+    "本阶段只做设计文档与 truth writeback，不实现 handoff packet generator 或 adapter prompt generator。",
+    "是否允许外部 agent 在项目显式 opt-in 后直接写 committed truth 仍保留为 open question。",
+    "前端继续冻结；handoff freshness 是否上 deck 后续再决策。"
   ],
-  "finalState": "accepted"
+  "finalState": "accepted-with-closeout-pending"
 }

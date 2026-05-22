@@ -78,7 +78,14 @@
       "title": "Drift guardrails",
       "summary": "Add checks or documented workflow to prevent canonical repo skill, installed global skill, and committed truth from drifting apart again.",
       "state": "done"
+    },
+    {
+      "id": "project-state-store-cross-agent-bridge-planning",
+      "label": "跨 Agent 状态",
+      "title": "Project State Store / Cross-Agent Bridge planning",
+      "summary": "Define Threadsmith as a local project-level state store and conservative cross-agent handoff bridge while preserving the existing workflow.",
+      "state": "active"
     }
   ],
-  "updatedAt": "2026-05-23T03:00:00.000Z"
+  "updatedAt": "2026-05-22T20:46:09.000Z"
 }

@@ -1,38 +1,36 @@
 {
-  "phaseName": "Drift guardrails",
-  "phaseGoal": "防止 canonical repo skill、global installed skill 和 committed truth 再次无声分叉。",
-  "deliverable": "只读 skill sync 校验命令、drift guardrails 计划和 closeout truth。",
+  "phaseName": "Project State Store / Cross-Agent Bridge v1 planning closeout",
+  "phaseGoal": "把 Threadsmith 的“项目级状态底座 + 跨 agent 交接层”定位整理成可审核设计文档，并保持现有 workflow 不受影响。",
+  "deliverable": "docs/plans/project-state-store-and-cross-agent-bridge-v1.md 设计文档、truth writeback、PR。",
   "inScope": [
-    "新增 repo skill 与 global installed skill 的只读一致性检查",
-    "报告 missing、extra、changed 文件",
-    "允许通过环境变量覆盖 repo/global skill 路径以便 smoke verification",
-    "写回本轮 committed truth",
+    "明确 Threadsmith 新定位与现有 workflow 的关系",
+    "定义项目状态分层：AGENTS.md、committed truth、agent packets、evidence、events/audit",
+    "定义任意 agent 的读取顺序与写回权限",
+    "设计 handoff packet 与 Codex / Claude / generic adapter prompt",
+    "记录 external agent v1 默认只读 + 写回建议的边界",
     "保持 frontend freeze"
   ],
   "outOfScope": [
-    "自动安装、复制、删除或覆盖全局 ~/.codex/skills/threadsmith",
-    "修改仓库可见性",
-    "发布 release",
-    "实现 multi-provider 自动执行",
-    "真实执行任意外部 skill",
-    "维护、优化或重构前端 UI"
+    "实现 handoff packet generator",
+    "实现 adapter prompt generator",
+    "让 Claude / Codex 自动互相调用",
+    "允许外部 agent 默认直接写 committed truth",
+    "修改全局 ~/.codex/skills/threadsmith",
+    "维护、优化或重构前端 UI",
+    "发布 release"
   ],
-  "stopCondition": "只读 skill sync guardrail 已实现；默认检查能报告当前 drift；override smoke 能通过；targeted tests 通过。",
+  "stopCondition": "设计文档已写入 docs/plans，committed truth 已同步到本阶段，文档和 JSON 校验通过，并开 PR 等待审核/合并。",
   "verificationForThisPhase": [
-    "npm run verify:skill-sync",
-    "THREADSMITH_INSTALLED_SKILL_DIR=codex/skills/threadsmith npm run verify:skill-sync",
     "git diff --check",
-    "npm run test --workspace @threadsmith/runtime -- projectCharterGate.test.ts",
-    "npm run test --workspace @threadsmith/orchestrator",
-    "truth files and roadmap files remain internally consistent"
+    "jq empty .threadsmith/*.json",
+    "test -f docs/plans/project-state-store-and-cross-agent-bridge-v1.md",
+    "npm run verify:skill-contract"
   ],
   "activeOwners": [
     "planner",
-    "executor",
     "reviewer",
     "verifier",
-    "closeout",
-    "hygiene"
+    "closeout"
   ],
   "blockedBy": []
 }
