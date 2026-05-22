@@ -112,6 +112,35 @@ Read these before deciding the next move:
 
 `action-queue.ndjson` is append-only action history. Do not treat it as the main state object.
 
+## State Boundary Contract
+
+Threadsmith state is layered. Do not collapse these layers into one generic
+summary:
+
+- project constitution: `AGENTS.md`
+- committed truth: durable `.threadsmith/*.json` state objects
+- derived packet: Context Packet, role packets, handoff packet, and adapter prompts
+- evidence: verification summaries and run results that prove or reject a claim
+- audit: events and action queue that explain how state changed
+- runtime artifact: run directories, stdout/stderr, closeout artifacts, and local smoke workspaces
+
+Authority order:
+
+1. `AGENTS.md`
+2. committed truth
+3. evidence
+4. derived packet
+5. audit / runtime artifact
+6. chat memory
+
+Summary is not state. A handoff packet is readable projection over state. It
+must not override committed truth.
+
+External agents default to read-only plus writeback proposals. They may read
+committed truth, packets, evidence, and audit trails, but they must not directly
+mutate committed truth unless a future project opt-in explicitly grants that
+permission.
+
 ## Context Artifacts
 
 Use these when present:
@@ -128,12 +157,23 @@ Use these when present:
 
 Context artifacts are derived from committed truth and repo signals. They are useful working context, but committed truth remains the authority if there is a conflict.
 
+Handoff and adapter artifacts are also derived packets:
+
+- `.threadsmith/handoff/current-agent-handoff.md`
+- `.threadsmith/adapters/codex.md`
+- `.threadsmith/adapters/claude.md`
+- `.threadsmith/adapters/generic-agent.md`
+
+If their source files, generated timestamp, or phase reference cannot be checked,
+fall back to committed truth and route high-risk work to recover.
+
 When reporting or rendering status, label the source layer explicitly:
 
 - committed truth: durable `.threadsmith/` state
 - role packet: role-scoped working context derived from committed truth
 - Context Packet: shared derived working context
 - repo/evidence signal: file, test, or runtime evidence
+- audit signal: event or action history, not current authority
 - UI/demo interpretation: synthetic presentation or learning fixture, not authority
 
 When frontend maintenance is frozen for a phase, treat UI/demo interpretation as
@@ -173,6 +213,18 @@ Write `.threadsmith/` only for durable boundary changes:
 - recovery identifies stale or contradictory truth
 
 Do not write casual discussion, tentative options, or private reasoning.
+
+Role write boundaries:
+
+- Planner may update phase/status/active work, but must not claim verification passed.
+- Executor may change source and tests, but must not self-certify review, verification, or final acceptance.
+- Reviewer may write review conclusions and risks, but must not self-certify verification.
+- Verifier may write evidence and verification result, but must not patch implementation unless routed to repair.
+- Closeout may record accepted state and next planned slice, but must not add new implementation scope.
+- Hygiene may refresh derived packets or propose truth repairs, but must not pretend a packet is authority.
+
+Unknown external agents must produce writeback proposals instead of direct
+committed-truth writes.
 
 ## Writeback Failure Handling
 

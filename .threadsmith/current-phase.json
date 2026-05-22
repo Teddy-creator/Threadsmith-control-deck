@@ -1,33 +1,33 @@
 {
-  "phaseName": "Project State Store / Cross-Agent Bridge v1 planning closeout",
-  "phaseGoal": "把 Threadsmith 的“项目级状态底座 + 跨 agent 交接层”定位整理成可审核设计文档，并保持现有 workflow 不受影响。",
-  "deliverable": "docs/plans/project-state-store-and-cross-agent-bridge-v1.md 设计文档、truth writeback、PR #28 合并记录。",
+  "phaseName": "State Boundary Contract v1",
+  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第一刀落成可测试的状态边界 contract，明确权威真相、派生 packet、证据、审计和运行产物的边界。",
+  "deliverable": "domain stateBoundary contract、truth-boundary 文档更新、threadsmith runtime contract 检查更新、对应测试与验证证据。",
   "inScope": [
-    "明确 Threadsmith 新定位与现有 workflow 的关系",
-    "定义项目状态分层：AGENTS.md、committed truth、agent packets、evidence、events/audit",
-    "定义任意 agent 的读取顺序与写回权限",
-    "设计 handoff packet 与 Codex / Claude / generic adapter prompt",
-    "记录 external agent v1 默认只读 + 写回建议的边界",
-    "保持 frontend freeze"
+    "新增 domain 层 State Boundary Contract",
+    "定义状态层级、authority、write mode 和外部 agent 默认写回边界",
+    "定义 planner / executor / reviewer / verifier / closeout / hygiene 的写入边界",
+    "更新 docs/architecture/threadsmith-truth-boundary.md",
+    "更新 codex/skills/threadsmith/references/runtime-contract.md",
+    "扩展 verify:skill-contract，防止状态边界文案回退"
   ],
   "outOfScope": [
     "实现 handoff packet generator",
     "实现 adapter prompt generator",
-    "让 Claude / Codex 自动互相调用",
-    "允许外部 agent 默认直接写 committed truth",
-    "修改全局 ~/.codex/skills/threadsmith",
-    "维护、优化或重构前端 UI",
+    "实现 writeback proposal 文件格式",
+    "让外部 agent 直接写 committed truth",
+    "改动前端 UI",
+    "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "设计文档已写入 docs/plans，committed truth 已同步，文档和 JSON 校验通过，GitHub checks 通过，PR #28 已合并到 main。",
+  "stopCondition": "State Boundary Contract 已在 domain/docs/skill contract 三层落地，相关测试与 contract 验证通过，并进入 reviewer/verifier gate。",
   "verificationForThisPhase": [
+    "npm run test --workspace @threadsmith/domain",
+    "npm run verify:skill-contract",
     "git diff --check",
-    "jq empty .threadsmith/*.json",
-    "test -f docs/plans/project-state-store-and-cross-agent-bridge-v1.md",
-    "npm run verify:skill-contract"
+    "jq empty .threadsmith/*.json"
   ],
   "activeOwners": [
-    "planner",
+    "executor",
     "reviewer",
     "verifier",
     "closeout"

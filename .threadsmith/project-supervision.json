@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Project State Store / Cross-Agent Bridge v1 planning 正在收口：设计文档已写成，前端冻结，不进入自动 multi-provider 执行。",
+  "summary": "State Boundary Contract v1 已 accepted：状态边界已落到 domain/docs/skill contract，下一刀进入 Handoff Packet Generator v1。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已确认本轮范围：把项目级状态底座与跨 agent 交接层写成可审核设计文档。",
+      "taskSummary": "已把 Project State Store / Cross-Agent Bridge v1 的下一刀收束为 State Boundary Contract v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "design direction approved",
-      "updatedAt": "2026-05-22T20:46:09.000Z"
+      "latestEvidenceLabel": "phase reset from accepted planning",
+      "updatedAt": "2026-05-23T05:42:50.000+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 project-state-store-and-cross-agent-bridge-v1 设计文档。",
+      "taskSummary": "已新增 stateBoundary domain contract、测试，并同步 architecture / skill runtime contract 文档。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "design doc drafted",
-      "updatedAt": "2026-05-22T20:46:09.000Z"
+      "latestEvidenceLabel": "domain tests and skill contract passed locally",
+      "updatedAt": "2026-05-23T05:42:50.000+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查设计保持现有 workflow、保护 committed truth，并把外部 agent 默认限制为只读 + 写回建议。",
+      "taskSummary": "已检查实现保持 conservative boundary，不扩大到 UI、handoff generator 或 direct external writes。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "design reviewed",
-      "updatedAt": "2026-05-22T20:46:09.000Z"
+      "latestEvidenceLabel": "review passed",
+      "updatedAt": "2026-05-23T05:50:00.000+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已验证文档存在、JSON 有效、diff hygiene 和 skill contract。",
+      "taskSummary": "已运行 domain tests、skill contract、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "local verification passed",
-      "updatedAt": "2026-05-22T20:46:09.000Z"
+      "latestEvidenceLabel": "verification passed",
+      "updatedAt": "2026-05-23T05:50:00.000+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "保持前端、自动 multi-provider 执行、任意外部 agent 直接写 truth 在本轮范围外。",
+      "taskSummary": "保持前端冻结，不修改全局 installed skill，不发布 release。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "scope guardrails active",
-      "updatedAt": "2026-05-22T20:46:09.000Z"
+      "updatedAt": "2026-05-23T05:42:50.000+08:00"
     }
   ],
-  "updatedAt": "2026-05-22T20:46:09.000Z"
+  "updatedAt": "2026-05-23T05:50:00.000+08:00"
 }

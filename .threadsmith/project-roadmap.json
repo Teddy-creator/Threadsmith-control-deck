@@ -84,14 +84,14 @@
       "label": "跨 Agent 状态",
       "title": "Project State Store / Cross-Agent Bridge planning",
       "summary": "Define Threadsmith as a local project-level state store and conservative cross-agent handoff bridge while preserving the existing workflow.",
-      "state": "current"
+      "state": "done"
     },
     {
       "id": "project-state-store-cross-agent-bridge-v1",
       "label": "交接实现",
       "title": "Project State Store / Cross-Agent Bridge v1 implementation",
       "summary": "Implement the accepted handoff packet, adapter prompt, and read/write boundary contracts after the planning document is approved.",
-      "state": "next"
+      "state": "current"
     }
   ],
   "updatedAt": "2026-05-22T20:46:09.000Z"
