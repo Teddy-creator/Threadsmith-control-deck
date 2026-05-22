@@ -23,12 +23,12 @@
     },
     {
       "id": "verification",
-      "label": "domain tests、skill contract、diff hygiene 与 JSON 校验需保持通过",
+      "label": "project truth schema、domain tests、skill contract、diff hygiene 与 JSON 校验需保持通过",
       "status": "pass"
     }
   ],
-  "implementationStatus": "implemented",
-  "reviewStatus": "passed",
+  "implementationStatus": "ready-for-review",
+  "reviewStatus": "ready-for-verification",
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [

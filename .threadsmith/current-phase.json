@@ -21,6 +21,7 @@
   ],
   "stopCondition": "State Boundary Contract 已在 domain/docs/skill contract 三层落地，相关测试与 contract 验证通过，并进入 reviewer/verifier gate。",
   "verificationForThisPhase": [
+    "npm run verify:project-truth",
     "npm run test --workspace @threadsmith/domain",
     "npm run verify:skill-contract",
     "git diff --check",

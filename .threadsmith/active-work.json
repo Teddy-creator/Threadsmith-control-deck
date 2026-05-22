@@ -21,7 +21,7 @@
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 domain tests、skill contract、JSON 和 diff hygiene，均通过。",
+      "taskSummary": "已运行 domain tests、skill contract、JSON、project truth schema 和 diff hygiene，均通过。",
       "requiresUserDecision": false
     },
     {
