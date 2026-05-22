@@ -2,7 +2,7 @@ import { access, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { expect, test } from "@playwright/test";
-import { connectAndInitializeCustomProject } from "./helpers";
+import { connectAndInitializeCustomProject, writeUsefulAgents } from "./helpers";
 
 test("a custom project can inspect project and phase workbenches from the deck", async ({
   page
@@ -16,6 +16,11 @@ test("a custom project can inspect project and phase workbenches from the deck",
   const initialPhaseGoal = `为 ${projectName} 补齐足够的仓库信号，再定义第一条 autopilot slice。`;
 
   try {
+    await writeUsefulAgents(projectRoot, {
+      title: projectName,
+      purpose:
+        "A sparse custom project used to verify Threadsmith can initialize from a project charter before README or manifest details exist."
+    });
     await page.goto("/");
     await connectAndInitializeCustomProject(page, projectRoot);
 

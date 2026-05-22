@@ -2,7 +2,7 @@ import { access, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
-import { connectAndInitializeCustomProject } from "./helpers";
+import { connectAndInitializeCustomProject, writeUsefulAgents } from "./helpers";
 
 test("a custom project can inspect acceptance state from the deck", async ({
   page
@@ -17,6 +17,11 @@ test("a custom project can inspect acceptance state from the deck", async ({
     "Bootstrap 已建立最小 Threadsmith truth，但当前仓库信号不足，必须先补充信息后再进入 automatic chain。";
 
   try {
+    await writeUsefulAgents(projectRoot, {
+      title: "Acceptance Bootstrap Fixture",
+      purpose:
+        "A sparse custom project used to verify Threadsmith acceptance-state onboarding from a project charter."
+    });
     await page.goto("/");
     await connectAndInitializeCustomProject(page, projectRoot);
 
