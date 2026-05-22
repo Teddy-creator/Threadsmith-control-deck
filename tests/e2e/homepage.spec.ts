@@ -121,7 +121,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "Project State Store / Cross-Agent Bridge v1 设计已进入 closeout：文档草案已写成，等待本轮验证、提交与 PR。"
+      "Project State Store / Cross-Agent Bridge v1 planning 已收口：设计文档已合并到 main，当前阶段可以作为下一轮实现的依据。"
     ).first()
   ).toBeVisible();
 });
