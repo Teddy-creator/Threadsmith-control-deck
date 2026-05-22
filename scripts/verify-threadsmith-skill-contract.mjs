@@ -92,6 +92,34 @@ const checks = [
       /Operational behavior/,
       /implementation remains blocked/
     ]
+  },
+  {
+    file: "references/runtime-contract.md",
+    label: "state boundary layers and external agent defaults are documented",
+    patterns: [
+      /## State Boundary Contract/,
+      /project constitution/,
+      /committed truth/,
+      /derived packet/,
+      /evidence/,
+      /audit/,
+      /runtime artifact/,
+      /Summary is not state/,
+      /External agents default to read-only plus writeback proposals/
+    ]
+  },
+  {
+    file: "references/runtime-contract.md",
+    label: "role write boundaries are documented",
+    patterns: [
+      /Role write boundaries/,
+      /Planner may update phase\/status\/active work/,
+      /Executor may change source and tests/,
+      /Reviewer may write review conclusions/,
+      /Verifier may write evidence and verification result/,
+      /Closeout may record accepted state/,
+      /Hygiene may refresh derived packets/
+    ]
   }
 ];
 

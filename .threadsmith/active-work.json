@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已确认本轮进入 Project State Store / Cross-Agent Bridge v1 planning：只收口设计文档，不进入产品实现。",
+      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第一刀：State Boundary Contract v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 docs/plans/project-state-store-and-cross-agent-bridge-v1.md，定义状态分层、读取协议、写回协议、handoff packet 和 adapter prompt。",
+      "taskSummary": "已实现 domain stateBoundary contract、测试、truth-boundary 文档和 skill runtime contract 检查。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查设计保持现有 workflow、不扩大到自动 multi-provider 执行，并默认保护 committed truth。",
+      "taskSummary": "已检查实现保持 conservative boundary：没有扩大到 handoff generator、adapter generator、frontend 或外部 agent 直接写 truth。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 git diff --check、jq JSON 校验、文档存在性检查和 skill contract verification。",
+      "taskSummary": "已运行 domain tests、skill contract、JSON、project truth schema 和 diff hygiene，均通过。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "PR #28 已合并到 main；设计文档、truth writeback、schema/e2e 修复和 GitHub checks 已收口。",
+      "taskSummary": "已记录 State Boundary Contract v1 accepted，下一刀为 Handoff Packet Generator v1。",
       "requiresUserDecision": false
     }
   ],

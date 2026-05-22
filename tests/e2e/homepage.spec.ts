@@ -87,12 +87,18 @@ test("current Threadsmith repo can be read as a real project from the source and
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Threadsmith", exact: true })).toBeVisible();
   await expect(
-    page.getByText("Drift guardrails", { exact: true }).first()
+    page
+      .getByText("Project State Store / Cross-Agent Bridge planning", {
+        exact: true
+      })
+      .first()
   ).toBeVisible();
   await expect(
-    page.getByText("Project State Store / Cross-Agent Bridge planning", {
-      exact: true
-    }).first()
+    page
+      .getByText("Project State Store / Cross-Agent Bridge v1 implementation", {
+        exact: true
+      })
+      .first()
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "当前总命令" })).toBeVisible();
 
@@ -113,7 +119,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByRole("heading", { name: "Context 状态" })).toBeVisible();
   await expect(
     inspectorPanel
-      .getByText("Project State Store / Cross-Agent Bridge v1 planning closeout")
+      .getByText("State Boundary Contract v1")
       .first()
   ).toBeVisible();
 
@@ -121,7 +127,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "Project State Store / Cross-Agent Bridge v1 planning 已收口：设计文档已合并到 main，当前阶段可以作为下一轮实现的依据。"
+      "State Boundary Contract v1 已 accepted：状态边界已成为 domain contract、架构文档和 skill runtime contract 的共同约束，下一刀可以在此基础上实现 handoff packet generator。"
     ).first()
   ).toBeVisible();
 });

@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Project State Store / Cross-Agent Bridge v1 planning 已收口：设计文档已合并到 main，当前阶段可以作为下一轮实现的依据。",
+  "currentClaim": "State Boundary Contract v1 已 accepted：状态边界已成为 domain contract、架构文档和 skill runtime contract 的共同约束，下一刀可以在此基础上实现 handoff packet generator。",
   "doneWhenChecklist": [
     {
-      "id": "design-doc",
-      "label": "设计文档已写入 docs/plans/project-state-store-and-cross-agent-bridge-v1.md",
+      "id": "domain-contract",
+      "label": "packages/domain/src/stateBoundary.ts 定义状态层级、authority、write mode、role rule 与 external agent 默认边界",
       "status": "pass"
     },
     {
-      "id": "workflow-preserved",
-      "label": "文档明确现有 Planner -> Executor -> Reviewer -> Verifier -> Closeout 工作流不被替代",
+      "id": "domain-tests",
+      "label": "stateBoundary.test.ts 覆盖 committed truth 权威、derived packet 非权威、external agent proposal、verifier/closeout evidence gate",
       "status": "pass"
     },
     {
-      "id": "external-agent-boundary",
-      "label": "文档明确外部 agent v1 默认只读 + 写回建议，不直接写 committed truth",
+      "id": "docs-boundary",
+      "label": "docs/architecture/threadsmith-truth-boundary.md 已对齐 project constitution / committed truth / derived packet / evidence / audit / runtime artifact",
       "status": "pass"
     },
     {
-      "id": "truth-writeback",
-      "label": ".threadsmith committed truth 已切到本阶段",
+      "id": "skill-contract",
+      "label": "codex/skills/threadsmith/references/runtime-contract.md 与 verify:skill-contract 已锁住状态边界和角色写入边界",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "文档、JSON、skill contract、homepage e2e 与 GitHub checks 已通过",
+      "label": "project truth schema、domain tests、skill contract、diff hygiene 与 JSON 校验需保持通过",
       "status": "pass"
     }
   ],
@@ -32,9 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本阶段只做设计文档与 truth writeback，不实现 handoff packet generator 或 adapter prompt generator。",
-    "是否允许外部 agent 在项目显式 opt-in 后直接写 committed truth 仍保留为 open question。",
-    "前端继续冻结；handoff freshness 是否上 deck 后续再决策。"
+    "本阶段只实现 State Boundary Contract，不生成 handoff packet。",
+    "外部 agent 仍默认只读 + writeback proposal；直接写 committed truth 继续保留为未来 opt-in 问题。",
+    "前端继续冻结；本阶段不展示状态边界 UI。"
   ],
   "finalState": "accepted"
 }
