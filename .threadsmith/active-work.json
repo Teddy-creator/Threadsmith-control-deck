@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "确认本轮进入 drift guardrails：只新增只读校验，不安装或覆盖全局 skill，前端继续冻结。",
+      "taskSummary": "已确认本轮进入 Project State Store / Cross-Agent Bridge v1 planning：只收口设计文档，不进入产品实现。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 verify-threadsmith-skill-sync.mjs 和 npm run verify:skill-sync，用于比较 repo skill 与 installed skill。",
+      "taskSummary": "已新增 docs/plans/project-state-store-and-cross-agent-bridge-v1.md，定义状态分层、读取协议、写回协议、handoff packet 和 adapter prompt。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已审查 guardrail：脚本只读、差异报告清晰、未触碰前端。",
+      "taskSummary": "已检查设计保持现有 workflow、不扩大到自动 multi-provider 执行，并默认保护 committed truth。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行默认 drift 检查、override smoke、truth JSON、diff hygiene、runtime Project Charter Gate tests 和 orchestrator tests。",
+      "taskSummary": "已运行 git diff --check、jq JSON 校验、文档存在性检查和 skill contract verification。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
-      "status": "done",
-      "taskSummary": "已记录 drift guardrails closeout；默认检查当前会检测到 global skill drift，后续是否同步需单独决策。",
+      "status": "running",
+      "taskSummary": "验证已通过；正在提交设计文档与 truth writeback，并开 PR。",
       "requiresUserDecision": false
     }
   ],

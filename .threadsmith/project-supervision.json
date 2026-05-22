@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "canonical workflow repair 已完成 drift guardrails；前端冻结，新增只读 skill sync 校验。",
+  "summary": "Project State Store / Cross-Agent Bridge v1 planning 正在收口：设计文档已写成，前端冻结，不进入自动 multi-provider 执行。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已确认 drift guardrails 范围：检测 repo/global skill 分叉，不自动同步。",
+      "taskSummary": "已确认本轮范围：把项目级状态底座与跨 agent 交接层写成可审核设计文档。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "patch scope accepted",
-      "updatedAt": "2026-05-13T00:00:00.000Z"
+      "latestEvidenceLabel": "design direction approved",
+      "updatedAt": "2026-05-22T20:46:09.000Z"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 verify:skill-sync 只读检查入口。",
+      "taskSummary": "已新增 project-state-store-and-cross-agent-bridge-v1 设计文档。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "release surface aligned",
-      "updatedAt": "2026-05-10T16:47:20.000Z"
+      "latestEvidenceLabel": "design doc drafted",
+      "updatedAt": "2026-05-22T20:46:09.000Z"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 Project Charter Gate 计划是否足够约束，又不会过度阻塞低风险探索。",
+      "taskSummary": "已检查设计保持现有 workflow、保护 committed truth，并把外部 agent 默认限制为只读 + 写回建议。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "release boundaries reviewed",
-      "updatedAt": "2026-05-13T00:00:00.000Z"
+      "latestEvidenceLabel": "design reviewed",
+      "updatedAt": "2026-05-22T20:46:09.000Z"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已验证默认 drift 检查、override smoke 与 focused tests。",
+      "taskSummary": "已验证文档存在、JSON 有效、diff hygiene 和 skill contract。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "local verification passed",
-      "updatedAt": "2026-05-13T00:00:00.000Z"
+      "updatedAt": "2026-05-22T20:46:09.000Z"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "保持 global skill 安装、multi-provider 自动化和任意外部 skill auto-run 在本轮范围外。",
+      "taskSummary": "保持前端、自动 multi-provider 执行、任意外部 agent 直接写 truth 在本轮范围外。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "scope guardrails active",
-      "updatedAt": "2026-05-10T16:47:20.000Z"
+      "updatedAt": "2026-05-22T20:46:09.000Z"
     }
   ],
-  "updatedAt": "2026-05-23T03:00:00.000Z"
+  "updatedAt": "2026-05-22T20:46:09.000Z"
 }

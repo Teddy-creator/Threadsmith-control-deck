@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "canonical workflow repair v1",
-  "overallState": "stable",
-  "currentFocus": "Drift guardrails 已完成；下一步需要决定是否同步全局 skill，或先整理提交范围。",
-  "projectStatusSummary": "Threadsmith 当前已完成 Project Charter Quality v1、产品问题迁回复查与只读 skill sync guardrail；默认检查已能发现 repo/global skill drift，前端继续冻结。",
+  "currentTrack": "project state store / cross-agent bridge v1 planning",
+  "overallState": "planning",
+  "currentFocus": "把 Threadsmith 的项目级状态底座与跨 agent 交接层整理为可审核设计文档，并准备 PR。",
+  "projectStatusSummary": "Threadsmith 当前正在把 .threadsmith truth 从内部状态文件夹升级为更清晰的项目级状态协议设计：保留现有 workflow，新增 handoff packet、adapter prompt、外部 agent 读写边界和 recover 规则。",
   "latestAcceptedSlice": {
-    "title": "Drift guardrails",
-    "recordedAt": "2026-05-23T03:00:00.000+08:00"
+    "title": "Threadsmith skill state machine",
+    "recordedAt": "2026-05-23T04:04:00.000+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Decide global skill sync or prepare commit scope",
+    "title": "Project State Store / Cross-Agent Bridge v1 implementation",
     "recordedAt": null
   },
-  "currentMilestoneId": "drift-guardrails",
-  "nextMilestoneId": "drift-guardrails",
+  "currentMilestoneId": "project-state-store-cross-agent-bridge-planning",
+  "nextMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "topRisks": [
-    "再次把 threadsmith-control-deck、全局 installed skill 和历史 Threadsmith 仓库混为同一版本。",
-    "Project Charter Gate 当前仍是文本启发式，复杂 AGENTS.md 可能需要结构化 parser。",
-    "产品层剩余体验问题需要继续按 canonical repo 重新验证，前端相关问题不能在本轮悄悄混入。"
+    "把 Threadsmith 误定位成通用个人记忆系统，导致范围过大。",
+    "让外部 agent 默认直接写 committed truth，增加冲突和错误验收风险。",
+    "在设计文档阶段偷偷进入前端或 multi-provider 自动执行实现。"
   ],
-  "updatedAt": "2026-05-23T03:00:00.000Z"
+  "updatedAt": "2026-05-22T20:46:09.000Z"
 }
