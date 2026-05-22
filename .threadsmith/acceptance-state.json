@@ -1,5 +1,5 @@
 {
-  "currentClaim": "Project State Store / Cross-Agent Bridge v1 设计已进入 closeout：文档草案已写成，等待本轮验证、提交与 PR。",
+  "currentClaim": "Project State Store / Cross-Agent Bridge v1 planning 已收口：设计文档已合并到 main，当前阶段可以作为下一轮实现的依据。",
   "doneWhenChecklist": [
     {
       "id": "design-doc",
@@ -23,7 +23,7 @@
     },
     {
       "id": "verification",
-      "label": "文档、JSON 与 skill contract 验证待运行",
+      "label": "文档、JSON、skill contract、homepage e2e 与 GitHub checks 已通过",
       "status": "pass"
     }
   ],
@@ -36,5 +36,5 @@
     "是否允许外部 agent 在项目显式 opt-in 后直接写 committed truth 仍保留为 open question。",
     "前端继续冻结；handoff freshness 是否上 deck 后续再决策。"
   ],
-  "finalState": "accepted-with-closeout-pending"
+  "finalState": "accepted"
 }
