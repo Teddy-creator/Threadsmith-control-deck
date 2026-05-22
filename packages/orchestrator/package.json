@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@threadsmith/domain": "0.3.2",
-    "@threadsmith/fs-bridge": "0.3.2"
+    "@threadsmith/fs-bridge": "0.3.2",
+    "@threadsmith/runtime": "0.3.2"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

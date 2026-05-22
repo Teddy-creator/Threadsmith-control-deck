@@ -80,6 +80,31 @@ async function seedRepository(projectRoot: string, args: {
     [`# ${args.title}`, "", args.summary].join("\n"),
     "utf8"
   );
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      "Run deterministic Threadsmith autopilot smoke scenarios.",
+      "",
+      "## Goals And Non-Goals",
+      "Goal: verify autopilot truth. Non-goals: real provider execution or release publishing.",
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src and tests. Commands: npm test and npm run build.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep fake Codex smoke behavior isolated from product code.",
+      "",
+      "## Human Confirmation Gates",
+      "Ask before destructive git, publishing, or scope expansion.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when smoke truth is accepted or pauses honestly with evidence."
+    ].join("\n"),
+    "utf8"
+  );
 }
 
 async function writeAutopilotPhase(projectRoot: string, phaseName: string, phaseGoal: string) {

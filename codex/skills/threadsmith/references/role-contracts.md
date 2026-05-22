@@ -14,6 +14,7 @@ Role packet: `.threadsmith/context/role-packets/planner.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - Project Brief
 - Current Phase
 - project status
@@ -44,6 +45,7 @@ Role packet: `.threadsmith/context/role-packets/executor.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - Current Phase
 - in-scope and out-of-scope lists
 - relevant files
@@ -73,6 +75,7 @@ Role packet: `.threadsmith/context/role-packets/reviewer.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - acceptance claim
 - Current Phase
 - scope
@@ -102,6 +105,7 @@ Role packet: `.threadsmith/context/role-packets/verifier.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - acceptance checklist
 - verification commands
 - evidence summary
@@ -130,6 +134,7 @@ Role packet: `.threadsmith/context/role-packets/closeout.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - accepted-with-closeout-pending claim
 - known gaps
 - residual risks
@@ -160,6 +165,7 @@ Role packet: `.threadsmith/context/role-packets/hygiene.json`
 
 Required inputs:
 
+- applicable `AGENTS.md`
 - committed truth
 - recent diff
 - evidence summary
@@ -184,3 +190,33 @@ Forbidden writes:
 Completion artifact:
 
 - hygiene summary with verified facts, stale assumptions, contradictions, and next safe action
+
+## Role-Specific AGENTS.md Checks
+
+Planner:
+
+- check current phase against goals, non-goals, architecture boundaries, and risk rules
+- identify confirmation gates before execution
+
+Executor:
+
+- do not cross edit boundaries
+- do not execute high-risk operations without confirmation
+- explain diffs relative to architecture boundaries
+
+Reviewer:
+
+- review for architecture and risk-policy violations
+
+Verifier:
+
+- verify the checks required by `AGENTS.md` or report why unavailable
+
+Closeout:
+
+- identify whether stable lessons should update `AGENTS.md`
+- recommend durable-rule updates by default; write only through confirmed builder/update flow
+
+Hygiene:
+
+- resolve AGENTS.md / `.threadsmith/` contradictions before normal work

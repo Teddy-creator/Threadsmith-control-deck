@@ -56,8 +56,29 @@
       "label": "Schema 补丁",
       "title": "v0.3.2 release truth schema patch",
       "summary": "Publish a tiny patch release so the v0.3.1 follow-up schema fix is included in a clean tag and source archive.",
-      "state": "current"
+      "state": "done"
+    },
+    {
+      "id": "canonical-workflow-repair-v1",
+      "label": "主仓校准",
+      "title": "Canonical workflow repair",
+      "summary": "Re-anchor Threadsmith development on threadsmith-control-deck, sync installed skill output improvements, and plan Project Charter Gate work from the proposal.",
+      "state": "done"
+    },
+    {
+      "id": "product-issue-migration-canonical-recheck",
+      "label": "产品回迁",
+      "title": "Product issue migration / canonical repo recheck",
+      "summary": "Move previously confirmed product issues back to the canonical repo, freeze frontend work, and re-check/fix skill/protocol/truth issues there.",
+      "state": "done"
+    },
+    {
+      "id": "drift-guardrails",
+      "label": "防漂移",
+      "title": "Drift guardrails",
+      "summary": "Add checks or documented workflow to prevent canonical repo skill, installed global skill, and committed truth from drifting apart again.",
+      "state": "done"
     }
   ],
-  "updatedAt": "2026-05-13T00:00:00.000Z"
+  "updatedAt": "2026-05-23T03:00:00.000Z"
 }

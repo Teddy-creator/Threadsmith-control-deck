@@ -87,6 +87,31 @@ async function seedRepository(projectRoot: string) {
     ].join("\n"),
     "utf8"
   );
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      "Verify deck-action bridge routing in an isolated smoke project.",
+      "",
+      "## Goals And Non-Goals",
+      "Goal: launch one executor run. Non-goals: real provider execution or release publishing.",
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src. Commands: npm test.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep smoke files isolated from Threadsmith product code.",
+      "",
+      "## Human Confirmation Gates",
+      "Ask before destructive git, publishing, or broad scope expansion.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when command bridge truth and smoke marker verification pass."
+    ].join("\n"),
+    "utf8"
+  );
 }
 
 async function seedThreadsmithTruth(projectRoot: string) {

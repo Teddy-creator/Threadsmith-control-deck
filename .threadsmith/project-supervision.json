@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "v0.3.2 schema-fix patch release 正在准备；下一步是运行验证、提交、打 tag、推送并确认 GitHub Release / CI。",
+  "summary": "canonical workflow repair 已完成 drift guardrails；前端冻结，新增只读 skill sync 校验。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,7 +10,7 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "把本轮限定为 v0.3.2 schema-fix patch release，不扩大到新功能。",
+      "taskSummary": "已确认 drift guardrails 范围：检测 repo/global skill 分叉，不自动同步。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "patch scope accepted",
@@ -23,7 +23,7 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已更新 README、usage guide、front-door copy、release checklist、GitHub Release copy 与 truth。",
+      "taskSummary": "已新增 verify:skill-sync 只读检查入口。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "release surface aligned",
@@ -36,7 +36,7 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 v0.3.2 patch release 是否准确限定为 release truth schema/source archive 对齐。",
+      "taskSummary": "已检查 Project Charter Gate 计划是否足够约束，又不会过度阻塞低风险探索。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "release boundaries reviewed",
@@ -49,7 +49,7 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 v0.3.2 release verification matrix。",
+      "taskSummary": "已验证默认 drift 检查、override smoke 与 focused tests。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "local verification passed",
@@ -69,5 +69,5 @@
       "updatedAt": "2026-05-10T16:47:20.000Z"
     }
   ],
-  "updatedAt": "2026-05-13T00:00:00.000Z"
+  "updatedAt": "2026-05-23T03:00:00.000Z"
 }

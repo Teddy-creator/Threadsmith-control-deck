@@ -15,3 +15,6 @@ export * from "./phaseReset.ts";
 export * from "./phaseResetDraftArtifacts.ts";
 export * from "./skillDiscovery.ts";
 export * from "./skillRoutingConfig.ts";
+export * from "./projectManifest.ts";
+export * from "./projectCharter.ts";
+export * from "./projectCharterPreferences.ts";

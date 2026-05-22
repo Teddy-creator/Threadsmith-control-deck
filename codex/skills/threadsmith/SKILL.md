@@ -9,9 +9,28 @@ Use this skill as the explicit supervisor entry for a Threadsmith-managed projec
 
 Threadsmith is not a generic coding prompt and it should not be invoked for every casual chat message. It is a phase-bound workflow driver that reads committed project truth, chooses the next narrow move, and writes durable state only at real task boundaries.
 
+## Project Charter Gate
+
+Before normal bootstrap or phase execution, find the applicable `AGENTS.md`.
+Treat it as project-level constitution.
+If it is missing, placeholder-only, stale, or lacks project purpose, non-goals,
+architecture/risk guidance, verification expectations, or human confirmation
+gates for a risky repo, stop and route to `agents-md-builder`.
+Do not let AI invent these decisions silently.
+
 ## Operating Modes
 
 Infer the mode from the user's request. If unclear, prefer `sync`.
+
+Acknowledgement handling has higher priority than the default `sync` fallback.
+If the user replies with a short approval such as "同意", "可以", "继续",
+"好", "yes", or "proceed" after Threadsmith recommended a concrete next step,
+inherit that previous mode, role, and action. Execute the accepted step or name
+the blocking gate; do not turn the approval into another status refresh.
+
+If the current acceptance state is `accepted-with-closeout-pending` and the user
+approves continuing, select `drive` with role `closeout` unless a blocking gate
+or new user decision is discovered.
 
 ### `sync`
 
@@ -63,15 +82,17 @@ Behavior:
 
 ## Required Read Order
 
-1. `.threadsmith/project-brief.json`
-2. `.threadsmith/current-phase.json`
-3. `.threadsmith/acceptance-state.json`
-4. `.threadsmith/project-status.json`
-5. `.threadsmith/active-work.json`
-6. `.threadsmith/project-supervision.json`
-7. `.threadsmith/context/current-packet.json` if present
-8. `.threadsmith/context/role-packets/<role>.json` for the selected role if present
-9. `.threadsmith/context/evidence-summary.json` and `.threadsmith/context/repo-map.json` if needed
+1. Applicable `AGENTS.md` files, nearest project-specific first, then parent/root if relevant
+2. `.threadsmith/preferences.json`
+3. `.threadsmith/project-brief.json`
+4. `.threadsmith/current-phase.json`
+5. `.threadsmith/acceptance-state.json`
+6. `.threadsmith/project-status.json`
+7. `.threadsmith/active-work.json`
+8. `.threadsmith/project-supervision.json`
+9. `.threadsmith/context/current-packet.json` if present
+10. `.threadsmith/context/role-packets/<role>.json` for the selected role if present
+11. `.threadsmith/context/evidence-summary.json` and `.threadsmith/context/repo-map.json` if needed
 
 If a role packet exists and is consistent with the current phase, use it as the role's working context. If it is missing or stale, fall back to the main Context Packet and committed truth, then recommend regenerating role packets later.
 
@@ -89,6 +110,8 @@ If a role packet exists and is consistent with the current phase, use it as the 
 10. If the user asks for the automatic single-phase chain, prefer:
     - `npm run threadsmith:autopilot -- continue <project-root>`
     - use `start` or `resume` only when the decision is already known
+11. If the user accepts the previously recommended next step, execute that step or name the blocking gate; do not restate the same recommendation as if it were new.
+12. Label the source layer for any important status claim: committed truth, role packet, Context Packet, repo/evidence signal, or chat memory.
 
 ## Contracts
 
@@ -104,12 +127,31 @@ When active, start with:
 
 ### Threadsmith Decision
 - mode: `sync`, `drive`, `continuous`, or `recover`
+- accepted previous recommendation: yes / no
+- source layer: committed truth / role packet / Context Packet / repo evidence / chat memory
 - project state
 - current phase state
 - acceptance state
 - selected role and role packet status
+- action taken now or blocking gate
+- last completed step
 - next best step
 - active gate or stop condition
+
+### 上一步做了什么
+- 已完成的动作
+- 关键变更
+- 相关证据或产物
+
+### 下一步具体要做什么
+- 目标
+- 具体动作
+- 架构影响或涉及对象：说明影响的是哪一层（项目 truth、role packet、Context Packet、runtime contract、action contract、tests、docs），以及为什么这层变化会影响后续流程
+- 成功标准
+- 停止条件
+
+### 需要确认的点
+- 仅保留会改变路线、范围或验收的事项
 
 Then perform the next narrow move unless the correct result is to stop and ask.
 

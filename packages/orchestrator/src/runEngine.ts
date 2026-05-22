@@ -4,6 +4,7 @@ import { buildExecutorPacket, buildPacketForRole } from "./packetBuilder.ts";
 import { launchCodexCliExecutor, type CodexCliLaunch } from "./codexCliExecutor.ts";
 import { PhaseRunner } from "./phaseRunner.ts";
 import type { RunExecutionRequest, RunLaunchResponse } from "./providerTypes.ts";
+import { assertProjectCharterGate } from "./projectCharterGate.ts";
 
 export interface RoleRunLaunchResponse extends RunLaunchResponse {
   completion: CodexCliLaunch["completion"];
@@ -21,6 +22,13 @@ export async function launchProjectRoleRun(
   const role = input.role ?? "executor";
   const provider = input.provider ?? "codex";
   const runId = input.runId ?? crypto.randomUUID();
+
+  await assertProjectCharterGate({
+    projectRoot: input.projectRoot,
+    mode: "drive",
+    riskLevel: "medium",
+    mutatesSource: true
+  });
 
   if (provider !== "codex") {
     throw new Error(`当前自动执行桥只支持 Codex provider，收到：${provider}`);
@@ -71,6 +79,13 @@ export async function startProjectRun(
 export async function startAutopilotPhaseRun(
   input: AutopilotRunRequest
 ): Promise<PhaseRunRecord> {
+  await assertProjectCharterGate({
+    projectRoot: input.projectRoot,
+    mode: "continuous",
+    riskLevel: "medium",
+    mutatesSource: true
+  });
+
   const runner = new PhaseRunner();
   return runner.start(input);
 }
@@ -78,6 +93,13 @@ export async function startAutopilotPhaseRun(
 export async function resumeAutopilotPhaseRun(
   input: AutopilotRunRequest
 ): Promise<PhaseRunRecord> {
+  await assertProjectCharterGate({
+    projectRoot: input.projectRoot,
+    mode: "continuous",
+    riskLevel: "medium",
+    mutatesSource: true
+  });
+
   const runner = new PhaseRunner();
   return runner.resume(input);
 }

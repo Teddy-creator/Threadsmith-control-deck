@@ -20,3 +20,4 @@ export * from "./skillOrchestrator.ts";
 export * from "./miniProtocols.ts";
 export * from "./skillDiscovery.ts";
 export * from "./skillRoutingConfig.ts";
+export * from "./projectCharterGate.ts";

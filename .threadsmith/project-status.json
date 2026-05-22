@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "v0.3.2 patch release",
+  "currentTrack": "canonical workflow repair v1",
   "overallState": "stable",
-  "currentFocus": "v0.3.2 patch release 正在收口：把 v0.3.1 后续 schema 修复纳入干净 tag/source archive，并确认 GitHub Release / CI。",
-  "projectStatusSummary": "Threadsmith v0.3.2 是 v0.3.x Skill Orchestrator 线的补丁发布，重点是 release truth schema、source archive、版本号和发布资料对齐；不引入新的自动化承诺。",
+  "currentFocus": "Drift guardrails 已完成；下一步需要决定是否同步全局 skill，或先整理提交范围。",
+  "projectStatusSummary": "Threadsmith 当前已完成 Project Charter Quality v1、产品问题迁回复查与只读 skill sync guardrail；默认检查已能发现 repo/global skill drift，前端继续冻结。",
   "latestAcceptedSlice": {
-    "title": "v0.3.1 public documentation and hygiene patch",
-    "recordedAt": "2026-05-13T00:00:00.000Z"
+    "title": "Drift guardrails",
+    "recordedAt": "2026-05-23T03:00:00.000+08:00"
   },
   "nextPlannedSlice": {
-    "title": "v0.3.2 tag / GitHub Release",
+    "title": "Decide global skill sync or prepare commit scope",
     "recordedAt": null
   },
-  "currentMilestoneId": "v0-3-2-schema-fix-patch",
-  "nextMilestoneId": "post-v0-3-2-roadmap",
+  "currentMilestoneId": "drift-guardrails",
+  "nextMilestoneId": "drift-guardrails",
   "topRisks": [
-    "本机全局 $threadsmith skill 可能仍是旧版；本轮只更新仓库说明，不自动覆盖全局 skill。",
-    "发布态文案必须与 tag / GitHub Release 状态一致。",
-    "v0.3.2 仍不承诺 multi-provider 自动执行或真实外部 skill 调用。"
+    "再次把 threadsmith-control-deck、全局 installed skill 和历史 Threadsmith 仓库混为同一版本。",
+    "Project Charter Gate 当前仍是文本启发式，复杂 AGENTS.md 可能需要结构化 parser。",
+    "产品层剩余体验问题需要继续按 canonical repo 重新验证，前端相关问题不能在本轮悄悄混入。"
   ],
-  "updatedAt": "2026-05-13T00:00:00.000Z"
+  "updatedAt": "2026-05-23T03:00:00.000Z"
 }

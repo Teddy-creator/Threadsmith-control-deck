@@ -2,6 +2,16 @@
 
 Threadsmith v2 supports four supervisor modes plus deck-facing actions.
 
+All execution-like actions first run Project Charter Gate unless the user
+explicitly bypasses it for low-risk exploratory work.
+
+Gate handling:
+
+- `pass`: continue normally
+- `warn`: continue only for read-only or low-risk work and report missing guidance
+- `fail`: stop implementation/bootstrap/continuous execution and route to `agents-md-builder`
+- `bypassed`: continue only within the explicit bypass boundary and report residual risk
+
 ## `sync`
 
 Meaning:
@@ -20,6 +30,7 @@ Use when:
 Stop condition:
 
 - project / phase / acceptance / next best step are reported
+- Project Charter Gate status is reported when missing, incomplete, stale, or bypassed
 
 ## `drive`
 
@@ -32,6 +43,7 @@ Use when:
 - the user asks to continue, advance, implement, verify, or close out
 - current truth is fresh enough
 - the selected role has a clear next action
+- Project Charter Gate is `pass` or safely bypassed
 
 Typical routes:
 
@@ -47,6 +59,8 @@ Stop condition:
 - a gate blocks progress
 - verification fails
 - writeback fails
+- if the user already accepted the previous recommended next step, do not repeat it as a new recommendation; either execute it or report the blocking gate
+- if acceptance is `accepted-with-closeout-pending`, the narrow step is closeout; do not re-run planning, review, or verification unless evidence has become stale or contradictory
 
 ## `continuous`
 
@@ -62,6 +76,7 @@ Use when:
 - the user explicitly complains that manual gate-by-gate prompting is too slow
 - current truth is fresh enough and the project has a clear current phase
 - the next step can be represented as one locked phase run
+- Project Charter Gate is `pass`
 
 Stop condition:
 
@@ -107,6 +122,23 @@ Route through the autopilot continuation decision. It may start a new phase run,
 
 Inspect the Current Phase contract. Do not mutate truth.
 
+### `open-project-charter`
+
+Inspect the applicable `AGENTS.md` and report Project Charter Gate status. Do
+not mutate truth.
+
+### `repair-project-charter`
+
+Route to `agents-md-builder` or hygiene depending on whether the issue is
+missing/incomplete AGENTS.md or a contradiction between AGENTS.md and
+`.threadsmith/`.
+
+### `bootstrap-from-agents`
+
+Bootstrap `.threadsmith/` from confirmed AGENTS.md, repo inspection, user
+request, and existing docs/manifests. Do not invent uncertain architecture
+decisions.
+
 ### `run-verification`
 
 Route to verifier. Requires implementation and review to be ready.
@@ -125,10 +157,45 @@ Stop and ask instead of continuing when:
 
 - phase goal is ambiguous
 - selected role packet contradicts committed truth
+- Project Charter Gate fails for execution-like work
 - writeback failed
 - destructive git action would be required
 - verification requires unavailable external credentials or services
 - user decision changes scope or non-goals
+
+## Acknowledgement Rule
+
+Short approval replies such as "同意", "可以", "继续", "好", "yes", or
+"proceed" are not ambiguous when the previous Threadsmith response recommended
+a concrete next step. In that case:
+
+- mark `accepted previous recommendation` as `yes`
+- inherit the previous recommended action
+- inherit the selected mode and role when still valid
+- execute the accepted step or report the blocking gate
+- do not end by asking for the same approval again
+- do not choose `sync` merely because the user's reply is short
+
+If a new risk, destructive action, scope change, missing credential, or failed
+writeback appears while executing the accepted step, stop and report that gate.
+
+When committed truth says `accepted-with-closeout-pending`, an approval reply
+selects role `closeout` and should write the closeout truth instead of
+recommending closeout again.
+
+## Architecture Comprehension Rule
+
+For significant work, the response must include a compact architecture impact
+line. This is not planner ownership and must not become a second task plan. It
+should name:
+
+- the affected layer, such as committed truth, role packet, Context Packet,
+  runtime contract, action contract, tests, docs, or product UI
+- the concrete object or module being changed
+- why that layer matters to the workflow
+
+If the current action is only read-only status sync, say that no architecture
+change is being made.
 
 ## Preview Rule
 
@@ -140,6 +207,7 @@ Before any execution-like action, provide a short preview:
 - role packet status
 - why now
 - expected stop condition
+- if continuing from an already accepted recommendation, say whether you are executing it or why it is blocked instead of re-issuing the same advice
 
 For `continuous`, the selected role may be `phase-runner`; include whether the runner will use `continue`, `start`, `resume`, `wait`, or `reset-needed`.
 

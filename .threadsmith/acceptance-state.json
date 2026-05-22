@@ -1,40 +1,41 @@
 {
-  "currentClaim": "v0.3.2 patch release 正在发布收口；当前目标是确认 schema-valid truth、source archive、版本号、验证证据、tag 和 GitHub Release 全部一致。",
+  "currentClaim": "Drift guardrails 已完成：新增只读 skill sync 校验，默认检查能发现 repo skill 与 global installed skill 的当前分叉，override smoke 与 focused tests 通过。",
   "doneWhenChecklist": [
     {
-      "id": "truth-v0-3-2",
-      "label": ".threadsmith committed truth 已切到 v0.3.2 patch release",
+      "id": "previous-closeout",
+      "label": "Product issue migration / canonical repo recheck 已完成 closeout",
       "status": "pass"
     },
     {
-      "id": "release-checklist-v0-3-2",
-      "label": "v0.3.2 release checklist 反映本轮 patch release 范围",
+      "id": "phase-reset",
+      "label": "当前 phase 已切到 drift guardrails",
       "status": "pass"
     },
     {
-      "id": "changelog-v0-3-2",
-      "label": "CHANGELOG 中包含独立 v0.3.2 条目",
+      "id": "plan",
+      "label": "drift guardrails implementation plan 已写入 docs/plans",
       "status": "pass"
     },
     {
-      "id": "release-copy-v0-3-2",
-      "label": "v0.3.2 GitHub Release copy 可供发布使用",
+      "id": "readonly-check",
+      "label": "只读 skill sync 检查脚本已新增",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "release verification 有新证据，并支持 ready / not ready 决策",
+      "label": "drift guardrails targeted verification 已完成",
       "status": "pass"
     }
   ],
   "implementationStatus": "ready-for-review",
   "reviewStatus": "ready-for-verification",
   "verificationStatus": "passed",
-  "closeoutStatus": "pending",
+  "closeoutStatus": "done",
   "knownGaps": [
-    "仍需完成 v0.3.2 tag、GitHub Release 创建，以及 push 后 GitHub Actions CI 确认。",
-    "发布动作不会自动安装或覆盖用户本机全局 ~/.codex/skills/threadsmith/SKILL.md。",
-    "v0.3.2 仍不承诺 multi-provider 自动执行或真实外部 skill 调用。"
+    "Project Charter Quality v1 已收口，但字段级评估仍然是文本启发式；后续可考虑更强的结构化 parser。",
+    "前端已冻结；Control Deck / UI source-label 与 copy polish 先不作为本轮修复范围。",
+    "本轮 guardrail 只检测 drift，不自动安装或覆盖全局 skill。",
+    "当前默认 npm run verify:skill-sync 已发现 global skill 与 repo skill 存在 3 个文件差异：SKILL.md、references/action-contracts.md、references/runtime-contract.md。"
   ],
-  "finalState": "accepted-with-closeout-pending"
+  "finalState": "accepted"
 }

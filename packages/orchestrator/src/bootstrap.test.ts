@@ -59,6 +59,34 @@ async function seedNodeProject(projectRoot: string, args?: {
   );
 }
 
+async function writeUsefulAgents(projectRoot: string) {
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      "Build and maintain a focused test project for Threadsmith bootstrap behavior.",
+      "",
+      "## Goals And Non-Goals",
+      "Goal: keep bootstrap behavior honest. Non-goals: broad unrelated rewrites.",
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src and tests. Commands: npm test and npm run build.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep bootstrap inference separate from implementation. Ask before destructive changes.",
+      "",
+      "## Human Confirmation Gates",
+      "Confirm before scope expansion, destructive git, or publishing.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when tests or explicit verification pass and evidence is reported."
+    ].join("\n"),
+    "utf8"
+  );
+}
+
 afterEach(async () => {
   await Promise.all(
     createdRoots.splice(0).map((projectRoot) =>
@@ -71,6 +99,7 @@ describe("bootstrapProjectState", () => {
   it("bootstraps a project with no .threadsmith directory", async () => {
     const projectRoot = await createProjectRoot();
     await seedNodeProject(projectRoot);
+    await writeUsefulAgents(projectRoot);
 
     const result = await bootstrapProjectState(projectRoot);
     const state = await loadProjectState(projectRoot);
@@ -92,6 +121,7 @@ describe("bootstrapProjectState", () => {
       readmeSummary:
         "Threadsmith Lab explores workflow automation and deck-backed supervision."
     });
+    await writeUsefulAgents(projectRoot);
 
     const result = await bootstrapProjectState(projectRoot);
 
@@ -111,6 +141,7 @@ describe("bootstrapProjectState", () => {
   it("repairs partial or invalid truth with a fresh bootstrap draft", async () => {
     const projectRoot = await createProjectRoot();
     await seedNodeProject(projectRoot);
+    await writeUsefulAgents(projectRoot);
     await mkdir(join(projectRoot, ".threadsmith"), { recursive: true });
     await writeFile(
       join(projectRoot, ".threadsmith", "project-brief.json"),
@@ -144,6 +175,7 @@ describe("bootstrapProjectState", () => {
     const projectRoot = await createProjectRoot();
     await mkdir(join(projectRoot, "notes"), { recursive: true });
     await writeFile(join(projectRoot, "notes", "todo.txt"), "figure this out\n", "utf8");
+    await writeUsefulAgents(projectRoot);
 
     const result = await bootstrapProjectState(projectRoot);
 
@@ -156,5 +188,14 @@ describe("bootstrapProjectState", () => {
     expect(result.state.activeWork.items[0]?.requiresUserDecision).toBe(true);
     expect(result.state.projectStatus.projectStatusSummary).toContain("补完后再回到 autopilot 主线");
     expect(result.state.projectStatus.projectLabel).toBe(basename(projectRoot));
+  });
+
+  it("stops new bootstrap when AGENTS.md is missing", async () => {
+    const projectRoot = await createProjectRoot();
+    await seedNodeProject(projectRoot);
+
+    await expect(bootstrapProjectState(projectRoot)).rejects.toThrow(
+      /Project Charter Gate blocked execution/
+    );
   });
 });
