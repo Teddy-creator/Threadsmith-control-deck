@@ -57,6 +57,29 @@ Do not repeat the same AGENTS.md setup prompt unless:
 - AGENTS.md and `.threadsmith/` contradict each other
 - the previous decline is stale for the current task
 
+Operational behavior:
+
+- read-only `sync` may continue after a prior decline, but must report that
+  implementation remains blocked until the constitution is confirmed
+- `drive`, `continuous`, implementation bootstrap, and source-mutating deck
+  actions must stop after a prior decline and route to `agents-md-builder` or a
+  user confirmation gate
+- if decline memory exists, do not phrase the result as a brand-new suggestion
+  to create AGENTS.md; phrase it as an existing constraint
+- if no decline memory exists and AGENTS.md is missing, ask once with a concrete
+  reason tied to project risk, architecture boundaries, and verification
+  expectations
+
+First-run charter prompt shape:
+
+- what is missing: AGENTS.md / project constitution
+- why it matters: durable purpose, non-goals, architecture boundaries,
+  commands, verification, and human confirmation gates
+- what will happen if accepted: route to `agents-md-builder` before normal
+  Threadsmith execution
+- what will happen if declined: remember the decline and allow read-only sync,
+  but block implementation-like work
+
 ## Monorepo Rules
 
 - nearest applicable `AGENTS.md` wins for local task behavior
