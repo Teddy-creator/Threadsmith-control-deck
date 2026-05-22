@@ -44,6 +44,18 @@ charter status. `drive`, `continuous`, and implementation bootstrap must stop on
 `fail` unless a safe explicit bypass applies. `recover` and hygiene may proceed
 to repair contradictory or stale state.
 
+## Project Charter Gate Matrix
+
+| Situation | `sync` | `drive` / implementation | `continuous` | Required response |
+| --- | --- | --- | --- | --- |
+| Useful AGENTS.md exists | continue | continue | continue | mention source path when relevant |
+| AGENTS.md missing and no decline memory | continue read-only with warning | stop | stop | ask once, route to `agents-md-builder` before implementation |
+| AGENTS.md placeholder or incomplete | continue read-only with warning | stop | stop | identify missing fields and route to `agents-md-builder` |
+| AGENTS.md stale | continue read-only with warning | stop | stop | route to hygiene unless user requests read-only sync |
+| User previously declined setup | continue read-only with existing-constraint note | stop | stop | do not ask again unless risk/scope changed |
+| AGENTS.md contradicts `.threadsmith/` | stop normal sync and recover | stop | stop | route to hygiene / recover |
+| Explicit low-risk read-only bypass | continue with residual risk | stop if mutating source | stop | record residual risk and avoid implementation |
+
 ## Decline Memory
 
 If the user declines AGENTS.md creation or update, record that decision in

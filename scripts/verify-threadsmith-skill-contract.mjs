@@ -7,17 +7,34 @@ const skillDir =
 const checks = [
   {
     file: "SKILL.md",
-    label: "short approvals execute instead of repeating recommendations",
+    label: "decision state machine is explicit",
     patterns: [
-      /Acknowledgement handling has higher priority/,
-      /accepted previous recommendation/,
-      /same recommendation/
+      /## Decision State Machine/,
+      /Recover gate/,
+      /Acknowledgement gate/,
+      /Project Charter Gate/,
+      /Mode selection/,
+      /Role selection/,
+      /Output level/
     ]
   },
   {
     file: "SKILL.md",
-    label: "operator orientation sections are required",
+    label: "short approvals execute instead of repeating recommendations",
     patterns: [
+      /short approval/,
+      /inherit that previous mode, role, and\s+action/,
+      /re-summarize the same recommendation/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "output matrix and orientation sections are required",
+    patterns: [
+      /## Output Matrix/,
+      /Full output sections/,
+      /Compact sync output/,
+      /Conceptual answer/,
       /### 上一步做了什么/,
       /### 下一步具体要做什么/,
       /### 当前架构位置/
@@ -36,26 +53,41 @@ const checks = [
   },
   {
     file: "SKILL.md",
-    label: "project charter decline memory is explicit",
+    label: "references use progressive disclosure",
     patterns: [
-      /Project Charter Gate/,
-      /declines?/i,
-      /decline memory/
+      /Load references only when needed/,
+      /Read `references\/runtime-contract\.md`/,
+      /Read `references\/role-contracts\.md`/,
+      /Read `references\/action-contracts\.md`/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "logical roles are explicit",
+    patterns: [
+      /Use planner, executor, reviewer, verifier, closeout, and hygiene as distinct roles/,
+      /Prefer role ownership over person ownership/
     ]
   },
   {
     file: "references/action-contracts.md",
-    label: "anti-repeat invariant is documented",
+    label: "action state machine and anti-repeat invariant are documented",
     patterns: [
+      /## Decision Ladder/,
       /Anti-repeat invariant/,
       /execution-shaped/,
-      /must not restate/
+      /must not restate/,
+      /## Output Level Rule/,
+      /Direct conceptual answers are allowed/
     ]
   },
   {
     file: "references/runtime-contract.md",
-    label: "AGENTS.md first-run and decline behavior is documented",
+    label: "AGENTS.md first-run and gate matrix are documented",
     patterns: [
+      /## Project Charter Gate Matrix/,
+      /User previously declined setup/,
+      /AGENTS.md contradicts `.threadsmith\/`/,
       /First-run charter prompt shape/,
       /Operational behavior/,
       /implementation remains blocked/

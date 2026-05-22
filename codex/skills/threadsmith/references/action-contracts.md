@@ -5,6 +5,22 @@ Threadsmith v2 supports four supervisor modes plus deck-facing actions.
 All execution-like actions first run Project Charter Gate unless the user
 explicitly bypasses it for low-risk exploratory work.
 
+## Decision Ladder
+
+Use this ladder before choosing an action:
+
+1. Recover: interruption, stale truth, failed verification, stuck run,
+   contradiction, confusing state, or bad handoff selects `recover`.
+2. Acknowledgement: a short approval after a concrete recommendation inherits
+   the prior mode / role / action and must execute or report a blocking gate.
+3. Project Charter Gate: execution-like work stops on failed charter status
+   unless an explicit low-risk read-only bypass applies.
+4. Mode: `continuous` for keep-going/autopilot, `drive` for next-step work,
+   `sync` for read-only status, `recover` for repair.
+5. Role: choose planner, executor, reviewer, verifier, closeout, or hygiene from
+   current truth and role packet freshness.
+6. Output: use the smallest output level that still orients the operator.
+
 Gate handling:
 
 - `pass`: continue normally
@@ -192,6 +208,29 @@ Anti-repeat invariant:
 - it must not restate "next I recommend..." as the main result
 - if no execution is possible because the previous recommendation is not
   recoverable from context, switch to `recover` and say exactly what is missing
+
+## Output Level Rule
+
+Full output is required for:
+
+- `drive`
+- `continuous`
+- `recover`
+- bootstrap
+- closeout
+- any response that writes or proposes durable truth changes
+
+Compact sync output is enough for read-only status refresh:
+
+- current state
+- current phase
+- acceptance state
+- next step
+- risks or confirmation needs
+
+Direct conceptual answers are allowed when the user asks how Threadsmith works
+or asks for clarification. In that case, do not force the full workflow report,
+do not write `.threadsmith/`, and label the source layer for factual claims.
 
 ## Architecture Comprehension Rule
 

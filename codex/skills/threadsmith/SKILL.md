@@ -18,21 +18,67 @@ architecture/risk guidance, verification expectations, or human confirmation
 gates for a risky repo, stop and route to `agents-md-builder`.
 Do not let AI invent these decisions silently.
 
-## Operating Modes
+## Decision State Machine
 
-Infer the mode from the user's request. If unclear, prefer `sync`.
+Resolve every invocation in this order. Do not skip ahead.
 
-Acknowledgement handling has higher priority than the default `sync` fallback.
-If the user replies with a short approval such as "同意", "可以", "继续",
-"好", "yes", or "proceed" after Threadsmith recommended a concrete next step,
-inherit that previous mode, role, and action. Execute the accepted step or name
-the blocking gate; do not turn the approval into another status refresh.
-Do not re-open the same choice, re-summarize the same recommendation, or produce
-a "next step is..." answer unless the accepted step is actually blocked.
+1. **Recover gate:** if the user reports interruption, stale state, failed
+   verification, stuck run, bad handoff, unexpected drift, confusing state, or
+   truth/repo disagreement, choose `recover` before any normal work.
+2. **Acknowledgement gate:** if the user replies with a short approval such as
+   "同意", "可以", "继续", "好", "yes", or "proceed" after Threadsmith
+   recommended a concrete next step, inherit that previous mode, role, and
+   action. Execute the accepted step or name the blocking gate. Do not turn the
+   approval into another status refresh, re-open the same choice, or
+   re-summarize the same recommendation.
+3. **Project Charter Gate:** before normal bootstrap, `drive`, or `continuous`,
+   evaluate AGENTS.md / project constitution status. Missing, stale,
+   placeholder, declined, or contradictory charters follow the matrix in
+   `references/runtime-contract.md`.
+4. **Mode selection:** choose `continuous` for an explicit autopilot / keep-going
+   request, `drive` for advance / implement / verify / closeout, `sync` for
+   read-only status / refresh / "do not implement", and `recover` for repair.
+   If unclear, prefer `sync`.
+5. **Role selection:** select the next role from acceptance state and current
+   phase: planner -> executor -> reviewer -> verifier -> closeout, with hygiene
+   for stale, contradictory, or handoff work.
+6. **Output level:** choose the smallest output shape that still orients the
+   operator. Use the Output Matrix below.
 
 If the current acceptance state is `accepted-with-closeout-pending` and the user
 approves continuing, select `drive` with role `closeout` unless a blocking gate
 or new user decision is discovered.
+
+## Output Matrix
+
+Use the full output only for `drive`, `continuous`, `recover`, bootstrap,
+closeout, or any response that changes durable truth. Use compact output for
+read-only `sync`. For ordinary conceptual questions about Threadsmith, answer
+directly without the full contract, but still cite the relevant source layer
+when making status claims.
+
+Full output sections:
+
+1. `Threadsmith Decision`
+2. `上一步做了什么`
+3. `下一步具体要做什么`
+4. `当前架构位置`
+5. `需要确认的点`
+
+Compact sync output:
+
+- 当前状态
+- 当前阶段
+- 验收状态
+- 下一步
+- 风险 / 需要确认
+
+Conceptual answer:
+
+- answer the question directly
+- mention whether the answer comes from committed truth, skill contract, repo
+  evidence, or chat memory
+- do not write `.threadsmith/`
 
 ### `sync`
 
@@ -119,15 +165,17 @@ If a role packet exists and is consistent with the current phase, use it as the 
 
 ## Contracts
 
-Read these before acting:
+Load references only when needed:
 
-- `references/runtime-contract.md`
-- `references/role-contracts.md`
-- `references/action-contracts.md`
+- Read `references/runtime-contract.md` for Project Charter Gate, truth
+  authority, writeback, freshness, and AGENTS.md behavior.
+- Read `references/role-contracts.md` when selecting or enforcing a role.
+- Read `references/action-contracts.md` when executing an action, interpreting
+  short approvals, choosing output level, or handling deck-facing actions.
 
 ## Output Contract
 
-When active, start with:
+When using the full output, start with:
 
 ### Threadsmith Decision
 - mode: `sync`, `drive`, `continuous`, or `recover`
