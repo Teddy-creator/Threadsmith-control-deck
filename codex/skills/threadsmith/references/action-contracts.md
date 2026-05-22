@@ -183,6 +183,16 @@ When committed truth says `accepted-with-closeout-pending`, an approval reply
 selects role `closeout` and should write the closeout truth instead of
 recommending closeout again.
 
+Anti-repeat invariant:
+
+- if the previous response ended with a concrete recommended next step and the
+  user approves it, the next Threadsmith response must be execution-shaped
+- execution-shaped means it contains an action attempt, artifact creation,
+  verification command, truth writeback, or explicit blocking gate
+- it must not restate "next I recommend..." as the main result
+- if no execution is possible because the previous recommendation is not
+  recoverable from context, switch to `recover` and say exactly what is missing
+
 ## Architecture Comprehension Rule
 
 For significant work, the response must include a compact architecture impact
@@ -196,6 +206,16 @@ should name:
 
 If the current action is only read-only status sync, say that no architecture
 change is being made.
+
+Orientation rule:
+
+- `上一步做了什么` explains the last durable state transition, not merely the
+  previous sentence in chat
+- `下一步具体要做什么` explains the current executable move or blocking gate
+- `当前架构位置` explains where this phase sits in project / workflow / state /
+  risk layers
+- keep these sections concrete enough that an operator can understand the
+  project without repeatedly asking what changed or why the next slice matters
 
 ## Preview Rule
 

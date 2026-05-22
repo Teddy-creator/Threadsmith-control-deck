@@ -40,6 +40,7 @@
     "verify:launchers:windows": "node scripts/verify-powershell-launchers.mjs",
     "verify:launchers": "npm run verify:launchers:macos && npm run verify:launchers:windows",
     "verify:skill-sync": "node scripts/verify-threadsmith-skill-sync.mjs",
+    "verify:skill-contract": "node scripts/verify-threadsmith-skill-contract.mjs",
     "verify:autopilot": "npm run test --workspace @threadsmith/orchestrator && npm run test --workspace @threadsmith/runtime && npm run test --workspace @threadsmith/control-deck -- src/test/renderDeck.workflow.test.tsx && npm run test:e2e:autopilot && npm run smoke:autopilot",
     "verify:release": "npm run test && npm run build && npm run test:e2e && npm run smoke:autopilot && npm run verify:launchers",
     "verify:bridge": "npm run test --workspace @threadsmith/orchestrator && npm run test:e2e:bridge",

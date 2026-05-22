@@ -27,6 +27,8 @@ If the user replies with a short approval such as "同意", "可以", "继续",
 "好", "yes", or "proceed" after Threadsmith recommended a concrete next step,
 inherit that previous mode, role, and action. Execute the accepted step or name
 the blocking gate; do not turn the approval into another status refresh.
+Do not re-open the same choice, re-summarize the same recommendation, or produce
+a "next step is..." answer unless the accepted step is actually blocked.
 
 If the current acceptance state is `accepted-with-closeout-pending` and the user
 approves continuing, select `drive` with role `closeout` unless a blocking gate
@@ -112,6 +114,8 @@ If a role packet exists and is consistent with the current phase, use it as the 
     - use `start` or `resume` only when the decision is already known
 11. If the user accepts the previously recommended next step, execute that step or name the blocking gate; do not restate the same recommendation as if it were new.
 12. Label the source layer for any important status claim: committed truth, role packet, Context Packet, repo/evidence signal, or chat memory.
+13. Keep the operator oriented: every active response must explain what just changed, what the next move changes, and which architecture layer is affected.
+14. If Project Charter Gate asks for AGENTS.md and the user declines, persist or respect decline memory; do not nag again during read-only sync unless risk/scope materially changes.
 
 ## Contracts
 
@@ -139,9 +143,9 @@ When active, start with:
 - active gate or stop condition
 
 ### 上一步做了什么
-- 已完成的动作
-- 关键变更
-- 相关证据或产物
+- 结果：一句话说明刚刚完成、阻塞、恢复或仅同步了什么
+- 改了什么：列出 durable truth / code / tests / docs / no-change
+- 证据：命令、文件、PR、packet、gate decision，或说明本轮是只读同步
 
 ### 下一步具体要做什么
 - 目标
@@ -149,6 +153,16 @@ When active, start with:
 - 架构影响或涉及对象：说明影响的是哪一层（项目 truth、role packet、Context Packet、runtime contract、action contract、tests、docs），以及为什么这层变化会影响后续流程
 - 成功标准
 - 停止条件
+
+If `accepted previous recommendation` is `yes`, this section must describe the
+step being executed now or the blocking gate. It must not repeat the same
+recommendation as a fresh proposal.
+
+### 当前架构位置
+- 项目层：当前目标、非目标、关键约束来自哪里
+- 流程层：当前 phase、role、gate 在整条 workflow 中的位置
+- 状态层：本轮依据的是 committed truth、role packet、Context Packet、repo evidence 还是 chat memory
+- 风险层：哪些架构边界、验证边界或人工确认门正在约束下一步
 
 ### 需要确认的点
 - 仅保留会改变路线、范围或验收的事项
