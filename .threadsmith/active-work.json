@@ -26,7 +26,7 @@
     },
     {
       "role": "closeout",
-      "status": "in-progress",
+      "status": "running",
       "taskSummary": "验证已通过；正在提交设计文档与 truth writeback，并开 PR。",
       "requiresUserDecision": false
     }

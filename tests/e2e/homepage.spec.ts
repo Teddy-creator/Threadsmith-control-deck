@@ -89,6 +89,11 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(
     page.getByText("Drift guardrails", { exact: true }).first()
   ).toBeVisible();
+  await expect(
+    page.getByText("Project State Store / Cross-Agent Bridge planning", {
+      exact: true
+    }).first()
+  ).toBeVisible();
   await expect(page.getByRole("heading", { name: "当前总命令" })).toBeVisible();
 
   await page.getByRole("button", { name: "项目", exact: true }).click();
@@ -107,14 +112,16 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("阶段工作台", { exact: true })).toBeVisible();
   await expect(inspectorPanel.getByRole("heading", { name: "Context 状态" })).toBeVisible();
   await expect(
-    inspectorPanel.getByText("Drift guardrails").first()
+    inspectorPanel
+      .getByText("Project State Store / Cross-Agent Bridge v1 planning closeout")
+      .first()
   ).toBeVisible();
 
   await page.getByRole("button", { name: "验收", exact: true }).click();
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "Drift guardrails 已完成：新增只读 skill sync 校验，默认检查能发现 repo skill 与 global installed skill 的当前分叉，override smoke 与 focused tests 通过。"
+      "Project State Store / Cross-Agent Bridge v1 设计已进入 closeout：文档草案已写成，等待本轮验证、提交与 PR。"
     ).first()
   ).toBeVisible();
 });
