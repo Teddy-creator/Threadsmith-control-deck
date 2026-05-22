@@ -1,12 +1,12 @@
 {
   "projectLabel": "Threadsmith",
   "currentTrack": "project state store / cross-agent bridge v1 planning",
-  "overallState": "planning",
-  "currentFocus": "把 Threadsmith 的项目级状态底座与跨 agent 交接层整理为可审核设计文档，并准备 PR。",
-  "projectStatusSummary": "Threadsmith 当前正在把 .threadsmith truth 从内部状态文件夹升级为更清晰的项目级状态协议设计：保留现有 workflow，新增 handoff packet、adapter prompt、外部 agent 读写边界和 recover 规则。",
+  "overallState": "in-progress",
+  "currentFocus": "Project State Store / Cross-Agent Bridge v1 planning 已合并；下一轮可以从设计文档进入实现切口。",
+  "projectStatusSummary": "Threadsmith 已把 .threadsmith truth 从内部状态文件夹升级为更清晰的项目级状态协议设计：保留现有 workflow，新增 handoff packet、adapter prompt、外部 agent 读写边界和 recover 规则。设计文档已通过 PR #28 合并。",
   "latestAcceptedSlice": {
-    "title": "Threadsmith skill state machine",
-    "recordedAt": "2026-05-23T04:04:00.000+08:00"
+    "title": "Project State Store / Cross-Agent Bridge v1 planning",
+    "recordedAt": "2026-05-23T05:16:00.000+08:00"
   },
   "nextPlannedSlice": {
     "title": "Project State Store / Cross-Agent Bridge v1 implementation",

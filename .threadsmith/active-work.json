@@ -26,8 +26,8 @@
     },
     {
       "role": "closeout",
-      "status": "running",
-      "taskSummary": "验证已通过；正在提交设计文档与 truth writeback，并开 PR。",
+      "status": "done",
+      "taskSummary": "PR #28 已合并到 main；设计文档、truth writeback、schema/e2e 修复和 GitHub checks 已收口。",
       "requiresUserDecision": false
     }
   ],

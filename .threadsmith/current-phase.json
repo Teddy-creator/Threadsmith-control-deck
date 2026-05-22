@@ -1,7 +1,7 @@
 {
   "phaseName": "Project State Store / Cross-Agent Bridge v1 planning closeout",
   "phaseGoal": "把 Threadsmith 的“项目级状态底座 + 跨 agent 交接层”定位整理成可审核设计文档，并保持现有 workflow 不受影响。",
-  "deliverable": "docs/plans/project-state-store-and-cross-agent-bridge-v1.md 设计文档、truth writeback、PR。",
+  "deliverable": "docs/plans/project-state-store-and-cross-agent-bridge-v1.md 设计文档、truth writeback、PR #28 合并记录。",
   "inScope": [
     "明确 Threadsmith 新定位与现有 workflow 的关系",
     "定义项目状态分层：AGENTS.md、committed truth、agent packets、evidence、events/audit",
@@ -19,7 +19,7 @@
     "维护、优化或重构前端 UI",
     "发布 release"
   ],
-  "stopCondition": "设计文档已写入 docs/plans，committed truth 已同步到本阶段，文档和 JSON 校验通过，并开 PR 等待审核/合并。",
+  "stopCondition": "设计文档已写入 docs/plans，committed truth 已同步，文档和 JSON 校验通过，GitHub checks 通过，PR #28 已合并到 main。",
   "verificationForThisPhase": [
     "git diff --check",
     "jq empty .threadsmith/*.json",
