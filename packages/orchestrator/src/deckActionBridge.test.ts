@@ -1,5 +1,5 @@
 import { PassThrough } from "node:stream";
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -48,6 +48,32 @@ function createMockChild() {
 }
 
 async function seedProject(projectRoot: string) {
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      "Exercise deck bridge execution safely.",
+      "",
+      "## Goals And Non-Goals",
+      "Goal: test bridge dispatch. Non-goals: unrelated UI or provider work.",
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src and tests. Commands: npm test and npm run build.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep deck bridge, run engine, and provider routing responsibilities separate.",
+      "",
+      "## Human Confirmation Gates",
+      "Ask before destructive git, publishing, or broad scope expansion.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when the bridge route and run truth are written and tests pass."
+    ].join("\n"),
+    "utf8"
+  );
+
   await writeStateFragment(projectRoot, STATE_FILES.currentPhase, {
     phaseName: "Deck bridge smoke",
     phaseGoal: "通过 deck bridge 发起一轮真实 executor run。",

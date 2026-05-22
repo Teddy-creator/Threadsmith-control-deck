@@ -14,7 +14,7 @@ import {
   writeStateFragment
 } from "../../packages/fs-bridge/src/index.ts";
 import { STATE_FILES } from "../../packages/fs-bridge/src/paths.ts";
-import { readJsonFileWhenReady } from "./helpers";
+import { readJsonFileWhenReady, writeUsefulAgents } from "./helpers";
 
 const TEST_TIMEOUT_MS = 60_000;
 const RUN_COMPLETION_TIMEOUT_MS = 15_000;
@@ -31,6 +31,11 @@ async function prepareExecutorBridgeProject(mode: "success" | "fail") {
 
   await writeFile(smokeTargetPath, "pending\n", "utf8");
   await writeFile(fakeModePath, `${mode}\n`, "utf8");
+  await writeUsefulAgents(projectRoot, {
+    title: "Executor Bridge Smoke",
+    purpose:
+      "Verify that Threadsmith can launch a scoped executor bridge run and ingest the result."
+  });
   await initializeProjectState(projectRoot);
   await writeStateFragment(projectRoot, STATE_FILES.currentPhase, {
     phaseName: "Codex bridge smoke",

@@ -2,7 +2,7 @@ import { access, mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
-import { connectCustomProject } from "./helpers";
+import { connectCustomProject, writeUsefulAgents } from "./helpers";
 
 const CUSTOM_PROJECT_ONBOARDING_TITLE = "这个目录已经找到，只差初始化 Threadsmith";
 
@@ -40,6 +40,11 @@ test("a custom project without .threadsmith can be initialized from the deck", a
       ].join("\n"),
       "utf8"
     );
+    await writeUsefulAgents(projectRoot, {
+      title: "PromptPet AR",
+      purpose:
+        "Interactive AR pet prototype with prompt-driven reactions and clear Threadsmith onboarding."
+    });
 
     await page.goto("/");
     await connectCustomProject(page, projectRoot);

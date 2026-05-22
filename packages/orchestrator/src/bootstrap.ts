@@ -17,6 +17,7 @@ import {
   projectStatusSchema
 } from "@threadsmith/domain";
 import { initializeProjectState, loadProjectState } from "@threadsmith/fs-bridge";
+import { assertProjectCharterGate } from "./projectCharterGate.ts";
 
 type BootstrapKind = "existing" | "bootstrapped" | "paused";
 
@@ -397,6 +398,13 @@ export async function bootstrapProjectState(
       missingInfo: []
     };
   } catch {
+    await assertProjectCharterGate({
+      projectRoot,
+      mode: "bootstrap",
+      riskLevel: "medium",
+      mutatesSource: true
+    });
+
     const signals = await inspectRepository(projectRoot);
     const projectBrief = buildBootstrapBrief(signals);
     const currentPhase = buildBootstrapPhase(signals);

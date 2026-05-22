@@ -67,6 +67,37 @@ export async function connectAndInitializeCustomProject(
     .toBe(true);
 }
 
+export async function writeUsefulAgents(projectRoot: string, args: {
+  title: string;
+  purpose: string;
+}) {
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      args.purpose,
+      "",
+      "## Goals And Non-Goals",
+      `Goal: keep ${args.title} focused and verifiable. Non-goals: unrelated rewrites or release publishing.`,
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src and tests. Commands: npm test and npm run build.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep test fixture behavior isolated from Threadsmith product code. Ask before destructive changes.",
+      "",
+      "## Human Confirmation Gates",
+      "Confirm before destructive git, publishing, or scope expansion.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when the expected Threadsmith truth is written and focused checks pass."
+    ].join("\n"),
+    "utf8"
+  );
+}
+
 export async function seedBootstrappableProject(projectRoot: string, args: {
   packageName: string;
   title: string;
@@ -97,4 +128,8 @@ export async function seedBootstrappableProject(projectRoot: string, args: {
     [`# ${args.title}`, "", args.summary].join("\n"),
     "utf8"
   );
+  await writeUsefulAgents(projectRoot, {
+    title: args.title,
+    purpose: args.summary
+  });
 }

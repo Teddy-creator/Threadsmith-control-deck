@@ -64,6 +64,31 @@ async function seedRepository(projectRoot: string, args: {
     [`# ${args.title}`, "", args.summary].join("\n"),
     "utf8"
   );
+  await writeFile(
+    join(projectRoot, "AGENTS.md"),
+    [
+      "# Project Constitution",
+      "",
+      "## Purpose",
+      "Verify autopilot truth rendering in the deck.",
+      "",
+      "## Goals And Non-Goals",
+      "Goal: exercise accepted and paused autopilot states. Non-goals: real provider execution.",
+      "",
+      "## Repository Map And Commands",
+      "Source lives in src and tests. Commands: npm test and npm run build.",
+      "",
+      "## Architecture Boundaries And Risk Rules",
+      "Keep e2e smoke data isolated from product source.",
+      "",
+      "## Human Confirmation Gates",
+      "Ask before destructive git, publishing, or expanding test scope.",
+      "",
+      "## Definition Of Done And Verification",
+      "Done when the deck shows committed phase-run truth."
+    ].join("\n"),
+    "utf8"
+  );
 }
 
 async function writeAutopilotPhase(projectRoot: string, phaseName: string, phaseGoal: string) {

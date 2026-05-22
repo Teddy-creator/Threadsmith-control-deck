@@ -15,7 +15,12 @@ export const continuationBehaviorSourceSchema = z.enum([
 ]);
 
 export const storedPreferencesSchema = z.object({
-  continuationBehavior: continuationBehaviorSchema.optional()
+  continuationBehavior: continuationBehaviorSchema.optional(),
+  projectCharterGate: z.object({
+    declinedSetup: z.boolean().default(false),
+    declineReason: z.string().min(1).nullable().default(null),
+    declinedAt: z.string().min(1).nullable().default(null)
+  }).optional()
 });
 
 export const resolvedContinuationPreferenceSchema = z.object({

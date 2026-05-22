@@ -23,6 +23,37 @@ async function createProjectRoot() {
   return projectRoot;
 }
 
+async function writeUsefulAgents(projectRoot: string) {
+  await readFile(join(projectRoot, ".threadsmith", "project-brief.json"), "utf8");
+  await import("node:fs/promises").then(({ writeFile }) =>
+    writeFile(
+      join(projectRoot, "AGENTS.md"),
+      [
+        "# Project Constitution",
+        "",
+        "## Purpose",
+        "Keep runEngine tests honest.",
+        "",
+        "## Goals And Non-Goals",
+        "Goal: exercise drive and continuous entry gates. Non-goals: unrelated rewrites.",
+        "",
+        "## Repository Map And Commands",
+        "Source lives in src and tests. Commands: npm test and npm run build.",
+        "",
+        "## Architecture Boundaries And Risk Rules",
+        "Avoid destructive changes without confirmation.",
+        "",
+        "## Human Confirmation Gates",
+        "Ask before risky scope expansion or publishing.",
+        "",
+        "## Definition Of Done And Verification",
+        "Done when tests pass and evidence is captured."
+      ].join("\n"),
+      "utf8"
+    )
+  );
+}
+
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -95,6 +126,7 @@ afterEach(async () => {
 describe("startProjectRun", () => {
   it("creates a Codex executor run and launches codex exec with stdin prompt", async () => {
     const projectRoot = await createProjectRoot();
+    await writeUsefulAgents(projectRoot);
     const { child } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
 
@@ -246,6 +278,7 @@ describe("startProjectRun", () => {
 
   it("passes a reasoning override through to codex exec when configured", async () => {
     const projectRoot = await createProjectRoot();
+    await writeUsefulAgents(projectRoot);
     const { child } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
     process.env.THREADSMITH_CODEX_REASONING_EFFORT = "low";
@@ -274,6 +307,7 @@ describe("startProjectRun", () => {
 
   it("supports a quoted Codex command override with extra launcher arguments", async () => {
     const projectRoot = await createProjectRoot();
+    await writeUsefulAgents(projectRoot);
     const { child } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
     process.env.THREADSMITH_CODEX_BIN =
@@ -304,6 +338,7 @@ describe("startProjectRun", () => {
 
   it("classifies fallback verification success as reporting-stage failure when codex closes without JSON", async () => {
     const projectRoot = await createProjectRoot();
+    await writeUsefulAgents(projectRoot);
     await setPhaseVerification(projectRoot, ["node -e \"process.stdout.write('smoke-ok')\""]);
     const { child, emit } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
@@ -356,6 +391,7 @@ describe("startProjectRun", () => {
 
   it("classifies startup errors before task execution begins", async () => {
     const projectRoot = await createProjectRoot();
+    await writeUsefulAgents(projectRoot);
     const { child, emit } = createMockChild();
     const spawnMock = vi.fn(() => child as any);
 
@@ -393,5 +429,22 @@ describe("startProjectRun", () => {
             event.outcome === "failed"
         )
     );
+  });
+
+  it("blocks drive execution when AGENTS.md is missing", async () => {
+    const projectRoot = await createProjectRoot();
+    const { child } = createMockChild();
+    const spawnMock = vi.fn(() => child as any);
+
+    await expect(
+      startProjectRun({
+        projectRoot,
+        role: "executor",
+        provider: "codex",
+        runId: "run-missing-agents",
+        startedAt: "2026-04-09T10:20:00.000Z",
+        spawnProcess: spawnMock as any
+      })
+    ).rejects.toThrow(/Project Charter Gate blocked execution/);
   });
 });
