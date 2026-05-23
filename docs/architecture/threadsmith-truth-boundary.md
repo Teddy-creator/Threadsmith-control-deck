@@ -137,6 +137,9 @@ Verifier 不能把缺失 evidence 当成通过。Closeout 也不能在没有 ver
 那份文档给出了操作者流程、adapter 入口、proposal JSON 例子和
 `accept-plan` 的人工 gate 边界。
 
+当前 v1 bridge 已实现能力和验证地图见
+[Cross-Agent Bridge Contract Closeout v1](./cross-agent-bridge-contract-closeout-v1.md)。
+
 角色边界：
 
 - Planner 可以更新 phase / status / active work，但不能声称 verification passed。

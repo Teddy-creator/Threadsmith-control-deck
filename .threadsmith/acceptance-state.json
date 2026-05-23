@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Adapter Prompt Freshness v1 已 accepted：Threadsmith 现在有 threadsmith:adapters 命令，可从当前 committed truth 刷新 codex / claude / generic-agent adapter prompts，避免外部 agent 读到旧 phase。",
+  "currentClaim": "Cross-Agent Bridge Contract Closeout v1 已 accepted：Threadsmith 已把跨 agent bridge v1 的能力边界、验证方式、命令入口和下一阶段边界做合同式收口。",
   "doneWhenChecklist": [
     {
-      "id": "adapter-command",
-      "label": "新增 threadsmith:adapters 命令，从项目 truth 生成 adapters/*.md",
+      "id": "closeout-doc",
+      "label": "新增 cross-agent bridge contract closeout 文档",
       "status": "pass"
     },
     {
-      "id": "adapter-artifacts",
-      "label": "当前 canonical repo 刷新 codex / claude / generic-agent adapter prompts",
+      "id": "capability-boundary",
+      "label": "文档明确已具备能力与未承诺能力",
       "status": "pass"
     },
     {
-      "id": "fresh-phase",
-      "label": "adapter prompts 标注当前 phase 和 acceptance state，不再停留在旧 phase",
+      "id": "verification-map",
+      "label": "文档列出 bridge v1 的验证命令和证据入口",
       "status": "pass"
     },
     {
-      "id": "writeback-rules",
-      "label": "adapter prompts 保持 external agent proposal writeback 和 no direct truth write 边界",
+      "id": "truth-consistency",
+      "label": "docs / truth / scripts 对 bridge v1 的描述一致",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、adapter command、fs-bridge adapter test、diff hygiene 与 JSON 校验通过",
+      "label": "project truth、state bridge smoke、handoff、adapters、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],

@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Adapter Prompt Freshness v1 已 accepted：adapter prompts 可从当前 committed truth 刷新，避免外部 agent 读到旧 phase。",
+  "summary": "Cross-Agent Bridge Contract Closeout v1 已 accepted：state bridge、operator guide、handoff 和 adapter prompt 能力已收成可验证合同。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把下一刀重置为 Adapter Prompt Freshness v1，并保持前端冻结、全局 skill 不修改。",
+      "taskSummary": "Cross-Agent Bridge Contract Closeout v1 已完成；下一步由 planner 起草 Proposal Review Workflow v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from External Agent Handoff Packet v1",
-      "updatedAt": "2026-05-23T19:53:39+08:00"
+      "latestEvidenceLabel": "phase reset from Adapter Prompt Freshness v1",
+      "updatedAt": "2026-05-23T20:16:39+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 threadsmith:adapters 命令并刷新 .threadsmith/adapters/codex.md、claude.md、generic-agent.md。",
+      "taskSummary": "已新增 contract closeout 文档，并把 operator guide / truth boundary 指向该收口合同。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "adapter prompts refreshed",
-      "updatedAt": "2026-05-23T19:53:39+08:00"
+      "latestEvidenceLabel": "docs/architecture/cross-agent-bridge-contract-closeout-v1.md",
+      "updatedAt": "2026-05-23T20:16:39+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 adapters 已刷新到当前 phase，并保持 proposal writeback、derived working context 和 no direct truth write 边界。",
+      "taskSummary": "已审查 closeout 明确 v1 支持和不支持的边界，没有把 bridge 写成自动 multi-provider。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T19:53:39+08:00"
+      "latestEvidenceLabel": "boundary review passed",
+      "updatedAt": "2026-05-23T20:16:39+08:00"
     },
     {
       "id": "verifier-logical",
@@ -48,13 +48,12 @@
       "threadLabel": "Verifier",
       "provider": "codex",
       "presence": "logical",
-      "status": "running",
       "status": "done",
-      "taskSummary": "已运行 project truth、adapter command、fs-bridge adapter test、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、state bridge smoke、handoff、adapters、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T19:53:39+08:00"
+      "updatedAt": "2026-05-23T20:16:39+08:00"
     },
     {
       "id": "hygiene",
@@ -63,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Adapter Prompt Freshness v1 accepted；下一刀建议 Cross-Agent Bridge Contract Closeout v1。",
+      "taskSummary": "已记录 Cross-Agent Bridge Contract Closeout v1 accepted；下一刀建议 Proposal Review Workflow v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T19:53:39+08:00"
+      "updatedAt": "2026-05-23T20:16:39+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T19:53:39+08:00"
+  "updatedAt": "2026-05-23T20:16:39+08:00"
 }

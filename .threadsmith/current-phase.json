@@ -1,13 +1,13 @@
 {
-  "phaseName": "Adapter Prompt Freshness v1",
-  "phaseGoal": "让 .threadsmith/adapters/codex.md、claude.md、generic-agent.md 能从当前 committed truth 重新生成，避免外部 agent 读到过期 phase 和 acceptance 信息。",
-  "deliverable": "threadsmith:adapters command、刷新后的 adapter prompts、对应验证证据。",
+  "phaseName": "Cross-Agent Bridge Contract Closeout v1",
+  "phaseGoal": "把 project state store / cross-agent bridge v1 已实现能力做合同式收口，明确已具备、未具备、验证方式和下一阶段边界。",
+  "deliverable": "cross-agent bridge contract closeout 文档、truth closeout、对应验证证据。",
   "inScope": [
-    "新增命令行入口，从当前项目 committed truth 生成 .threadsmith/adapters/*.md",
-    "刷新当前 canonical repo 的 codex / claude / generic-agent adapter prompts",
-    "确保 adapter prompts 标注当前 phase、acceptance state、generated at 和 source authority",
-    "验证 adapter prompts 是 derived working context，不是 acceptance evidence",
-    "补充 package script，方便操作者手动刷新 adapters"
+    "汇总 proposal contract、proposal review / adoption plan、state bridge smoke、operator guide、handoff、adapter refresh 的当前能力",
+    "明确 v1 不包含真实 multi-provider 自动执行、不包含外部 agent 直接写 committed truth、不包含 proposal review UI",
+    "列出操作者可用命令和验证命令",
+    "检查 docs / truth / scripts 是否一致",
+    "写回 .threadsmith 作为 bridge v1 closeout"
   ],
   "outOfScope": [
     "真实执行外部 provider / CLI",
@@ -17,11 +17,12 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "adapter prompts 能从当前 committed truth 生成，并且不再停留在旧 phase 或旧 acceptance state。",
+  "stopCondition": "bridge v1 contract 能清楚说明当前能用什么、不能承诺什么、如何验证，以及下一阶段该从哪里继续。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
+    "npm run smoke:state-bridge",
+    "npm run threadsmith:handoff -- .",
     "npm run threadsmith:adapters -- .",
-    "npm run test --workspace @threadsmith/fs-bridge -- agentAdapters",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],
