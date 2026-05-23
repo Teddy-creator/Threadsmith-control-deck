@@ -77,6 +77,8 @@ If layers disagree, resolve in this order:
 | `npm run smoke:state-bridge` | Verifies isolated writeback proposal and proposal-review behavior. |
 | `npm run threadsmith:handoff -- .` | Generates the fixed current-agent handoff packet from current truth. |
 | `npm run threadsmith:adapters -- .` | Generates provider-specific adapter prompts from current truth. |
+| `npm run threadsmith:review-proposal -- . <proposal-id>` | Reviews one writeback proposal and writes a proposal-review artifact without applying truth. |
+| `npm run smoke:review-proposal` | Verifies the proposal review command path in an isolated project. |
 | `git diff --check` | Catches whitespace and diff hygiene issues before closeout. |
 | `jq empty .threadsmith/*.json` | Catches malformed top-level committed truth JSON. |
 
@@ -111,4 +113,3 @@ Route to recover if:
   proposal fixtures.
 - Cross-agent state contract tests: expand schema checks around proposal
   freshness and authority boundaries.
-

@@ -9,6 +9,7 @@ export * from "./agentHandoff.ts";
 export * from "./agentAdapters.ts";
 export * from "./writebackProposals.ts";
 export * from "./writebackProposalReviews.ts";
+export * from "./writebackProposalWorkflow.ts";
 export * from "./agentRuns.ts";
 export * from "./commandBridge.ts";
 export * from "./providerRouting.ts";
