@@ -3,19 +3,19 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将 current phase 重置为 Proposal Review Workflow v1，并新增实施计划。",
+      "taskSummary": "已将 current phase 重置为 Stale Proposal Recovery v1，并新增实施计划。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 review-proposal 命令、proposal review workflow helper、isolated smoke、focused tests 和 docs 更新。",
+      "taskSummary": "已实现 proposal freshness detection、focused tests 和 operator docs 更新。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已审查 proposal review 保持 accept-plan 人工采纳边界，不会自动改 committed truth。",
+      "taskSummary": "已审查 stale proposal 不会误入 accept-plan，且安全 proposal 仍可生成 accept-plan。",
       "requiresUserDecision": false
     },
     {
@@ -27,7 +27,7 @@
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Proposal Review Workflow v1 accepted；下一刀建议 Bridge v1 hardening / stale proposal recovery。",
+      "taskSummary": "已记录 Stale Proposal Recovery v1 accepted；下一刀建议 Bridge v1 handoff freshness hardening。",
       "requiresUserDecision": false
     }
   ],

@@ -1,12 +1,12 @@
 {
-  "phaseName": "Proposal Review Workflow v1",
-  "phaseGoal": "给 cross-agent bridge v1 增加可执行的 proposal review 命令面：读取外部 agent 的 writeback proposal，输出 accept-plan / reject / needs-recovery review artifact，但不自动修改 committed truth。",
-  "deliverable": "proposal review workflow plan、review proposal command、focused tests、docs/truth closeout。",
+  "phaseName": "Stale Proposal Recovery v1",
+  "phaseGoal": "硬化 proposal review：当 writeback proposal 早于当前 committed truth 更新时，输出 needs-recovery，而不是继续生成 accept-plan。",
+  "deliverable": "stale proposal recovery plan、freshness detection、focused tests、docs/truth closeout。",
   "inScope": [
-    "新增命令行入口，按 proposal id 审查 .threadsmith/proposals/<proposal-id>.json",
-    "复用现有 writeback proposal / proposal review domain schema 和 manual adoption plan",
-    "安全 proposal 输出 accept-plan，危险或冲突 proposal 输出 reject 或 needs-recovery",
-    "写入 .threadsmith/proposal-reviews/<proposal-id>.json 作为 runtime artifact",
+    "用 projectStatus.updatedAt 作为 committed truth freshness 水位线",
+    "proposal.createdAt 早于 committed truth freshness 时输出 needs-recovery",
+    "保持 phase mismatch 进入 needs-recovery",
+    "保持 evidence missing/failed 进入 reject",
     "补充 focused tests 和 operator docs"
   ],
   "outOfScope": [
@@ -17,11 +17,10 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "操作者能用一个命令把 proposal 转成 review artifact，并且 accept-plan 仍然不会自动写 committed truth。",
+  "stopCondition": "过期 proposal 不会被 accept-plan，操作者会收到明确的 sync / regenerate / rebase recovery 动作。",
   "verificationForThisPhase": [
-    "npm run test --workspace @threadsmith/domain -- writebackProposalReview",
-    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposal",
-    "npm run threadsmith:review-proposal -- . <fixture-id>",
+    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalWorkflow",
+    "npm run smoke:review-proposal",
     "npm run verify:project-truth",
     "git diff --check",
     "jq empty .threadsmith/*.json"

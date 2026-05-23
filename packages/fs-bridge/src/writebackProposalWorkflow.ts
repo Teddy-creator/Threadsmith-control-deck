@@ -29,6 +29,35 @@ function reviewIdFor(proposalId: string) {
   return `review-${proposalId}`;
 }
 
+function timestampMs(value: string | null | undefined) {
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function committedTruthFreshness(stateUpdatedAt: string | null | undefined) {
+  return timestampMs(stateUpdatedAt);
+}
+
+function isProposalOlderThanCommittedTruth(input: {
+  proposalCreatedAt: string;
+  committedTruthUpdatedAt: string | null | undefined;
+}) {
+  const proposalCreatedAt = timestampMs(input.proposalCreatedAt);
+  const committedTruthUpdatedAt = committedTruthFreshness(
+    input.committedTruthUpdatedAt
+  );
+
+  if (proposalCreatedAt === null || committedTruthUpdatedAt === null) {
+    return false;
+  }
+
+  return proposalCreatedAt < committedTruthUpdatedAt;
+}
+
 function evidenceForProposal(proposal: WritebackProposal) {
   return [
     {
@@ -137,6 +166,7 @@ export async function reviewWritebackProposalArtifact(
 
   const state = await loadProjectState(projectRoot);
   const currentPhaseName = state.currentPhase.phaseName;
+  const projectStatusUpdatedAt = state.projectStatus.updatedAt;
 
   const review =
     proposal.phaseName !== currentPhaseName
@@ -148,6 +178,18 @@ export async function reviewWritebackProposalArtifact(
           action:
             "Run Threadsmith recover/sync before applying this proposal, then regenerate or rebase the proposal."
         })
+      : isProposalOlderThanCommittedTruth({
+          proposalCreatedAt: proposal.createdAt,
+          committedTruthUpdatedAt: projectStatusUpdatedAt
+        })
+        ? needsRecoveryReview({
+            proposal,
+            reviewedAt,
+            reviewerProvider,
+            reason: `Proposal was created at "${proposal.createdAt}" before committed truth updated at "${projectStatusUpdatedAt}".`,
+            action:
+              "Run Threadsmith sync/recover, then regenerate or rebase this proposal against the current committed truth before adoption planning."
+          })
       : proposal.status !== "proposed" && proposal.status !== "needs-review"
         ? rejectReview({
             proposal,
@@ -177,4 +219,3 @@ export async function reviewWritebackProposalArtifact(
     review
   };
 }
-

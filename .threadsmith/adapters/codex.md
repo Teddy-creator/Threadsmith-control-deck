@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T12:43:07.344Z
+- generated at: 2026-05-23T12:58:54.990Z
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Proposal Review Workflow v1
+- current phase: Stale Proposal Recovery v1
 - acceptance state: accepted
 
 ## Purpose

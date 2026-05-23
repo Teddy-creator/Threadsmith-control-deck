@@ -183,6 +183,13 @@ npm run threadsmith:review-proposal -- . <proposal-id>
 `accept-plan`，它也只会生成 manual adoption plan，不会自动修改 committed
 truth。
 
+如果 proposal 的 `createdAt` 早于当前 `project-status.json` 的 `updatedAt`，
+Threadsmith 会把它判定为 stale proposal，并输出 `needs-recovery`。这表示：
+
+- proposal 可能基于旧 committed truth；
+- 不应该直接采纳；
+- 操作者应先 sync / recover，然后让外部 agent 重新生成或 rebase proposal。
+
 ### 6. 人工采纳或拒绝
 
 采纳前检查：

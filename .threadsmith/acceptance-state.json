@@ -1,24 +1,24 @@
 {
-  "currentClaim": "Proposal Review Workflow v1 已 accepted：Threadsmith 现在有 review-proposal 命令、isolated smoke 和 focused tests，用来把 external writeback proposal 转成 review artifact，同时保持 committed truth 不被自动修改。",
+  "currentClaim": "Stale Proposal Recovery v1 已 accepted：Threadsmith 现在会让早于当前 committed truth 的 writeback proposal 进入 needs-recovery，而不是生成 accept-plan。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Proposal Review Workflow v1 实施计划",
+      "label": "新增 Stale Proposal Recovery v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "review-command",
-      "label": "新增 proposal review 命令，能输出 review artifact",
+      "id": "freshness-detection",
+      "label": "proposal review 能识别 proposal.createdAt 早于 committed truth freshness",
       "status": "pass"
     },
     {
-      "id": "safe-boundary",
-      "label": "accept-plan 保持人工采纳计划，不自动写 committed truth",
+      "id": "recovery-output",
+      "label": "过期 proposal 输出 needs-recovery 和明确恢复动作",
       "status": "pass"
     },
     {
       "id": "tests",
-      "label": "accept-plan / reject / needs-recovery 路径有 focused tests",
+      "label": "safe / stale / phase mismatch / evidence failure 路径有 focused tests",
       "status": "pass"
     },
     {

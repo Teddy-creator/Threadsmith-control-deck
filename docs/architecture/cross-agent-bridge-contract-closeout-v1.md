@@ -101,6 +101,7 @@ Route to recover if:
 - generated handoff or adapter prompts name an old phase;
 - an external agent claims final acceptance without evidence;
 - a proposal tries to mutate committed truth directly;
+- a proposal was created before the latest committed truth update;
 - acceptance says `accepted` while git diff still contains unreviewed work;
 - verification evidence is missing or stale.
 
