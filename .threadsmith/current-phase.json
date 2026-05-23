@@ -1,24 +1,26 @@
 {
-  "phaseName": "Cross-Agent State Bridge v1 closeout / release decision",
-  "phaseGoal": "收束 Cross-Agent State Bridge v1 当前能力、缺口和发布判断，确认这条线是否已经形成稳定 v1。",
-  "deliverable": "closeout doc update、v1 release decision、truth closeout、verification evidence。",
+  "phaseName": "Proposal Adoption and Round-trip v1",
+  "phaseGoal": "补上显式 proposal adoption 命令，并用隔离 smoke 验证外部 agent proposal -> Threadsmith review -> adoption 写回 truth 的完整链路。",
+  "deliverable": "adopt-proposal CLI、fs-bridge adoption workflow、focused tests、round-trip smoke、docs/truth closeout。",
   "inScope": [
-    "确认 Cross-Agent State Bridge v1 已实现能力清单",
-    "更新 closeout 文档状态和 release decision",
-    "确认 proposal visibility 已纳入 v1 contract",
-    "刷新 .threadsmith truth 到当前 closeout slice",
-    "运行 project truth、skill contract、diff hygiene 和 JSON 校验"
+    "实现 npm run threadsmith:adopt-proposal -- . <proposal-id>",
+    "只允许采纳已 review 为 accept-plan 的 proposal",
+    "采纳前校验 targetPath、targetPointer 和写入后的 JSON schema",
+    "新增 isolated round-trip smoke 覆盖 external proposal -> review -> adoption",
+    "更新 Cross-Agent Bridge operator docs 和 truth"
   ],
   "outOfScope": [
-    "实现 proposal adoption command",
-    "前端维护或 UI 改造",
-    "multi-provider 自动执行",
+    "自动多 agent 调度",
     "外部 agent 直接写 committed truth",
+    "采纳 source-code 变更",
+    "前端维护或 UI 改造",
     "发布 release",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md"
   ],
-  "stopCondition": "操作者能清楚知道 Cross-Agent State Bridge v1 当前已完成什么、为什么暂不发 release、下一步可选做什么。",
+  "stopCondition": "操作者能用显式命令安全采纳已通过 review 的 proposal，并看到完整跨 agent handoff/review/adoption 链路已被 smoke 验证。",
   "verificationForThisPhase": [
+    "npm run smoke:proposal-roundtrip",
+    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalAdoption",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
     "git diff --check",

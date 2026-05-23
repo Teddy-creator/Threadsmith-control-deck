@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Cross-Agent State Bridge v1 closeout / release decision 已 accepted：v1 bridge 能力已收束，暂不为这次 closeout 单独发布 release。",
+  "currentClaim": "Proposal Adoption and Round-trip v1 已 accepted：Threadsmith 现在能显式采纳 accept-plan proposal，并用 isolated smoke 验证外部 proposal -> review -> adoption 写回 truth 的完整链路。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "确认 closeout / release decision 范围",
+      "label": "新增 Proposal Adoption and Round-trip v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "contract",
-      "label": "确认 Cross-Agent State Bridge v1 contract 已包含 proposal visibility",
+      "id": "adoption-command",
+      "label": "新增 npm run threadsmith:adopt-proposal -- . <proposal-id>",
       "status": "pass"
     },
     {
-      "id": "closeout-doc",
-      "label": "更新 closeout 文档状态、命令面和 release decision",
+      "id": "safety",
+      "label": "采纳前校验 accept-plan、target path、pointer 和结果 schema",
       "status": "pass"
     },
     {
-      "id": "truth",
-      "label": "刷新 .threadsmith truth 到当前 closeout slice",
+      "id": "roundtrip",
+      "label": "新增 external proposal -> review -> adoption 的 isolated smoke",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "focused tests、round-trip smoke、project truth、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "proposal adoption command 仍未实现，后续需要单独设计权限、验证和 rollback 边界。",
-    "这轮不发布 release，只把 v1 bridge closeout 合并到 main。"
+    "这轮只做显式 adoption 和 round-trip 验证，不做自动多 agent 调度。",
+    "adopt-proposal 必须保持 opt-in，不能把 accept-plan 变成自动写回。"
   ],
   "finalState": "accepted"
 }
