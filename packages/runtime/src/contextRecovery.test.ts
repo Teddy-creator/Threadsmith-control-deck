@@ -199,6 +199,55 @@ describe("deriveContextRecovery", () => {
     expect(recovery.rolePacketStatus).toBe("fresh");
   });
 
+  it("routes pending writeback proposals to proposal review before normal continuation", () => {
+    const packet = packetFor();
+    const recovery = deriveContextRecovery(state, {
+      currentPacket: packet,
+      rolePackets: [rolePacketFor(packet)],
+      selectedRole: "executor",
+      contextArtifactsLoaded: true,
+      writebackProposals: [
+        {
+          proposalId: "claude-review-1",
+          status: "proposed",
+          severity: "watch",
+          headline: "存在待审 writeback proposal",
+          detail: "外部 agent 提交了 proposal，需要 Threadsmith review 后才能采纳或拒绝。",
+          reasons: ["writeback-proposal-pending"]
+        }
+      ]
+    });
+
+    expect(recovery.status).toBe("watch");
+    expect(recovery.action).toBe("review-proposal");
+    expect(recovery.selectedRole).toBe("hygiene");
+    expect(recovery.reasons).toContain("writeback-proposal-pending");
+  });
+
+  it("requires recovery for invalid or self-accepted writeback proposals", () => {
+    const packet = packetFor();
+    const recovery = deriveContextRecovery(state, {
+      currentPacket: packet,
+      rolePackets: [rolePacketFor(packet)],
+      selectedRole: "executor",
+      contextArtifactsLoaded: true,
+      writebackProposals: [
+        {
+          proposalId: "claude-final-acceptance",
+          status: "invalid",
+          severity: "recover",
+          headline: "writeback proposal 不可信",
+          detail: "外部 proposal 试图设置 accepted，必须先进入 hygiene。",
+          reasons: ["writeback-proposal-self-accepted"]
+        }
+      ]
+    });
+
+    expect(recovery.status).toBe("recover");
+    expect(recovery.action).toBe("review-proposal");
+    expect(recovery.reasons).toContain("writeback-proposal-self-accepted");
+  });
+
   it("prioritizes paused phase recovery over packet freshness", () => {
     const packet = packetFor();
     const recovery = deriveContextRecovery(state, {

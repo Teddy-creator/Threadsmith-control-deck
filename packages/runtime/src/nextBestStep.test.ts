@@ -453,4 +453,29 @@ describe("selectNextBestStep", () => {
       "Context Packet 与当前 committed truth 重新一致。"
     );
   });
+
+  it("prioritizes writeback proposal review over ordinary phase advancement", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      {
+        status: "watch",
+        action: "review-proposal",
+        headline: "存在待审 writeback proposal",
+        detail: "外部 agent 提交了 proposal，需要 Threadsmith review 后才能采纳或拒绝。",
+        reasons: ["writeback-proposal-pending"],
+        selectedRole: "hygiene",
+        currentPacketStatus: "fresh",
+        rolePacketStatus: "fresh"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("review-proposal");
+    expect(result.primary.label).toBe("审查 writeback proposal");
+    expect(result.primary.expectedRoles).toEqual(["hygiene", "reviewer"]);
+    expect(result.primary.stopCondition).toContain("采纳、拒绝");
+  });
 });

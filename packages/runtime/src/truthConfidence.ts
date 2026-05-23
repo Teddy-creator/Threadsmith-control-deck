@@ -12,6 +12,7 @@ export type TruthConfidenceSurface =
   | "context-artifact"
   | "current-packet"
   | "role-packet"
+  | "writeback-proposal"
   | "latest-run"
   | "phase-run"
   | "accepted-continuation"
@@ -53,6 +54,8 @@ function actionLabel(action: ContextRecoveryAction) {
       return "同步 Context Packet";
     case "run-hygiene":
       return "运行 context hygiene";
+    case "review-proposal":
+      return "审查 writeback proposal";
     case "wait-for-run":
       return "等待结果回流";
     case "repair-run":
@@ -165,6 +168,38 @@ function reasonFromId(
         label: "当前角色 packet 已过期",
         detail: "角色 packet 与主 packet 或 committed truth 不一致，继续前应先运行 hygiene。",
         surface: "role-packet",
+        severity: "recover"
+      };
+    case "writeback-proposal-pending":
+      return {
+        id,
+        label: "存在待审 writeback proposal",
+        detail: recovery.detail,
+        surface: "writeback-proposal",
+        severity: "watch"
+      };
+    case "writeback-proposal-invalid":
+      return {
+        id,
+        label: "writeback proposal 不可信",
+        detail: recovery.detail,
+        surface: "writeback-proposal",
+        severity: "recover"
+      };
+    case "writeback-proposal-conflict":
+      return {
+        id,
+        label: "writeback proposal 与当前 truth 冲突",
+        detail: recovery.detail,
+        surface: "writeback-proposal",
+        severity: "recover"
+      };
+    case "writeback-proposal-self-accepted":
+      return {
+        id,
+        label: "外部 proposal 试图自我验收",
+        detail: recovery.detail,
+        surface: "writeback-proposal",
         severity: "recover"
       };
     case "latest-run-failed":

@@ -14,6 +14,7 @@ export type RuntimeActionId =
   | "run-verification"
   | "sync-context"
   | "run-hygiene"
+  | "review-proposal"
   | "create-handoff";
 
 export interface ActionRecommendation {
@@ -391,7 +392,8 @@ export function selectNextBestStep(
   const shouldPrioritizeContextRecovery =
     contextRecovery &&
     (contextRecovery.action === "sync-context" ||
-      contextRecovery.action === "run-hygiene") &&
+      contextRecovery.action === "run-hygiene" ||
+      contextRecovery.action === "review-proposal") &&
     state.activeWork.items.every((item) => item.status !== "running");
 
   if (shouldPrioritizeContextRecovery && contextRecovery.action === "sync-context") {
@@ -447,6 +449,34 @@ export function selectNextBestStep(
           "如果要切线程或暂停当前工作，先保存一个干净恢复点。",
           ["hygiene"],
           "恢复点已经可供下一轮继续。"
+        )
+      ]
+    };
+  }
+
+  if (shouldPrioritizeContextRecovery && contextRecovery.action === "review-proposal") {
+    return {
+      primary: recommendation(
+        "review-proposal",
+        "审查 writeback proposal",
+        contextRecovery.detail,
+        ["hygiene", "reviewer"],
+        "proposal 已被明确采纳、拒绝或转成新的安全 recovery 动作。"
+      ),
+      alternatives: [
+        recommendation(
+          "run-hygiene",
+          "先重新锚定 truth",
+          "如果 proposal 与当前 truth 的关系不清楚，先运行 hygiene，把 proposal、committed truth 和证据拆开。",
+          ["hygiene"],
+          "proposal、truth 和证据边界已经重新清晰。"
+        ),
+        recommendation(
+          "open-current-phase",
+          "查看当前 phase 边界",
+          "先确认 proposal 是否仍属于当前 phase，避免采纳过期建议。",
+          ["planner"],
+          "当前 phase 与 proposal 适用范围已经确认。"
         )
       ]
     };
