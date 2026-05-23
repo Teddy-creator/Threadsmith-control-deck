@@ -119,7 +119,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByRole("heading", { name: "Context 状态" })).toBeVisible();
   await expect(
     inspectorPanel
-      .getByText("State Boundary Contract v1")
+      .getByText("Handoff Packet Generator v1")
       .first()
   ).toBeVisible();
 
@@ -127,7 +127,7 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
     inspectorPanel.getByText(
-      "State Boundary Contract v1 已 accepted：状态边界已成为 domain contract、架构文档和 skill runtime contract 的共同约束，下一刀可以在此基础上实现 handoff packet generator。"
+      "Handoff Packet Generator v1 已 accepted：固定路径 current-agent-handoff.md 已接入 create-handoff 与 closeout 自动 handoff，并保持 legacy continuation packet 兼容。"
     ).first()
   ).toBeVisible();
 });
