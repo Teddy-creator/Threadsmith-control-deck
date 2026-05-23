@@ -105,7 +105,9 @@ const checks = [
       /audit/,
       /runtime artifact/,
       /Summary is not state/,
-      /External agents default to read-only plus writeback proposals/
+      /External agents default to read-only plus writeback proposals/,
+      /\.threadsmith\/proposals\/<proposal-id>\.json/,
+      /must not self-accept final state/
     ]
   },
   {

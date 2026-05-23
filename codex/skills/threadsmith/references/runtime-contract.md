@@ -122,7 +122,7 @@ summary:
 - derived packet: Context Packet, role packets, handoff packet, and adapter prompts
 - evidence: verification summaries and run results that prove or reject a claim
 - audit: events and action queue that explain how state changed
-- runtime artifact: run directories, stdout/stderr, closeout artifacts, and local smoke workspaces
+- runtime artifact: run directories, stdout/stderr, closeout artifacts, writeback proposals, and local smoke workspaces
 
 Authority order:
 
@@ -231,6 +231,11 @@ Role write boundaries:
 
 Unknown external agents must produce writeback proposals instead of direct
 committed-truth writes.
+
+Writeback proposals live at `.threadsmith/proposals/<proposal-id>.json`.
+They are runtime artifacts, not committed truth. A proposal may describe
+proposed truth updates, evidence, residual risks, and recover conditions, but it
+must not self-accept final state or bypass reviewer / verifier / closeout gates.
 
 ## Writeback Failure Handling
 

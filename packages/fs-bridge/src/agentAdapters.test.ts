@@ -123,7 +123,9 @@ describe("agent adapter prompts", () => {
     expect(codex).toContain("`recover`: stop normal work");
     expect(claude).toContain("# Threadsmith Adapter: Claude");
     expect(claude).toContain("Default to read-only access for committed `.threadsmith/` truth.");
-    expect(claude).toContain("Return a writeback proposal");
+    expect(claude).toContain(".threadsmith/proposals/<proposal-id>.json");
+    expect(claude).toContain("external agents must not set `accepted`");
+    expect(claude).toContain("A proposal for final acceptance must include evidence.");
     expect(generic).toContain("# Threadsmith Adapter: Generic Agent");
     expect(generic).toContain(".threadsmith/handoff/current-agent-handoff.md");
     expect(generic).toContain(

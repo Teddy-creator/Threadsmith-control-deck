@@ -78,7 +78,24 @@ function adapterModeInstructions(adapterName: AgentAdapterName) {
     "Read committed truth before planning or coding.",
     "Use current-agent-handoff.md as a compact projection, not as authority.",
     "Perform only the role/action that is safe from current truth.",
-    "Return changed files, evidence, residual risk, and a writeback proposal for Threadsmith to review."
+    "Return changed files, evidence, residual risk, and a writeback proposal artifact for Threadsmith to review."
+  ];
+}
+
+function writebackProposalInstructions(adapterName: AgentAdapterName) {
+  if (adapterName === "codex") {
+    return [
+      "Native Codex work should normally use `$threadsmith` for committed truth writeback.",
+      "Use a proposal only when acting as an external or delegated worker that should not directly update committed truth."
+    ];
+  }
+
+  return [
+    `Write proposed state changes to ${THREADSMITH_DIR}/proposals/<proposal-id>.json or return JSON with the same shape.`,
+    "Required fields: proposalId, createdAt, agent, role, phaseName, summary, proposedTruthUpdates, evidence, residualRisks, recoverIf, status.",
+    "status must start as `proposed` or `needs-review`; external agents must not set `accepted`.",
+    "proposedTruthUpdates must target `.threadsmith/...` truth files, not source files and not proposal artifacts.",
+    "A proposal for final acceptance must include evidence."
   ];
 }
 
@@ -123,6 +140,9 @@ ${
     : "- Default to read-only access for committed `.threadsmith/` truth.\n- Do not directly edit committed truth unless the project explicitly grants that permission in a future opt-in contract.\n- Return a writeback proposal describing intended truth changes, evidence, and residual risk."
 }
 
+## Writeback Proposal Contract
+${formatBulletList(writebackProposalInstructions(options.adapterName))}
+
 ## Recover If
 - AGENTS.md and ${THREADSMITH_DIR}/ disagree.
 - current-agent-handoff.md is missing, stale, or references a different phase.
@@ -134,7 +154,7 @@ ${
 - What you read: source files and freshness notes.
 - What you did: files changed or no-change.
 - Evidence: commands, artifacts, or explicit missing evidence.
-- Proposed Threadsmith writeback: current phase, acceptance state, active work, and next safe move.
+- Proposed Threadsmith writeback: include a writeback proposal artifact path or inline JSON proposal.
 `;
 }
 
