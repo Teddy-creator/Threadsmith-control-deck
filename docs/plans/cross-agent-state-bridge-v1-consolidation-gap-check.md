@@ -1,6 +1,6 @@
 # Cross-Agent State Bridge v1 Consolidation & Gap Check
 
-> Status: planned for execution.
+> Status: accepted.
 > Scope: project state store / cross-agent bridge v1 documentation closeout.
 
 ## Goal
@@ -55,3 +55,14 @@ handoff/adapters, and freshness hardening.
 
 Stop after the consolidation document, gap list, and truth refresh are complete.
 Do not continue into implementation of any listed follow-up gap in this slice.
+
+## Closeout Result
+
+Cross-Agent State Bridge v1 has been consolidated into the architecture
+contract, closeout document, and operator guide. The accepted v1 surface covers
+truth validation, bridge refresh, handoff/adapters, proposal fixtures, proposal
+status visibility, and proposal review with manual adoption boundaries.
+
+Release decision: do not tag a new release for this closeout alone. Keep it on
+`main` and revisit release only when a future user-facing improvement warrants a
+patch release.

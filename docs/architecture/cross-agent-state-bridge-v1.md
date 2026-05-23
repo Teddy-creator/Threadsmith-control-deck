@@ -1,7 +1,7 @@
 # Cross-Agent State Bridge v1
 
 > Status: consolidated v1 contract.
-> Continuity: consolidate + gap-check.
+> Continuity: accepted closeout.
 
 ## What This Is
 
@@ -211,5 +211,7 @@ Cross-Agent State Bridge v1 can be considered ready when:
 
 1. Proposal adoption command design: only consider after operators are comfortable
    with manual review and status visibility.
+2. Bridge UX hardening: make stale handoff, stale adapter, and stale proposal
+   warnings clearer before adding more automation.
 
 Do not combine these with this consolidation slice.

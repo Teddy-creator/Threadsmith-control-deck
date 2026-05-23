@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "project state store / cross-agent bridge v1 proposal visibility",
+  "currentTrack": "project state store / cross-agent bridge v1 closeout",
   "overallState": "stable",
-  "currentFocus": "Pending Proposal Visibility v1 已完成：proposal-status 命令可以让操作者看到 pending/reviewed/invalid proposal。",
-  "projectStatusSummary": "Threadsmith 已有 Cross-Agent State Bridge v1 总图、bridge-refresh command、external-agent proposal fixture pack 和 pending proposal visibility；外部 agent 提交的 proposal 现在更不容易被漏掉。",
+  "currentFocus": "Cross-Agent State Bridge v1 已完成 closeout / release decision：v1 bridge 能力收束，暂不单独发布 release。",
+  "projectStatusSummary": "Threadsmith 已有 Cross-Agent State Bridge v1 总图、bridge-refresh command、external-agent proposal fixture pack、pending proposal visibility 和 closeout decision；这条线目前稳定在手动 proposal review / adoption boundary。",
   "latestAcceptedSlice": {
-    "title": "Pending Proposal Visibility v1",
-    "recordedAt": "2026-05-23T23:11:38+08:00"
+    "title": "Cross-Agent State Bridge v1 closeout / release decision",
+    "recordedAt": "2026-05-23T23:26:04+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Cross-Agent State Bridge v1 closeout / release decision",
+    "title": "Proposal adoption command design",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "proposal status 仍是命令行能力，前端 UI 已冻结。",
     "accept-plan 仍不是自动采纳；操作者需要通过正确 role gate 手动应用 truth 更新。",
-    "未来如果做自动采纳，必须单独设计权限、验证和 rollback 边界。"
+    "如果未来加入 proposal adoption command，必须单独设计权限、验证和 rollback 边界。",
+    "不要把 Cross-Agent State Bridge v1 误解为 multi-provider 自动执行。"
   ],
-  "updatedAt": "2026-05-23T23:11:38+08:00"
+  "updatedAt": "2026-05-23T23:26:04+08:00"
 }

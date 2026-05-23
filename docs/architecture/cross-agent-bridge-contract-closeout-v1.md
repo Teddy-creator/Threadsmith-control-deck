@@ -1,7 +1,8 @@
 # Cross-Agent Bridge Contract Closeout v1
 
-> Status: implementation closeout in progress.
+> Status: accepted.
 > Scope: project state store / cross-agent bridge v1.
+> Release decision: no immediate release.
 
 For the consolidated v1 map and gap check, see
 [Cross-Agent State Bridge v1](./cross-agent-state-bridge-v1.md).
@@ -27,6 +28,10 @@ mutate committed project truth by default.
 - Adapter prompts at `.threadsmith/adapters/codex.md`,
   `.threadsmith/adapters/claude.md`, and
   `.threadsmith/adapters/generic-agent.md`.
+- Bridge refresh command that regenerates handoff and adapters from one
+  committed truth read.
+- Proposal status command that lists pending, reviewed, and invalid proposal
+  artifacts before review.
 - Manual adoption plan semantics for `accept-plan`.
 
 ## What V1 Does Not Support
@@ -80,8 +85,12 @@ If layers disagree, resolve in this order:
 | `npm run smoke:state-bridge` | Verifies isolated writeback proposal and proposal-review behavior. |
 | `npm run threadsmith:handoff -- .` | Generates the fixed current-agent handoff packet from current truth. |
 | `npm run threadsmith:adapters -- .` | Generates provider-specific adapter prompts from current truth. |
+| `npm run threadsmith:bridge-refresh -- .` | Validates committed truth and refreshes handoff plus adapter prompts together. |
+| `npm run threadsmith:proposal-status -- .` | Lists pending, reviewed, and invalid proposal artifacts. |
 | `npm run threadsmith:review-proposal -- . <proposal-id>` | Reviews one writeback proposal and writes a proposal-review artifact without applying truth. |
 | `npm run smoke:review-proposal` | Verifies the proposal review command path in an isolated project. |
+| `npm run smoke:proposal-status` | Verifies proposal visibility for pending, reviewed, and invalid artifacts in an isolated project. |
+| `npm run smoke:proposal-fixtures` | Verifies safe, stale, wrong-phase, and unsafe fixture behavior. |
 | `git diff --check` | Catches whitespace and diff hygiene issues before closeout. |
 | `jq empty .threadsmith/*.json` | Catches malformed top-level committed truth JSON. |
 
@@ -98,6 +107,22 @@ This contract is considered valid when:
 - docs describe proposal review as manual gate, not automatic adoption;
 - `.threadsmith` committed truth records this closeout slice honestly.
 
+## Closeout Decision
+
+Cross-Agent State Bridge v1 is ready as an accepted Threadsmith capability:
+operators can refresh project handoff context, delegate a narrow role to another
+agent, receive a proposal, inspect the pending proposal queue, and review the
+proposal without allowing external agents to mutate committed truth directly.
+
+This does not require an immediate public release by itself. It is a bridge
+foundation slice, not a user-facing app release. The safer release decision is:
+
+- keep the merged v1 bridge work on `main`;
+- do not tag a new release only for this closeout;
+- use this document and the operator guide as the current source of truth;
+- consider a future patch release only when bundled with a clearer operator
+  workflow, adoption command design, or other user-facing improvement.
+
 ## Failure And Recovery Conditions
 
 Route to recover if:
@@ -112,10 +137,9 @@ Route to recover if:
 
 ## Next Recommended Slices
 
-- Bridge UX hardening: make stale handoff / stale adapter warnings clearer.
-- Proposal review workflow: add a deterministic command that reviews a proposal
-  and emits an adoption plan or rejection.
-- External-agent fixture pack: add sample Codex / Claude / generic-agent
-  proposal fixtures.
+- Proposal adoption command design: decide whether to add an opt-in command that
+  applies accepted proposal truth updates through native Threadsmith gates.
+- Bridge UX hardening: make stale handoff / stale adapter / stale proposal
+  warnings clearer in operator-facing output.
 - Cross-agent state contract tests: expand schema checks around proposal
-  freshness and authority boundaries.
+  freshness and authority boundaries when new writeback modes are added.
