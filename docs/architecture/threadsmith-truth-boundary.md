@@ -132,6 +132,11 @@ Verifier 不能把缺失 evidence 当成通过。Closeout 也不能在没有 ver
 - Derived packet 可以生成或更新，但必须标明来源文件和生成时间。
 - AGENTS.md 不应被 agent 静默发明；缺失或明显不完整时应先让用户确认。
 
+如果你需要把这套边界交给 Codex / Claude / 其他 agent 实际使用，先看
+[Cross-Agent Bridge Operator Guide](../guides/cross-agent-bridge-operator-guide.md)。
+那份文档给出了操作者流程、adapter 入口、proposal JSON 例子和
+`accept-plan` 的人工 gate 边界。
+
 角色边界：
 
 - Planner 可以更新 phase / status / active work，但不能声称 verification passed。

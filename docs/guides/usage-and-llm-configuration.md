@@ -283,7 +283,20 @@ Runtime artifacts：
 
 更完整的边界说明见 [Threadsmith Truth Boundary](../architecture/threadsmith-truth-boundary.md)。
 
-## 6. Skill Routing 配置
+## 6. Cross-Agent Bridge 操作指南
+
+如果你想让另一个 agent 读取 Threadsmith 项目状态并返回可审查的状态更新，
+不要让它直接改 `.threadsmith/*.json`。推荐使用
+[Cross-Agent Bridge Operator Guide](./cross-agent-bridge-operator-guide.md)：
+
+- 用 `.threadsmith/adapters/*.md` 给外部 agent 说明读取顺序和输出格式；
+- 让外部 agent 返回 writeback proposal；
+- 由 Threadsmith review proposal，并生成人工 adoption plan；
+- 通过 verification / closeout 后，才把变化写入 committed truth。
+
+当前 v1 重点是安全交接和状态桥，不是自动 multi-provider 执行。
+
+## 7. Skill Routing 配置
 
 `v0.3.x` 的 External Skill Adapter v1 会发现本地 / 项目内 Codex skills，并把它们转换成可解释的 adapter candidates。项目级配置存在：
 
@@ -304,7 +317,7 @@ Runtime artifacts：
 
 Risk review 也遵守同样边界：Threadsmith 可以把 `critical-decision-review` 写进 advisory route metadata、role packets 和 route artifacts，但不会代替你自动调用外部 skill。低风险、可逆、证据充分的改动可以快速通过并回到普通 workflow，不需要为了显得“严谨”而做重审查。
 
-## 7. LLM / Provider 配置
+## 8. LLM / Provider 配置
 
 当前公开稳定线仍然是 `Codex-only` 主线。
 
@@ -327,7 +340,7 @@ Provider routing 存在于：
 
 它的作用是让项目明确“每个角色现在由谁承担”。当前 UI 可以展示和记录这些路由，但当前稳定线 / 内部开发线不承诺非 Codex provider 的全自动执行已经完成。
 
-## 8. Codex CLI 配置
+## 9. Codex CLI 配置
 
 如果你要使用自动执行桥，确保本机能运行 Codex CLI。
 
@@ -356,7 +369,7 @@ npm run threadsmith:autopilot -- status "/path/to/your-project"
 
 如果项目还没有足够 truth，autopilot 会先尝试 bootstrap；如果无法安全推断，会暂停并要求补充信息，而不是凭空 invent 一个 phase。
 
-## 9. Claude / Gemini / Other Providers
+## 10. Claude / Gemini / Other Providers
 
 Threadsmith 的架构为 multi-provider 预留了 provider routing 和 role boundary，但当前稳定线不把 fully automated multi-provider execution 作为交付承诺。
 
@@ -366,7 +379,7 @@ Threadsmith 的架构为 multi-provider 预留了 provider routing 和 role boun
 - 当前稳定自动执行路径仍然是 Codex。
 - 非 Codex provider adapter / routing 后续会作为独立版本推进。
 
-## 10. 验证
+## 11. 验证
 
 开发或发布前常用验证：
 
@@ -386,7 +399,7 @@ npm run verify:release
 
 `npm run smoke:self-host` 默认会在隔离 runtime workspace 里运行，避免把当前项目 truth 弄脏。
 
-## 11. 常见问题
+## 12. 常见问题
 
 ### 页面看起来没更新
 

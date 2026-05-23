@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从 Proposal Review / Adoption v1 closeout 进入 Cross-Agent State Bridge Smoke v1，目标是验证 proposal -> review -> adoption plan 链路。",
+      "taskSummary": "已从 Cross-Agent State Bridge Smoke v1 closeout 进入 Bridge Documentation / Operator Guide v1，目标是把状态桥链路写成操作者指南。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 deterministic state bridge smoke script 与 npm run smoke:state-bridge。",
+      "taskSummary": "已新增 cross-agent bridge operator guide，并补充 truth boundary / usage docs 的交叉链接。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 smoke 真实验证 artifact 与 no-auto-adoption 边界。",
+      "taskSummary": "已检查 operator guide 与 proposal / review schema、adapter rules 和 no-auto-adoption 边界一致。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 fs-bridge tests、state bridge smoke、project truth、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、state bridge smoke、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Cross-Agent State Bridge Smoke v1 accepted；下一刀建议 Bridge Documentation / Operator Guide v1。",
+      "taskSummary": "已记录 Bridge Documentation / Operator Guide v1 accepted；下一刀建议 External Agent Handoff Packet v1。",
       "requiresUserDecision": false
     }
   ],
