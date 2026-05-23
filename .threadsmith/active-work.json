@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "Cross-Agent Bridge Contract Closeout v1 已完成；下一步由 planner 起草 Proposal Review Workflow v1。",
+      "taskSummary": "已将 current phase 重置为 Proposal Review Workflow v1，并新增实施计划。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 cross-agent bridge contract closeout 文档，并把 operator guide、truth boundary 链接到该收口合同。",
+      "taskSummary": "已实现 review-proposal 命令、proposal review workflow helper、isolated smoke、focused tests 和 docs 更新。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已审查文档边界：明确不支持自动 multi-provider、外部 agent 默认不直写 truth、accept-plan 只是人工采纳计划。",
+      "taskSummary": "已审查 proposal review 保持 accept-plan 人工采纳边界，不会自动改 committed truth。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 project truth、state bridge smoke、handoff、adapters、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 focused tests、smoke:review-proposal、project truth、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Cross-Agent Bridge Contract Closeout v1 accepted；下一刀建议 Proposal Review Workflow v1。",
+      "taskSummary": "已记录 Proposal Review Workflow v1 accepted；下一刀建议 Bridge v1 hardening / stale proposal recovery。",
       "requiresUserDecision": false
     }
   ],

@@ -1,13 +1,13 @@
 {
-  "phaseName": "Cross-Agent Bridge Contract Closeout v1",
-  "phaseGoal": "把 project state store / cross-agent bridge v1 已实现能力做合同式收口，明确已具备、未具备、验证方式和下一阶段边界。",
-  "deliverable": "cross-agent bridge contract closeout 文档、truth closeout、对应验证证据。",
+  "phaseName": "Proposal Review Workflow v1",
+  "phaseGoal": "给 cross-agent bridge v1 增加可执行的 proposal review 命令面：读取外部 agent 的 writeback proposal，输出 accept-plan / reject / needs-recovery review artifact，但不自动修改 committed truth。",
+  "deliverable": "proposal review workflow plan、review proposal command、focused tests、docs/truth closeout。",
   "inScope": [
-    "汇总 proposal contract、proposal review / adoption plan、state bridge smoke、operator guide、handoff、adapter refresh 的当前能力",
-    "明确 v1 不包含真实 multi-provider 自动执行、不包含外部 agent 直接写 committed truth、不包含 proposal review UI",
-    "列出操作者可用命令和验证命令",
-    "检查 docs / truth / scripts 是否一致",
-    "写回 .threadsmith 作为 bridge v1 closeout"
+    "新增命令行入口，按 proposal id 审查 .threadsmith/proposals/<proposal-id>.json",
+    "复用现有 writeback proposal / proposal review domain schema 和 manual adoption plan",
+    "安全 proposal 输出 accept-plan，危险或冲突 proposal 输出 reject 或 needs-recovery",
+    "写入 .threadsmith/proposal-reviews/<proposal-id>.json 作为 runtime artifact",
+    "补充 focused tests 和 operator docs"
   ],
   "outOfScope": [
     "真实执行外部 provider / CLI",
@@ -17,12 +17,12 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "bridge v1 contract 能清楚说明当前能用什么、不能承诺什么、如何验证，以及下一阶段该从哪里继续。",
+  "stopCondition": "操作者能用一个命令把 proposal 转成 review artifact，并且 accept-plan 仍然不会自动写 committed truth。",
   "verificationForThisPhase": [
+    "npm run test --workspace @threadsmith/domain -- writebackProposalReview",
+    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposal",
+    "npm run threadsmith:review-proposal -- . <fixture-id>",
     "npm run verify:project-truth",
-    "npm run smoke:state-bridge",
-    "npm run threadsmith:handoff -- .",
-    "npm run threadsmith:adapters -- .",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],

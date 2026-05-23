@@ -35,6 +35,7 @@
     "threadsmith:autopilot": "node --import tsx scripts/threadsmith-autopilot.ts",
     "threadsmith:adapters": "node --import tsx scripts/threadsmith-adapters.ts",
     "threadsmith:handoff": "node --import tsx scripts/threadsmith-handoff.ts",
+    "threadsmith:review-proposal": "node --import tsx scripts/threadsmith-review-proposal.ts",
     "test:e2e": "playwright test",
     "test:e2e:autopilot": "playwright test tests/e2e/autopilot-v1.spec.ts",
     "test:e2e:bridge": "playwright test tests/e2e/agent-run-bridge.spec.ts",
@@ -50,6 +51,7 @@
     "smoke:self-host": "node --import tsx scripts/self-host-smoke.ts",
     "smoke:autopilot": "node --import tsx scripts/threadsmith-autopilot-smoke.ts",
     "smoke:state-bridge": "node --import tsx scripts/cross-agent-state-bridge-smoke.ts",
+    "smoke:review-proposal": "node --import tsx scripts/threadsmith-review-proposal-smoke.ts",
     "smoke:deck-route": "node --import tsx scripts/deck-route-smoke.ts"
   },
   "devDependencies": {

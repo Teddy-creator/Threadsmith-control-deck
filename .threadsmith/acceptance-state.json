@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Cross-Agent Bridge Contract Closeout v1 已 accepted：Threadsmith 已把跨 agent bridge v1 的能力边界、验证方式、命令入口和下一阶段边界做合同式收口。",
+  "currentClaim": "Proposal Review Workflow v1 已 accepted：Threadsmith 现在有 review-proposal 命令、isolated smoke 和 focused tests，用来把 external writeback proposal 转成 review artifact，同时保持 committed truth 不被自动修改。",
   "doneWhenChecklist": [
     {
-      "id": "closeout-doc",
-      "label": "新增 cross-agent bridge contract closeout 文档",
+      "id": "plan",
+      "label": "新增 Proposal Review Workflow v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "capability-boundary",
-      "label": "文档明确已具备能力与未承诺能力",
+      "id": "review-command",
+      "label": "新增 proposal review 命令，能输出 review artifact",
       "status": "pass"
     },
     {
-      "id": "verification-map",
-      "label": "文档列出 bridge v1 的验证命令和证据入口",
+      "id": "safe-boundary",
+      "label": "accept-plan 保持人工采纳计划，不自动写 committed truth",
       "status": "pass"
     },
     {
-      "id": "truth-consistency",
-      "label": "docs / truth / scripts 对 bridge v1 的描述一致",
+      "id": "tests",
+      "label": "accept-plan / reject / needs-recovery 路径有 focused tests",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、state bridge smoke、handoff、adapters、diff hygiene 与 JSON 校验通过",
+      "label": "focused tests、project truth、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],

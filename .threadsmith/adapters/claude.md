@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T12:19:33.554Z
+- generated at: 2026-05-23T12:43:07.344Z
 - adapter file: .threadsmith/adapters/claude.md
-- current phase: Cross-Agent Bridge Contract Closeout v1
+- current phase: Proposal Review Workflow v1
 - acceptance state: accepted
 
 ## Purpose

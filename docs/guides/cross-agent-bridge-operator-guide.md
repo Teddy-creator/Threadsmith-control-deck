@@ -172,6 +172,17 @@ Threadsmith 读取 proposal 后，只能做三类决定：
 Threadsmith gate 审查，再由操作者或 Threadsmith native workflow 在正确
 role boundary 内写回 committed truth。
 
+可以用命令生成 review artifact：
+
+```bash
+npm run threadsmith:review-proposal -- . <proposal-id>
+```
+
+该命令会读取 `.threadsmith/proposals/<proposal-id>.json`，并写入
+`.threadsmith/proposal-reviews/<proposal-id>.json`。即使结果是
+`accept-plan`，它也只会生成 manual adoption plan，不会自动修改 committed
+truth。
+
 ### 6. 人工采纳或拒绝
 
 采纳前检查：
@@ -241,6 +252,15 @@ npm run smoke:state-bridge
 - adoption plan 使用 `manual-threadsmith-gate`；
 - `accept-plan` 不会自动修改 committed truth；
 - 输出包含 `committedTruthMutation: "none"`。
+
+proposal review 命令的隔离 smoke：
+
+```bash
+npm run smoke:review-proposal
+```
+
+它会验证安全 proposal 能生成 `accept-plan` review artifact，并保持
+`committedTruthMutation: "none"`。
 
 ## 和日常 Threadsmith 工作流的关系
 

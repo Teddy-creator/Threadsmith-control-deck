@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Cross-Agent Bridge Contract Closeout v1 已 accepted：state bridge、operator guide、handoff 和 adapter prompt 能力已收成可验证合同。",
+  "summary": "Proposal Review Workflow v1 已 accepted：review-proposal 命令能把 external writeback proposal 转成 review artifact。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "Cross-Agent Bridge Contract Closeout v1 已完成；下一步由 planner 起草 Proposal Review Workflow v1。",
+      "taskSummary": "已将 current phase 重置为 Proposal Review Workflow v1，并新增实施计划。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from Adapter Prompt Freshness v1",
-      "updatedAt": "2026-05-23T20:16:39+08:00"
+      "latestEvidenceLabel": "docs/plans/proposal-review-workflow-v1.md",
+      "updatedAt": "2026-05-23T20:34:26+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 contract closeout 文档，并把 operator guide / truth boundary 指向该收口合同。",
+      "taskSummary": "已实现 review-proposal 命令、proposal review workflow helper、isolated smoke、focused tests 和 docs 更新。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/architecture/cross-agent-bridge-contract-closeout-v1.md",
-      "updatedAt": "2026-05-23T20:16:39+08:00"
+      "latestEvidenceLabel": "smoke:review-proposal passed",
+      "updatedAt": "2026-05-23T20:39:50+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已审查 closeout 明确 v1 支持和不支持的边界，没有把 bridge 写成自动 multi-provider。",
+      "taskSummary": "已审查 proposal review 保持 accept-plan 人工采纳边界，不会自动改 committed truth。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "boundary review passed",
-      "updatedAt": "2026-05-23T20:16:39+08:00"
+      "latestEvidenceLabel": "review passed",
+      "updatedAt": "2026-05-23T20:39:50+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 project truth、state bridge smoke、handoff、adapters、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 focused tests、smoke:review-proposal、project truth、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T20:16:39+08:00"
+      "updatedAt": "2026-05-23T20:42:18+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Cross-Agent Bridge Contract Closeout v1 accepted；下一刀建议 Proposal Review Workflow v1。",
+      "taskSummary": "已记录 Proposal Review Workflow v1 accepted；下一刀建议 Bridge v1 hardening / stale proposal recovery。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T20:16:39+08:00"
+      "updatedAt": "2026-05-23T20:42:18+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T20:16:39+08:00"
+  "updatedAt": "2026-05-23T20:42:18+08:00"
 }
