@@ -162,6 +162,10 @@ If a role packet exists and is consistent with the current phase, use it as the 
 12. Label the source layer for any important status claim: committed truth, role packet, Context Packet, repo/evidence signal, or chat memory.
 13. Keep the operator oriented: every active response must explain what just changed, what the next move changes, and which architecture layer is affected.
 14. If Project Charter Gate asks for AGENTS.md and the user declines, persist or respect decline memory; do not nag again during read-only sync unless risk/scope materially changes.
+15. Preserve phase continuity: before naming a next step, classify whether it is
+    a new direction, continuation, consolidation, gap check, handoff, or blocked
+    recovery. If the direction has already started, say "continue",
+    "consolidate", or "gap-check" instead of presenting it as a new start.
 
 ## Contracts
 
@@ -196,6 +200,7 @@ When using the full output, start with:
 - 证据：命令、文件、PR、packet、gate decision，或说明本轮是只读同步
 
 ### 下一步具体要做什么
+- continuity: new / continue / consolidate / gap-check / handoff / blocked
 - 目标
 - 具体动作
 - 架构影响或涉及对象：说明影响的是哪一层（项目 truth、role packet、Context Packet、runtime contract、action contract、tests、docs），以及为什么这层变化会影响后续流程
@@ -205,6 +210,18 @@ When using the full output, start with:
 If `accepted previous recommendation` is `yes`, this section must describe the
 step being executed now or the blocking gate. It must not repeat the same
 recommendation as a fresh proposal.
+
+If the next step belongs to a direction that already has committed truth,
+merged PRs, accepted plans, docs, tests, or generated artifacts, do not describe
+it as "start", "first write", or "begin design" unless the source evidence says
+that work has not started. Use:
+
+- `continue` when executing the next slice in the same direction
+- `consolidate` when turning existing work into a stable v1 shape or closeout
+- `gap-check` when comparing existing work against a definition and listing
+  missing pieces
+- `handoff` when packaging the state for another thread or agent
+- `blocked` when a gate prevents execution
 
 ### 当前架构位置
 - 项目层：当前目标、非目标、关键约束来自哪里

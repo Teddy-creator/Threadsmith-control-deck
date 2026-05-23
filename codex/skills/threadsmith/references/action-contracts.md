@@ -240,6 +240,41 @@ Direct conceptual answers are allowed when the user asks how Threadsmith works
 or asks for clarification. In that case, do not force the full workflow report,
 do not write `.threadsmith/`, and label the source layer for factual claims.
 
+## Next-Step Continuity Rule
+
+Every `next step` statement must first decide how the proposed move relates to
+already committed work. This prevents Threadsmith from making an active line of
+work sound like a brand-new initiative.
+
+Use exactly one continuity label:
+
+- `new`: no committed truth, merged PR, accepted plan, doc, test, or generated
+  artifact shows this direction has started
+- `continue`: the next action executes another narrow slice in an existing
+  direction
+- `consolidate`: the next action turns already completed pieces into a stable
+  definition, v1 boundary, closeout, or operator-facing shape
+- `gap-check`: the next action compares existing work against the intended
+  definition and lists what is missing
+- `handoff`: the next action packages current truth for another thread or agent
+- `blocked`: the next action cannot run until a gate, contradiction, or missing
+  decision is resolved
+
+When evidence shows the direction has already started, do not say "start",
+"first write", "begin design", or "now create the plan" unless the action is
+explicitly scoped to a new sub-slice. Prefer "continue", "consolidate", or
+"gap-check" and name the existing evidence that makes it not-new.
+
+Examples:
+
+- Bad: "Next, start the project-level state store design."
+- Good: "continuity: consolidate. The state bridge already has handoff,
+  adapter, proposal, and freshness pieces; next we consolidate those into a v1
+  boundary doc and gap list."
+- Bad: "Next, write the design doc" after merged implementation exists.
+- Good: "continuity: gap-check. Compare the merged implementation and operator
+  docs against the intended v1 contract, then list missing pieces."
+
 ## Architecture Comprehension Rule
 
 For significant work, the response must include a compact architecture impact
@@ -258,7 +293,8 @@ Orientation rule:
 
 - `上一步做了什么` explains the last durable state transition, not merely the
   previous sentence in chat
-- `下一步具体要做什么` explains the current executable move or blocking gate
+- `下一步具体要做什么` explains the current executable move or blocking gate,
+  and includes the continuity label from the Next-Step Continuity Rule
 - `当前架构位置` explains where this phase sits in project / workflow / state /
   risk layers
 - keep these sections concrete enough that an operator can understand the
