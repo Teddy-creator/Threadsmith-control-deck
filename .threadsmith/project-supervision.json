@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Bridge Documentation / Operator Guide v1 已 accepted：跨 agent 状态桥已有操作者指南、manual gate 和 no-auto-adoption 边界说明。",
+  "summary": "External Agent Handoff Packet v1 已 accepted：固定路径 handoff packet 可供外部或新线程 agent 安全接力。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把下一刀重置为 Bridge Documentation / Operator Guide v1，并保持前端冻结、全局 skill 不修改。",
+      "taskSummary": "已把下一刀重置为 External Agent Handoff Packet v1，并保持前端冻结、全局 skill 不修改。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from Cross-Agent State Bridge Smoke v1",
-      "updatedAt": "2026-05-23T17:45:35+08:00"
+      "latestEvidenceLabel": "phase reset from Bridge Documentation / Operator Guide v1",
+      "updatedAt": "2026-05-23T19:39:00+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 cross-agent bridge operator guide，并补充 truth boundary / usage docs 的交叉链接。",
+      "taskSummary": "已新增 threadsmith:handoff 命令并生成当前项目 .threadsmith/handoff/current-agent-handoff.md。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "operator guide drafted",
-      "updatedAt": "2026-05-23T17:45:35+08:00"
+      "latestEvidenceLabel": "current handoff generated",
+      "updatedAt": "2026-05-23T19:39:00+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 operator guide 与 proposal / review schema、adapter rules 和 no-auto-adoption 边界一致。",
+      "taskSummary": "已检查 handoff 是派生投影、保持 no direct truth write 边界，并确认 closeout 后需重新生成最终 handoff。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T17:45:35+08:00"
+      "updatedAt": "2026-05-23T19:39:00+08:00"
     },
     {
       "id": "verifier-logical",
@@ -50,11 +50,11 @@
       "presence": "logical",
       "status": "running",
       "status": "done",
-      "taskSummary": "已运行 project truth、state bridge smoke、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、handoff command、fs-bridge handoff test、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T17:45:35+08:00"
+      "updatedAt": "2026-05-23T19:39:00+08:00"
     },
     {
       "id": "hygiene",
@@ -63,12 +63,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Bridge Documentation / Operator Guide v1 accepted；下一刀建议 External Agent Handoff Packet v1。",
+      "taskSummary": "已记录 External Agent Handoff Packet v1 accepted；下一刀建议 Adapter Prompt Freshness v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T17:45:35+08:00"
+      "updatedAt": "2026-05-23T19:39:00+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T17:45:35+08:00"
+  "updatedAt": "2026-05-23T19:39:00+08:00"
 }

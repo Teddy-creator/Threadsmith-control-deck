@@ -1,13 +1,13 @@
 {
-  "phaseName": "Bridge Documentation / Operator Guide v1",
-  "phaseGoal": "把 proposal -> review -> adoption plan 的跨 agent 状态桥写成操作者可读、外部 agent 可照做的文档，同时保持 committed truth 的人工 gate 边界。",
-  "deliverable": "cross-agent bridge operator guide、相关文档链接、对应 truth writeback。",
+  "phaseName": "External Agent Handoff Packet v1",
+  "phaseGoal": "为外部或新线程 agent 提供固定路径的当前项目 handoff packet，让它能从 committed truth 的派生投影开始工作，同时不获得直接写 committed truth 的权限。",
+  "deliverable": "threadsmith:handoff command、当前项目 .threadsmith/handoff/current-agent-handoff.md、对应验证证据。",
   "inScope": [
-    "新增或更新文档，说明 Codex / Claude / generic agent 如何读取 Threadsmith truth",
-    "说明 writeback proposal、proposal review、manual adoption plan 的职责边界",
-    "给出操作者步骤：准备、委托、接收 proposal、review、人工采纳或拒绝",
-    "补充常见误区：accept-plan 不等于自动写 committed truth",
-    "把 operator guide 从现有 truth boundary / usage docs 交叉链接出来"
+    "新增命令行入口，从当前项目 committed truth 生成 .threadsmith/handoff/current-agent-handoff.md",
+    "生成当前 canonical repo 的 fixed-path handoff artifact",
+    "确保 handoff 明确标注 source files、generated at、recommended role、next safe move、writeback rules",
+    "验证 handoff 是 derived projection，不是 authority",
+    "补充 package script，方便操作者手动刷新 handoff"
   ],
   "outOfScope": [
     "真实执行外部 provider / CLI",
@@ -17,10 +17,11 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "文档能让操作者理解并执行跨 agent handoff，同时清楚知道哪些文件是 authority、哪些只是 proposal / review artifact。",
+  "stopCondition": "固定 handoff 文件能从当前 committed truth 生成，并清楚说明它只是派生投影、外部 agent 默认只能 proposal writeback。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
-    "npm run smoke:state-bridge",
+    "npm run threadsmith:handoff -- .",
+    "npm run test --workspace @threadsmith/fs-bridge -- agentHandoff",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],

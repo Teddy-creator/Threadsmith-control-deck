@@ -2,14 +2,14 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project state store / cross-agent bridge v1 implementation",
   "overallState": "stable",
-  "currentFocus": "Bridge Documentation / Operator Guide v1 已 accepted；下一刀可以进入 External Agent Handoff Packet v1。",
-  "projectStatusSummary": "Threadsmith 已有 proposal contract、recovery routing、review/adoption plan、deterministic smoke 和 operator guide；跨 agent handoff 的人工 gate 与 truth 边界已经可读。",
+  "currentFocus": "External Agent Handoff Packet v1 已 accepted；下一刀可以进入 Adapter Prompt Freshness v1。",
+  "projectStatusSummary": "Threadsmith 已有 proposal contract、review/adoption plan、deterministic smoke、operator guide 和固定路径 handoff packet；外部或新线程 agent 现在可从 current-agent-handoff.md 接力。",
   "latestAcceptedSlice": {
-    "title": "Bridge Documentation / Operator Guide v1",
-    "recordedAt": "2026-05-23T17:45:35+08:00"
+    "title": "External Agent Handoff Packet v1",
+    "recordedAt": "2026-05-23T19:39:00+08:00"
   },
   "nextPlannedSlice": {
-    "title": "External Agent Handoff Packet v1",
+    "title": "Adapter Prompt Freshness v1",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
@@ -19,5 +19,5 @@
     "让外部 agent 默认直接写 committed truth，增加冲突和错误验收风险。",
     "在设计文档阶段偷偷进入前端或 multi-provider 自动执行实现。"
   ],
-  "updatedAt": "2026-05-23T17:45:35+08:00"
+  "updatedAt": "2026-05-23T19:39:00+08:00"
 }
