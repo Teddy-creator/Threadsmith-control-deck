@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T15:47:42+08:00
+- generated at: 2026-05-23T16:10:10+08:00
 - adapter file: .threadsmith/adapters/generic-agent.md
-- current phase: Adapter Prompt Generator v1
+- current phase: Writeback Proposal Contract v1
 - acceptance state: accepted
 
 ## Purpose
@@ -26,7 +26,7 @@ If any source file disagrees with another source file, stop and route to recover
 - Read committed truth before planning or coding.
 - Use current-agent-handoff.md as a compact projection, not as authority.
 - Perform only the role/action that is safe from current truth.
-- Return changed files, evidence, residual risk, and a writeback proposal for Threadsmith to review.
+- Return changed files, evidence, residual risk, and a writeback proposal artifact for Threadsmith to review.
 
 ## Authority Rules
 - Committed truth in .threadsmith/project-brief.json, current-phase.json, acceptance-state.json, project-status.json, active-work.json, and project-supervision.json is the source of truth.
@@ -39,6 +39,13 @@ If any source file disagrees with another source file, stop and route to recover
 - Do not directly edit committed truth unless the project explicitly grants that permission in a future opt-in contract.
 - Return a writeback proposal describing intended truth changes, evidence, and residual risk.
 
+## Writeback Proposal Contract
+- Write proposed state changes to .threadsmith/proposals/<proposal-id>.json or return JSON with the same shape.
+- Required fields: proposalId, createdAt, agent, role, phaseName, summary, proposedTruthUpdates, evidence, residualRisks, recoverIf, status.
+- status must start as `proposed` or `needs-review`; external agents must not set `accepted`.
+- proposedTruthUpdates must target `.threadsmith/...` truth files, not source files and not proposal artifacts.
+- A proposal for final acceptance must include evidence.
+
 ## Recover If
 - AGENTS.md and .threadsmith/ disagree.
 - current-agent-handoff.md is missing, stale, or references a different phase.
@@ -50,4 +57,4 @@ If any source file disagrees with another source file, stop and route to recover
 - What you read: source files and freshness notes.
 - What you did: files changed or no-change.
 - Evidence: commands, artifacts, or explicit missing evidence.
-- Proposed Threadsmith writeback: current phase, acceptance state, active work, and next safe move.
+- Proposed Threadsmith writeback: include a writeback proposal artifact path or inline JSON proposal.

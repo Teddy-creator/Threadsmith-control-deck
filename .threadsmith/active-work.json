@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第三刀：Adapter Prompt Generator v1。",
+      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第四刀：Writeback Proposal Contract v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 Codex / Claude / Generic Agent adapter prompt 生成器，并保持外部 agent 默认只读 + proposal。",
+      "taskSummary": "已实现 writeback proposal contract、proposal artifact helper，并更新 adapter prompt 指向该 contract。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 adapter provider-safe，且没有允许外部 agent 直接写 committed truth。",
+      "taskSummary": "已检查 proposal contract 阻止外部 agent 绕过 review / verifier / closeout gate。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 fs-bridge tests、project truth、skill contract、diff hygiene 和 JSON 校验。",
+      "taskSummary": "已运行 domain tests、fs-bridge tests、project truth、skill contract、diff hygiene 和 JSON 校验。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Adapter Prompt Generator v1 accepted，下一刀建议进入 Writeback Proposal Contract v1。",
+      "taskSummary": "已记录 Writeback Proposal Contract v1 accepted，下一刀建议进入 Recovery Integration v1。",
       "requiresUserDecision": false
     }
   ],

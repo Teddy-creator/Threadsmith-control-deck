@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T15:47:42+08:00
+- generated at: 2026-05-23T16:10:10+08:00
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Adapter Prompt Generator v1
+- current phase: Writeback Proposal Contract v1
 - acceptance state: accepted
 
 ## Purpose
@@ -39,6 +39,10 @@ If any source file disagrees with another source file, stop and route to recover
 - Write durable `.threadsmith/` state only at real phase, verification, closeout, or handoff boundaries.
 - Do not turn casual discussion into committed truth.
 
+## Writeback Proposal Contract
+- Native Codex work should normally use `$threadsmith` for committed truth writeback.
+- Use a proposal only when acting as an external or delegated worker that should not directly update committed truth.
+
 ## Recover If
 - AGENTS.md and .threadsmith/ disagree.
 - current-agent-handoff.md is missing, stale, or references a different phase.
@@ -50,4 +54,4 @@ If any source file disagrees with another source file, stop and route to recover
 - What you read: source files and freshness notes.
 - What you did: files changed or no-change.
 - Evidence: commands, artifacts, or explicit missing evidence.
-- Proposed Threadsmith writeback: current phase, acceptance state, active work, and next safe move.
+- Proposed Threadsmith writeback: include a writeback proposal artifact path or inline JSON proposal.

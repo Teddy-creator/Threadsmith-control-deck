@@ -90,6 +90,14 @@ export function getAdapterPromptPath(projectRoot: string, adapterName: string) {
   return join(getAdaptersDir(projectRoot), `${adapterName}.md`);
 }
 
+export function getProposalsDir(projectRoot: string) {
+  return join(getThreadsmithDir(projectRoot), "proposals");
+}
+
+export function getWritebackProposalPath(projectRoot: string, proposalId: string) {
+  return join(getProposalsDir(projectRoot), `${proposalId}.json`);
+}
+
 export function getContextFilePath(
   projectRoot: string,
   fileName: (typeof CONTEXT_FILES)[keyof typeof CONTEXT_FILES]

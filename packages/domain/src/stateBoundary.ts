@@ -286,6 +286,13 @@ export const defaultStateBoundaryContract = stateBoundaryContractSchema.parse({
       authority: "derived",
       description: "Provider-neutral or provider-specific adapter prompts derived from the state boundary and current project truth.",
       defaultWriteMode: "proposal"
+    },
+    {
+      path: ".threadsmith/proposals/<proposal-id>.json",
+      layer: "runtime-artifact",
+      authority: "runtime",
+      description: "Structured writeback proposal from an external or native agent; never accepted committed truth until reviewed and verified.",
+      defaultWriteMode: "proposal"
     }
   ],
   roleRules: [

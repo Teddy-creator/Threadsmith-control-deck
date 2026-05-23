@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Adapter Prompt Generator v1 已 accepted：Codex / Claude / Generic Agent 三份 adapter prompt 已可生成，并明确 committed truth 权威、handoff 非权威、外部 agent 默认只读 + proposal。",
+  "currentClaim": "Writeback Proposal Contract v1 已 accepted：外部 agent 现在可以通过结构化 proposal 提交建议写回，proposal 不会自动采纳，也不能绕过 review / verifier / closeout gate。",
   "doneWhenChecklist": [
     {
-      "id": "adapter-paths",
-      "label": ".threadsmith/adapters/codex.md、claude.md、generic-agent.md 可由 fs-bridge helper 稳定生成",
+      "id": "domain-contract",
+      "label": "domain 层定义 writeback proposal schema，覆盖 proposed truth updates、evidence、risks 和 recovery trigger",
       "status": "pass"
     },
     {
-      "id": "codex-adapter",
-      "label": "Codex adapter 指向 $threadsmith，并说明 sync / drive / continuous / recover 的使用边界",
+      "id": "fs-artifact",
+      "label": "fs-bridge 可写入并读取 .threadsmith/proposals/<proposal-id>.json",
       "status": "pass"
     },
     {
-      "id": "external-agent-safety",
-      "label": "Claude 与 generic adapter 明确 committed truth 权威、current-agent-handoff.md 非权威、默认只读 + writeback proposal",
+      "id": "adapter-contract",
+      "label": "Claude 与 generic adapter 明确要求使用 writeback proposal contract，不直接写 committed truth",
       "status": "pass"
     },
     {
-      "id": "recover-routing",
-      "label": "adapter 提醒 AGENTS.md / .threadsmith / handoff freshness 冲突时 route to recover",
+      "id": "no-auto-adoption",
+      "label": "本阶段不自动采纳 proposal；review / verifier / closeout gate 仍保留",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "fs-bridge tests、project truth schema、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "domain tests、fs-bridge tests、project truth schema、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本阶段尚未实现 external agent writeback proposal。",
+    "本阶段只定义 proposal contract，不实现自动采纳 proposal。",
     "前端继续冻结；handoff freshness 暂不做 UI 展示。"
   ],
   "finalState": "accepted"

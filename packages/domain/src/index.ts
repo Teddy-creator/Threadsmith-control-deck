@@ -22,3 +22,4 @@ export * from "./skillDiscovery.ts";
 export * from "./skillRoutingConfig.ts";
 export * from "./projectCharterGate.ts";
 export * from "./stateBoundary.ts";
+export * from "./writebackProposal.ts";

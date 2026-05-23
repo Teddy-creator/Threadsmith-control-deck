@@ -84,6 +84,17 @@ describe("stateBoundaryContractSchema", () => {
     ).toBe("proposal");
   });
 
+  it("treats writeback proposals as runtime artifacts, not committed truth", () => {
+    const proposal = defaultStateBoundaryContract.artifacts.find(
+      (artifact) => artifact.path === ".threadsmith/proposals/<proposal-id>.json"
+    )!;
+
+    expect(proposal.layer).toBe("runtime-artifact");
+    expect(proposal.authority).toBe("runtime");
+    expect(proposal.defaultWriteMode).toBe("proposal");
+    expect(proposal.description).toContain("never accepted committed truth");
+  });
+
   it("allows native Threadsmith workflow to use direct writes where the contract allows it", () => {
     const currentPhase = defaultStateBoundaryContract.artifacts.find(
       (artifact) => artifact.path === ".threadsmith/current-phase.json"

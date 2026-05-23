@@ -1,24 +1,26 @@
 {
-  "phaseName": "Adapter Prompt Generator v1",
-  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第三刀落成可测试的 adapter prompt 生成器，让 Codex、Claude 和通用 agent 能安全读取 Threadsmith truth 与 handoff，而不误写 committed truth。",
-  "deliverable": ".threadsmith/adapters/codex.md、claude.md、generic-agent.md 生成器、对应测试与验证证据。",
+  "phaseName": "Writeback Proposal Contract v1",
+  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第四刀落成可测试的 writeback proposal contract，让外部 agent 能提交结构化建议写回，而不是直接改 committed truth。",
+  "deliverable": "writeback proposal domain contract、fs-bridge proposal artifact helper、adapter prompt 更新、对应测试与验证证据。",
   "inScope": [
-    "新增 adapter prompt 生成 helper",
-    "生成 Codex / Claude / Generic Agent 三份 provider-safe adapter 文档",
-    "adapter 内容必须指向 committed truth、current-agent-handoff.md 和 recover 规则",
-    "Claude 与 generic adapter 默认 read-only + writeback proposal，不允许直接写 committed truth",
-    "增加 fs-bridge 测试覆盖 adapter 内容与路径"
+    "定义 writeback proposal JSON contract",
+    "区分 proposed truth updates、evidence、residual risks、stop/recover reasons",
+    "新增 fs-bridge helper 写入 .threadsmith/proposals/<id>.json",
+    "更新 adapter prompt，要求外部 agent 使用 proposal contract",
+    "增加 domain / fs-bridge 测试覆盖 proposal validation 与 artifact 写入"
   ],
   "outOfScope": [
-    "实现 writeback proposal 文件格式",
+    "自动采纳 proposal 并写 committed truth",
+    "实现 proposal review UI",
     "让外部 agent 直接写 committed truth",
     "改动前端 UI",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "三份 adapter prompt 可稳定生成，内容保持 provider-safe 与 committed truth 边界，相关测试与 project truth 验证通过，并进入 closeout。",
+  "stopCondition": "writeback proposal contract 与 artifact helper 已落地，adapter prompt 指向该 contract，相关测试与 project truth 验证通过，并进入 closeout。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
+    "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",
     "npm run verify:skill-contract",
     "git diff --check",
