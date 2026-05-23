@@ -90,9 +90,9 @@
       "id": "project-state-store-cross-agent-bridge-v1",
       "label": "交接实现",
       "title": "Project State Store / Cross-Agent Bridge v1 implementation",
-      "summary": "Implement the accepted handoff packet, adapter prompt, and read/write boundary contracts after the planning document is approved.",
-      "state": "current"
+      "summary": "Accepted v1 bridge with handoff/adapters, bridge refresh, proposal fixtures, proposal visibility, proposal review, and manual adoption boundaries.",
+      "state": "done"
     }
   ],
-  "updatedAt": "2026-05-22T20:46:09.000Z"
+  "updatedAt": "2026-05-23T23:26:04+08:00"
 }

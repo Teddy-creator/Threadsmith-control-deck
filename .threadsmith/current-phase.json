@@ -1,27 +1,24 @@
 {
-  "phaseName": "Pending Proposal Visibility v1",
-  "phaseGoal": "让操作者能在命令行看到当前是否存在待审 writeback proposal，以及每个 proposal 应该 review、recover 还是已经处理过。",
-  "deliverable": "proposal visibility summary、proposal-status CLI、focused tests、smoke、docs/truth closeout。",
+  "phaseName": "Cross-Agent State Bridge v1 closeout / release decision",
+  "phaseGoal": "收束 Cross-Agent State Bridge v1 当前能力、缺口和发布判断，确认这条线是否已经形成稳定 v1。",
+  "deliverable": "closeout doc update、v1 release decision、truth closeout、verification evidence。",
   "inScope": [
-    "扫描 .threadsmith/proposals/*.json 与 .threadsmith/proposal-reviews/*.json",
-    "把 proposal 分类为 pending、reviewed 或 invalid",
-    "pending proposal 输出 proposal id、agent/provider、role、phase、status、createdAt 和推荐 review 命令",
-    "新增 npm run threadsmith:proposal-status -- .",
-    "新增 npm run smoke:proposal-status",
-    "更新 Cross-Agent State Bridge v1 文档和 operator guide"
+    "确认 Cross-Agent State Bridge v1 已实现能力清单",
+    "更新 closeout 文档状态和 release decision",
+    "确认 proposal visibility 已纳入 v1 contract",
+    "刷新 .threadsmith truth 到当前 closeout slice",
+    "运行 project truth、skill contract、diff hygiene 和 JSON 校验"
   ],
   "outOfScope": [
-    "前端 UI",
-    "自动采纳 proposal",
-    "外部 agent 直接写 committed truth",
+    "实现 proposal adoption command",
+    "前端维护或 UI 改造",
     "multi-provider 自动执行",
+    "外部 agent 直接写 committed truth",
     "发布 release",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md"
   ],
-  "stopCondition": "操作者能用一条命令知道当前有没有待审 proposal，以及下一步应该 review 哪个 proposal。",
+  "stopCondition": "操作者能清楚知道 Cross-Agent State Bridge v1 当前已完成什么、为什么暂不发 release、下一步可选做什么。",
   "verificationForThisPhase": [
-    "npm run smoke:proposal-status",
-    "npm run test --workspace @threadsmith/fs-bridge -- proposalVisibility",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
     "git diff --check",

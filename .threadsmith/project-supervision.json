@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Pending Proposal Visibility v1 已 accepted：proposal-status 命令和摘要已补齐。",
+  "summary": "Cross-Agent State Bridge v1 closeout / release decision 已 accepted：v1 bridge 能力已收束，暂不单独发布 release。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已将当前 slice 收窄为 Pending Proposal Visibility v1。",
+      "taskSummary": "已将当前 slice 收窄为 Cross-Agent State Bridge v1 closeout / release decision。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/pending-proposal-visibility-v1.md",
-      "updatedAt": "2026-05-23T22:59:29+08:00"
+      "latestEvidenceLabel": "docs/plans/cross-agent-state-bridge-v1-consolidation-gap-check.md",
+      "updatedAt": "2026-05-23T23:26:04+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 proposal visibility summary、proposal-status CLI、tests、smoke 和文档更新。",
+      "taskSummary": "已更新 closeout 文档、v1 contract continuity 和 release decision。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/proposalVisibility.ts",
-      "updatedAt": "2026-05-23T23:11:38+08:00"
+      "latestEvidenceLabel": "docs/architecture/cross-agent-bridge-contract-closeout-v1.md",
+      "updatedAt": "2026-05-23T23:26:04+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 proposal visibility 正确区分 pending/reviewed/invalid，且不暗示自动采纳。",
+      "taskSummary": "已检查本轮只做 closeout / release decision，不扩张到新功能或 release 发布。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "docs/architecture/cross-agent-state-bridge-v1.md",
-      "updatedAt": "2026-05-23T23:11:38+08:00"
+      "updatedAt": "2026-05-23T23:26:04+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 proposal status smoke、focused tests、project truth、skill contract 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、skill contract、diff hygiene 和 JSON 校验。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run smoke:proposal-status",
-      "updatedAt": "2026-05-23T23:11:38+08:00"
+      "latestEvidenceLabel": "npm run verify:project-truth",
+      "updatedAt": "2026-05-23T23:26:04+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 accepted closeout，准备 PR。",
+      "taskSummary": "已记录 bridge v1 closeout accepted，准备 PR。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/acceptance-state.json",
-      "updatedAt": "2026-05-23T23:11:38+08:00"
+      "updatedAt": "2026-05-23T23:26:04+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T23:11:38+08:00"
+  "updatedAt": "2026-05-23T23:26:04+08:00"
 }

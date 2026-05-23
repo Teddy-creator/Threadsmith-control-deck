@@ -1,34 +1,29 @@
 {
-  "currentClaim": "Pending Proposal Visibility v1 已 accepted：Threadsmith 现在可以用 proposal-status 命令显示 pending / reviewed / invalid proposal，且不改变人工采纳边界。",
+  "currentClaim": "Cross-Agent State Bridge v1 closeout / release decision 已 accepted：v1 bridge 能力已收束，暂不为这次 closeout 单独发布 release。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Pending Proposal Visibility v1 实施计划",
+      "label": "确认 closeout / release decision 范围",
       "status": "pass"
     },
     {
-      "id": "summary",
-      "label": "新增 proposal visibility summary",
+      "id": "contract",
+      "label": "确认 Cross-Agent State Bridge v1 contract 已包含 proposal visibility",
       "status": "pass"
     },
     {
-      "id": "cli",
-      "label": "新增 npm run threadsmith:proposal-status -- .",
+      "id": "closeout-doc",
+      "label": "更新 closeout 文档状态、命令面和 release decision",
       "status": "pass"
     },
     {
-      "id": "tests",
-      "label": "新增 focused tests 与 smoke 覆盖 pending/reviewed/invalid",
-      "status": "pass"
-    },
-    {
-      "id": "docs",
-      "label": "Cross-Agent State Bridge v1 文档与 operator guide 说明 proposal status",
+      "id": "truth",
+      "label": "刷新 .threadsmith truth 到当前 closeout slice",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "proposal status smoke、focused tests、project truth、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "project truth、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -37,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只做命令行/summary visibility，不做前端 UI。",
-    "这轮不改变 proposal review 的人工采纳边界。"
+    "proposal adoption command 仍未实现，后续需要单独设计权限、验证和 rollback 边界。",
+    "这轮不发布 release，只把 v1 bridge closeout 合并到 main。"
   ],
   "finalState": "accepted"
 }
