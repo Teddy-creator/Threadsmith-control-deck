@@ -48,6 +48,53 @@ v1 总览、能力地图和缺口检查见
 v1 已实现能力、未承诺能力和验证命令见
 [Cross-Agent Bridge Contract Closeout v1](../architecture/cross-agent-bridge-contract-closeout-v1.md)。
 
+## 10 分钟操作流程
+
+如果你只是想把一个任务交给另一个 agent，按这条流程走：
+
+1. **确认 truth 新鲜**
+   运行 `npm run verify:project-truth`，或者用 `$threadsmith` sync / recover。
+2. **刷新交接面**
+   运行 `npm run threadsmith:bridge-refresh -- .`。
+3. **选择 adapter**
+   把 `.threadsmith/adapters/codex.md`、`.threadsmith/adapters/claude.md`
+   或 `.threadsmith/adapters/generic-agent.md` 交给外部 agent。
+4. **只委托一个窄角色**
+   例如只让它 review、research、verify、docs draft，或者只实现一个明确 slice。
+5. **要求返回 proposal**
+   外部 agent 可以返回工作结果和 evidence，但状态更新必须走
+   `.threadsmith/proposals/<proposal-id>.json`。
+6. **查看队列**
+   运行 `npm run threadsmith:proposal-status -- .`。
+7. **审查 proposal**
+   运行 `npm run threadsmith:review-proposal -- . <proposal-id>`。
+8. **显式采纳或恢复**
+   只有 review 是 `accept-plan` 时，才运行
+   `npm run threadsmith:adopt-proposal -- . <proposal-id>`。如果是
+   `needs-recovery` 或 `reject`，先 recover 或让外部 agent 重做。
+9. **运行验证**
+   根据当前 phase 跑测试或 smoke。不要把 proposal 当成 verification。
+10. **closeout**
+    只有 verification 通过后，才让 Threadsmith 在正确 role boundary 写入
+    accepted closeout。
+
+这条流程的核心是：外部 agent 可以帮你做事，也可以建议状态更新，但不能绕过
+Threadsmith 的 review、adoption、verification 和 closeout。
+
+## 命令速查
+
+| 场景 | 命令 | 会不会改 committed truth |
+| --- | --- | --- |
+| 校验项目 truth | `npm run verify:project-truth` | 不会 |
+| 刷新 handoff + adapters | `npm run threadsmith:bridge-refresh -- .` | 不会，只刷新派生交接面 |
+| 只生成 handoff | `npm run threadsmith:handoff -- .` | 不会 |
+| 只生成 adapters | `npm run threadsmith:adapters -- .` | 不会 |
+| 查看 proposal 队列 | `npm run threadsmith:proposal-status -- .` | 不会 |
+| 审查 proposal | `npm run threadsmith:review-proposal -- . <proposal-id>` | 不会，只写 review artifact |
+| 显式采纳 proposal | `npm run threadsmith:adopt-proposal -- . <proposal-id>` | 会，只能改允许的 `.threadsmith` truth |
+| 验证 proposal 队列 | `npm run smoke:proposal-status` | 不会，隔离临时项目 |
+| 验证完整 round trip | `npm run smoke:proposal-roundtrip` | 不会改当前项目，隔离临时项目 |
+
 ## 操作者流程
 
 ### 1. 准备项目状态
@@ -127,6 +174,8 @@ npm run threadsmith:bridge-refresh -- .
 完成后返回 changed files、verification evidence、residual risks，
 以及一份 writeback proposal。不要直接把 acceptance-state 改成 accepted。
 ```
+
+更多可复制模板见下方“常用委托提示词”。
 
 ### 4. 接收 proposal
 
@@ -277,6 +326,119 @@ proposal，Threadsmith 先 review，操作者再显式 adopt。
 
 如果不通过，记录 reject 或 needs-recovery，不要把 proposal 内容悄悄塞进
 committed truth。
+
+### 9. 验证并 closeout
+
+显式采纳 proposal 之后，仍然只表示 committed truth 被更新了，不表示项目完成。
+下一步要回到 Threadsmith 原有角色链：
+
+- reviewer 检查外部 agent 的结论有没有越权、证据有没有断层；
+- verifier 运行当前 phase 要求的命令；
+- closeout 在验证通过后记录 accepted；
+- 如果验证失败，进入 recover 或 repair，不要把失败 proposal 继续向前推。
+
+## 常用委托提示词
+
+这些模板给外部 agent 用。你可以把对应 adapter prompt、handoff 文件和下面任一
+模板一起发给它。
+
+### Reviewer
+
+```text
+请作为 Threadsmith-compatible external reviewer 工作。
+
+项目根目录：<project-root>
+请先读取 AGENTS.md、.threadsmith committed truth、handoff 和 adapter prompt。
+只审查当前 phase 的风险、遗漏、越权写入和验证缺口。
+不要修改 committed truth。
+
+请返回：
+- review summary
+- findings，按 severity 排序
+- evidence references
+- residual risks
+- 如果需要更新 Threadsmith 状态，请返回 writeback proposal
+```
+
+### Researcher
+
+```text
+请作为 Threadsmith-compatible external researcher 工作。
+
+项目根目录：<project-root>
+请先读取 AGENTS.md 和 .threadsmith committed truth，确认当前 phase 和非目标。
+只调研当前问题，不扩大产品范围，不直接改 committed truth。
+
+请返回：
+- research conclusion
+- sources or repo evidence
+- what should change in the current plan
+- what should remain out of scope
+- 如果需要状态更新，请返回 writeback proposal
+```
+
+### Verifier
+
+```text
+请作为 Threadsmith-compatible external verifier 工作。
+
+项目根目录：<project-root>
+请先读取 AGENTS.md、current-phase 和 acceptance-state。
+只验证当前 claim，不替 executor 补实现，不把缺失证据当通过。
+
+请返回：
+- commands run
+- pass / fail result
+- evidence references
+- blockers
+- 如果 verification status 需要更新，请返回 writeback proposal
+```
+
+### Docs Helper
+
+```text
+请作为 Threadsmith-compatible external docs helper 工作。
+
+项目根目录：<project-root>
+请先读取 AGENTS.md 和当前 phase。
+只改当前 scope 内的文档，不改变产品承诺，不声称未实现能力已经可用。
+
+请返回：
+- changed docs
+- wording risks
+- verification notes
+- 如果 docs 状态需要写回 Threadsmith，请返回 writeback proposal
+```
+
+### Executor Without Acceptance
+
+```text
+请作为 Threadsmith-compatible external executor 工作。
+
+项目根目录：<project-root>
+只实现 current phase 中明确 in-scope 的一个窄 slice。
+可以修改源码、测试或文档，但不要直接把 acceptance-state 改成 accepted。
+如果需要更新 Threadsmith 状态，只能返回 writeback proposal。
+
+请返回：
+- changed files
+- implementation summary
+- commands run
+- residual risks
+- writeback proposal
+```
+
+## 恢复分支
+
+| 情况 | 怎么判断 | 处理方式 |
+| --- | --- | --- |
+| stale handoff | handoff 的 `generated at` 早于 committed truth 更新时间 | 运行 `npm run threadsmith:bridge-refresh -- .`，再重新委托 |
+| stale adapter | adapter 的 `generated at` 早于 committed truth 更新时间 | 运行 `npm run threadsmith:bridge-refresh -- .`，不要继续用旧 adapter |
+| stale proposal | proposal `createdAt` 早于 `project-status.json.updatedAt` | review 会走 `needs-recovery`；先 sync / recover，再让外部 agent rebase |
+| wrong phase | proposal 的 `phaseName` 不是当前 phase | 不采纳；让外部 agent 基于当前 truth 重新生成 |
+| unsafe proposal | proposal 想 self-accept、改 source code、改 proposal artifact 或越权改 truth | reject；必要时更新 adapter prompt 或委托语句 |
+| missing evidence | proposal 想推进 review / verification / accepted，但没有 evidence | 不采纳；让 verifier 补证据 |
+| truth 冲突 | chat、proposal、handoff 和 committed truth 说法不一致 | committed truth 优先；用 `$threadsmith` recover |
 
 ## 最小 happy path
 

@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "project state store / cross-agent bridge v1 adoption and round-trip",
+  "currentTrack": "project state store / cross-agent bridge operator workflow",
   "overallState": "stable",
-  "currentFocus": "Proposal Adoption and Round-trip v1 已完成：Threadsmith 能显式采纳 accept-plan proposal，并验证完整跨 agent proposal 链路。",
-  "projectStatusSummary": "Threadsmith 已完成 Cross-Agent State Bridge v1 closeout、proposal status、proposal review、显式 proposal adoption 和 isolated round-trip smoke；当前仍不进入自动多 agent 调度。",
+  "currentFocus": "Bridge Operator Workflow v1 已完成：跨 agent 状态桥现在有可照着执行的日常操作流程。",
+  "projectStatusSummary": "Threadsmith 已完成 handoff/adapters、proposal status、proposal review、explicit adoption、isolated round-trip 和 operator workflow guide；当前仍不进入自动多 agent 调度。",
   "latestAcceptedSlice": {
-    "title": "Proposal Adoption and Round-trip v1",
-    "recordedAt": "2026-05-23T23:56:58+08:00"
+    "title": "Bridge Operator Workflow v1",
+    "recordedAt": "2026-05-24T00:35:30+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Bridge UX hardening or pause before automatic scheduling",
+    "title": "Pause before automatic scheduling; consider UX/doc review or state-store positioning next",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "adopt-proposal 仍是显式命令，不是自动多 agent 调度。",
-    "未来若做自动调度，需要独立 execution contract。",
-    "需要继续保持外部 agent 只读 + proposal 的默认边界。"
+    "操作者仍需要显式 review/adopt proposal，不能误解为自动多 agent 调度。",
+    "外部 agent 默认仍是只读 + proposal，不能直接写 committed truth。",
+    "如果未来做自动调度，需要单独 execution contract 和更强 stop/recovery 机制。"
   ],
-  "updatedAt": "2026-05-23T23:56:58+08:00"
+  "updatedAt": "2026-05-24T00:35:30+08:00"
 }
