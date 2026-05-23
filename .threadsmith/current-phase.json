@@ -1,32 +1,31 @@
 {
-  "phaseName": "External-Agent Fixture Pack v1",
-  "phaseGoal": "为 Cross-Agent State Bridge v1 增加一组外部 agent proposal 样例，帮助操作者理解 safe / stale / conflicting / unsafe proposal 会如何被 Threadsmith review。",
-  "deliverable": "proposal fixture pack、isolated smoke、operator docs update、truth closeout。",
+  "phaseName": "Pending Proposal Visibility v1",
+  "phaseGoal": "让操作者能在命令行看到当前是否存在待审 writeback proposal，以及每个 proposal 应该 review、recover 还是已经处理过。",
+  "deliverable": "proposal visibility summary、proposal-status CLI、focused tests、smoke、docs/truth closeout。",
   "inScope": [
-    "新增 happy-path proposal fixture，预期 review 结果为 accept-plan",
-    "新增 stale proposal fixture，预期 review 结果为 needs-recovery",
-    "新增 wrong-phase/conflicting proposal fixture，预期 review 结果为 needs-recovery",
-    "新增 unsafe self-acceptance fixture，预期 schema/review 阶段拒绝",
-    "新增 npm run smoke:proposal-fixtures",
-    "更新 Cross-Agent State Bridge v1 文档"
+    "扫描 .threadsmith/proposals/*.json 与 .threadsmith/proposal-reviews/*.json",
+    "把 proposal 分类为 pending、reviewed 或 invalid",
+    "pending proposal 输出 proposal id、agent/provider、role、phase、status、createdAt 和推荐 review 命令",
+    "新增 npm run threadsmith:proposal-status -- .",
+    "新增 npm run smoke:proposal-status",
+    "更新 Cross-Agent State Bridge v1 文档和 operator guide"
   ],
   "outOfScope": [
-    "前端维护或重构",
-    "multi-provider 自动执行",
+    "前端 UI",
+    "自动采纳 proposal",
     "外部 agent 直接写 committed truth",
-    "proposal review UI",
+    "multi-provider 自动执行",
     "发布 release",
-    "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
-    "pending proposal visibility"
+    "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md"
   ],
-  "stopCondition": "操作者能从 fixture pack 看懂外部 agent proposal 的正确形状，以及 Threadsmith 如何 accept-plan、needs-recovery 或拒绝不安全输入。",
+  "stopCondition": "操作者能用一条命令知道当前有没有待审 proposal，以及下一步应该 review 哪个 proposal。",
   "verificationForThisPhase": [
-    "npm run smoke:proposal-fixtures",
-    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalWorkflow",
+    "npm run smoke:proposal-status",
+    "npm run test --workspace @threadsmith/fs-bridge -- proposalVisibility",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
     "git diff --check",
-    "jq empty .threadsmith/*.json"
+    "jq empty .threadsmith/*.json docs/fixtures/cross-agent-proposals/*.json"
   ],
   "activeOwners": [
     "planner",

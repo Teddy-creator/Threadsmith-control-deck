@@ -47,6 +47,7 @@ In v1, an operator can:
 | Read-only external agent default | Implemented | `docs/guides/cross-agent-bridge-operator-guide.md`; adapter prompt output rules. |
 | Writeback proposal artifact | Implemented | `.threadsmith/proposals/<proposal-id>.json` contract in runtime/action docs and fs bridge tests. |
 | Proposal review command | Implemented | `npm run threadsmith:review-proposal -- . <proposal-id>`; `scripts/threadsmith-review-proposal.ts`. |
+| Pending proposal visibility | Implemented | `npm run threadsmith:proposal-status -- .`; `scripts/threadsmith-proposal-status.ts`; `npm run smoke:proposal-status`. |
 | Stale proposal recovery | Implemented | proposal review rejects or routes stale proposals to recovery before adoption. |
 | Handoff / adapter freshness anchors | Implemented | generated handoff/adapters include `generated at` and `committed truth updated at`. |
 | Bridge refresh command | Implemented | `npm run threadsmith:bridge-refresh -- .` validates readable truth and regenerates handoff + adapters. |
@@ -127,6 +128,16 @@ phase, and stop condition.
 
 ### 4. Review Proposal
 
+Before reviewing a specific proposal, check the operator queue:
+
+```bash
+npm run threadsmith:proposal-status -- .
+```
+
+This reports pending, reviewed, and invalid proposal artifacts. Pending items
+include the exact review command. Invalid artifacts are reported as invalid
+items instead of crashing the status command.
+
 Run:
 
 ```bash
@@ -173,6 +184,7 @@ These are intentionally not part of v1:
 | External agent fixtures were thin | Fixed by fixture pack | Sample Codex / Claude / generic proposal flows make adoption easier. | Keep `docs/fixtures/cross-agent-proposals/` aligned with proposal review behavior. |
 | Proposal adoption remains manual | Explicit v1 boundary | This is safer, but users may expect `accept-plan` to apply truth automatically. | Keep manual in v1; consider opt-in adoption command later. |
 | No proposal review UI | Follow-up | CLI review is enough for v1, but visual operators may miss pending proposals. | Only revisit after skill/protocol line stabilizes. |
+| Pending proposal visibility was implicit | Fixed by this slice | Operators should not need to inspect `.threadsmith/proposals/` manually. | Use `npm run threadsmith:proposal-status -- .` before review/adoption. |
 | No automatic multi-provider execution | Explicit non-goal | Cross-agent state bridge is a handoff and proposal bridge, not execution automation. | Treat as a separate future milestone. |
 | Handoff/adapters rely on regeneration discipline | Fixed by bridge refresh command | Freshness anchors expose staleness; the refresh command gives operators one safe way to regenerate both surfaces. | Keep `threadsmith:bridge-refresh` documented as the preferred refresh entry. |
 | Current `.threadsmith` truth still names the previous hardening phase until reset | Fixed by this slice | Operators should not see an accepted old phase as the current active phase. | This slice refreshes phase truth to consolidation / gap-check. |
@@ -189,6 +201,7 @@ Cross-Agent State Bridge v1 can be considered ready when:
   same committed truth read;
 - `npm run smoke:state-bridge` passes;
 - `npm run smoke:review-proposal` passes;
+- `npm run smoke:proposal-status` passes;
 - `npm run smoke:proposal-fixtures` passes;
 - stale handoff, stale adapter, and stale proposal behavior is documented;
 - committed truth records that v1 is consolidated rather than still in
@@ -196,7 +209,7 @@ Cross-Agent State Bridge v1 can be considered ready when:
 
 ## Recommended Next Slices
 
-1. Pending proposal visibility: expose pending proposal status in CLI/docs
-   before considering UI.
+1. Proposal adoption command design: only consider after operators are comfortable
+   with manual review and status visibility.
 
 Do not combine these with this consolidation slice.

@@ -1,29 +1,34 @@
 {
-  "currentClaim": "External-Agent Fixture Pack v1 已 accepted：Threadsmith 现在有 safe / stale / wrong-phase / unsafe self-acceptance proposal 样例，并用 smoke 验证预期 review 结果。",
+  "currentClaim": "Pending Proposal Visibility v1 已 accepted：Threadsmith 现在可以用 proposal-status 命令显示 pending / reviewed / invalid proposal，且不改变人工采纳边界。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 External-Agent Fixture Pack v1 实施计划",
+      "label": "新增 Pending Proposal Visibility v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "fixtures",
-      "label": "新增 happy/stale/wrong-phase/unsafe proposal fixtures",
+      "id": "summary",
+      "label": "新增 proposal visibility summary",
       "status": "pass"
     },
     {
-      "id": "smoke",
-      "label": "新增 proposal fixture smoke 并覆盖预期 review 结果",
+      "id": "cli",
+      "label": "新增 npm run threadsmith:proposal-status -- .",
+      "status": "pass"
+    },
+    {
+      "id": "tests",
+      "label": "新增 focused tests 与 smoke 覆盖 pending/reviewed/invalid",
       "status": "pass"
     },
     {
       "id": "docs",
-      "label": "Cross-Agent State Bridge v1 文档链接 fixture pack",
+      "label": "Cross-Agent State Bridge v1 文档与 operator guide 说明 proposal status",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "fixture smoke、proposal workflow tests、project truth、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "proposal status smoke、focused tests、project truth、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +37,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只补 proposal fixture pack，不做 pending proposal visibility。",
+    "这轮只做命令行/summary visibility，不做前端 UI。",
     "这轮不改变 proposal review 的人工采纳边界。"
   ],
   "finalState": "accepted"

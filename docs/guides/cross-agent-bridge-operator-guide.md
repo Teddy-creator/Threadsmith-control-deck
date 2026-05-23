@@ -183,7 +183,28 @@ proposal 的最小字段是：
 - proposal 不能提出修改另一个 proposal artifact。
 - 如果 proposal 想推动最终 accepted，必须带 evidence。
 
-### 5. Threadsmith review proposal
+### 5. 查看待审 proposal
+
+在 review 单个 proposal 之前，先看当前队列：
+
+```bash
+npm run threadsmith:proposal-status -- .
+```
+
+这个命令会扫描：
+
+- `.threadsmith/proposals/*.json`
+- `.threadsmith/proposal-reviews/*.json`
+
+并把 proposal 分成三类：
+
+- `pending`：还没有 review artifact，需要运行推荐的 review 命令。
+- `reviewed`：已经有 proposal review，除非要人工采纳，否则不需要重复处理。
+- `invalid`：artifact 格式坏了或不符合 schema，不能采纳，需要检查后重新生成或删除。
+
+这一步只是 visibility，不会执行外部 agent，也不会自动采纳 proposal。
+
+### 6. Threadsmith review proposal
 
 Threadsmith 读取 proposal 后，只能做三类决定：
 
@@ -221,7 +242,7 @@ Threadsmith 会把它判定为 stale proposal，并输出 `needs-recovery`。这
 - 不应该直接采纳；
 - 操作者应先 sync / recover，然后让外部 agent 重新生成或 rebase proposal。
 
-### 6. 人工采纳或拒绝
+### 7. 人工采纳或拒绝
 
 采纳前检查：
 

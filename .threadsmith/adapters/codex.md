@@ -2,10 +2,10 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T14:46:36.983Z
-- committed truth updated at: 2026-05-23T22:44:55+08:00
+- generated at: 2026-05-23T15:13:40.012Z
+- committed truth updated at: 2026-05-23T23:11:38+08:00
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: External-Agent Fixture Pack v1
+- current phase: Pending Proposal Visibility v1
 - acceptance state: accepted
 
 ## Purpose
