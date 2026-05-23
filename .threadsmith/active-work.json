@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把下一刀定为 Cross-Agent State Bridge v1 consolidation / gap-check，并明确不是 new design start。",
+      "taskSummary": "已将当前 slice 收窄为 Bridge Refresh Command v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 v1 收束文档、实施计划，并把 operator guide / closeout doc 链到 v1 总图。",
+      "taskSummary": "已实现 threadsmith:bridge-refresh 命令、smoke 和文档更新。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 v1 文档准确区分已实现能力、缺口、非目标和后续 slice。",
+      "taskSummary": "已检查 bridge-refresh 只刷新 derived bridge surface，不改变 committed truth 边界。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 project truth、skill contract、state bridge smoke、proposal review smoke、handoff/adapters generation、diff hygiene 和 JSON 校验。",
+      "taskSummary": "已运行 bridge refresh smoke、handoff/adapters、project truth、skill contract 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Cross-Agent State Bridge v1 consolidation / gap-check accepted；下一刀建议从 fixture pack 或 bridge refresh command 中择一。",
+      "taskSummary": "已记录 Bridge Refresh Command v1 accepted；下一刀建议 External-agent fixture pack。",
       "requiresUserDecision": false
     }
   ],

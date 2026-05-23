@@ -49,6 +49,7 @@ In v1, an operator can:
 | Proposal review command | Implemented | `npm run threadsmith:review-proposal -- . <proposal-id>`; `scripts/threadsmith-review-proposal.ts`. |
 | Stale proposal recovery | Implemented | proposal review rejects or routes stale proposals to recovery before adoption. |
 | Handoff / adapter freshness anchors | Implemented | generated handoff/adapters include `generated at` and `committed truth updated at`. |
+| Bridge refresh command | Implemented | `npm run threadsmith:bridge-refresh -- .` validates readable truth and regenerates handoff + adapters. |
 | Deterministic bridge smoke | Implemented | `npm run smoke:state-bridge`; `npm run smoke:review-proposal`. |
 | Operator guide | Implemented | `docs/guides/cross-agent-bridge-operator-guide.md`. |
 
@@ -84,6 +85,16 @@ or invoke `$threadsmith` in sync / recover mode when truth looks stale.
 ### 2. Refresh Derived Context
 
 Run:
+
+```bash
+npm run threadsmith:bridge-refresh -- .
+```
+
+This one command reads committed truth, refreshes the fixed handoff packet, and
+refreshes all provider adapter prompts. It does not execute external agents or
+apply proposals.
+
+If you need the lower-level commands, run:
 
 ```bash
 npm run threadsmith:handoff -- .
@@ -162,7 +173,7 @@ These are intentionally not part of v1:
 | Proposal adoption remains manual | Explicit v1 boundary | This is safer, but users may expect `accept-plan` to apply truth automatically. | Keep manual in v1; consider opt-in adoption command later. |
 | No proposal review UI | Follow-up | CLI review is enough for v1, but visual operators may miss pending proposals. | Only revisit after skill/protocol line stabilizes. |
 | No automatic multi-provider execution | Explicit non-goal | Cross-agent state bridge is a handoff and proposal bridge, not execution automation. | Treat as a separate future milestone. |
-| Handoff/adapters rely on regeneration discipline | Follow-up | Freshness anchors expose staleness but do not force regeneration automatically. | Add a single `threadsmith:bridge-refresh` command if this becomes annoying. |
+| Handoff/adapters rely on regeneration discipline | Fixed by bridge refresh command | Freshness anchors expose staleness; the refresh command gives operators one safe way to regenerate both surfaces. | Keep `threadsmith:bridge-refresh` documented as the preferred refresh entry. |
 | Current `.threadsmith` truth still names the previous hardening phase until reset | Fixed by this slice | Operators should not see an accepted old phase as the current active phase. | This slice refreshes phase truth to consolidation / gap-check. |
 
 ## V1 Ready Criteria
@@ -173,6 +184,8 @@ Cross-Agent State Bridge v1 can be considered ready when:
 - `npm run verify:project-truth` passes;
 - `npm run threadsmith:handoff -- .` produces the fixed handoff file;
 - `npm run threadsmith:adapters -- .` produces all three adapter prompts;
+- `npm run threadsmith:bridge-refresh -- .` refreshes both surfaces from the
+  same committed truth read;
 - `npm run smoke:state-bridge` passes;
 - `npm run smoke:review-proposal` passes;
 - stale handoff, stale adapter, and stale proposal behavior is documented;
@@ -183,9 +196,7 @@ Cross-Agent State Bridge v1 can be considered ready when:
 
 1. External-agent fixture pack: add examples for happy path, stale proposal,
    conflicting proposal, and unsafe self-acceptance.
-2. Bridge refresh command: optionally wrap handoff + adapters + truth check into
-   one operator command.
-3. Pending proposal visibility: expose pending proposal status in CLI/docs
+2. Pending proposal visibility: expose pending proposal status in CLI/docs
    before considering UI.
 
 Do not combine these with this consolidation slice.

@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Cross-Agent State Bridge v1 consolidation / gap-check 已 accepted：v1 能力地图和缺口清单已收束。",
+  "summary": "Bridge Refresh Command v1 已 accepted：跨 agent bridge 刷新步骤已合成一条 operator command。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把下一刀定为 Cross-Agent State Bridge v1 consolidation / gap-check，并明确不是 new design start。",
+      "taskSummary": "已将当前 slice 收窄为 Bridge Refresh Command v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/cross-agent-state-bridge-v1-consolidation-gap-check.md",
-      "updatedAt": "2026-05-23T21:53:37+08:00"
+      "latestEvidenceLabel": "docs/plans/bridge-refresh-command-v1.md",
+      "updatedAt": "2026-05-23T22:18:17+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 v1 收束文档、实施计划，并把 operator guide / closeout doc 链到 v1 总图。",
+      "taskSummary": "已实现 threadsmith:bridge-refresh 命令、smoke 和文档更新。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/architecture/cross-agent-state-bridge-v1.md",
-      "updatedAt": "2026-05-23T21:53:37+08:00"
+      "latestEvidenceLabel": "scripts/threadsmith-bridge-refresh.ts",
+      "updatedAt": "2026-05-23T22:26:55+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 v1 文档准确区分已实现能力、缺口、非目标和后续 slice。",
+      "taskSummary": "已检查 bridge-refresh 只刷新 derived bridge surface，不改变 committed truth 边界。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/architecture/cross-agent-state-bridge-v1.md",
-      "updatedAt": "2026-05-23T22:03:07+08:00"
+      "latestEvidenceLabel": "review passed",
+      "updatedAt": "2026-05-23T22:26:55+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 project truth、skill contract、state bridge smoke、proposal review smoke、handoff/adapters generation、diff hygiene 和 JSON 校验。",
+      "taskSummary": "已运行 bridge refresh smoke、handoff/adapters、project truth、skill contract 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T22:03:07+08:00"
+      "updatedAt": "2026-05-23T22:26:55+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Cross-Agent State Bridge v1 consolidation / gap-check accepted；下一刀建议从 fixture pack 或 bridge refresh command 中择一。",
+      "taskSummary": "已记录 Bridge Refresh Command v1 accepted；下一刀建议 External-agent fixture pack。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T22:03:07+08:00"
+      "updatedAt": "2026-05-23T22:26:55+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T22:03:07+08:00"
+  "updatedAt": "2026-05-23T22:26:55+08:00"
 }

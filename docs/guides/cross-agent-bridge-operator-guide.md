@@ -97,6 +97,14 @@ npm run threadsmith:handoff -- .
 npm run threadsmith:adapters -- .
 ```
 
+也可以用一条命令完成 committed truth 读取校验、handoff 刷新和 adapters 刷新：
+
+```bash
+npm run threadsmith:bridge-refresh -- .
+```
+
+这条命令只刷新派生交接面，不会执行外部 agent，也不会自动采纳 proposal。
+
 ### 3. 委托一个窄任务
 
 委托时不要说“帮我继续整个项目”。更稳的写法是：
