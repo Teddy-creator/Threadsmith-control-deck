@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Proposal Adoption and Round-trip v1 已 accepted：Threadsmith 现在能显式采纳 accept-plan proposal，并用 isolated smoke 验证外部 proposal -> review -> adoption 写回 truth 的完整链路。",
+  "currentClaim": "Bridge Operator Workflow v1 已 accepted：Threadsmith 现在有一条可照着执行的跨 agent 状态桥日常流程，明确 truth、handoff/adapters、proposal、review、adoption、verification 与 closeout 边界。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Proposal Adoption and Round-trip v1 实施计划",
+      "label": "新增 Bridge Operator Workflow v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "adoption-command",
-      "label": "新增 npm run threadsmith:adopt-proposal -- . <proposal-id>",
+      "id": "workflow-guide",
+      "label": "operator guide 收敛成一条可执行日常流程",
       "status": "pass"
     },
     {
-      "id": "safety",
-      "label": "采纳前校验 accept-plan、target path、pointer 和结果 schema",
+      "id": "prompts",
+      "label": "补充常见外部 agent 角色的可复制提示词",
       "status": "pass"
     },
     {
-      "id": "roundtrip",
-      "label": "新增 external proposal -> review -> adoption 的 isolated smoke",
+      "id": "recovery",
+      "label": "补充 stale / wrong-phase / unsafe / missing-evidence 恢复分支",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "focused tests、round-trip smoke、project truth、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "project truth、skill contract、proposal status、round-trip smoke、fixtures smoke 与 diff hygiene 通过",
       "status": "pass"
     }
   ],
@@ -32,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只做显式 adoption 和 round-trip 验证，不做自动多 agent 调度。",
-    "adopt-proposal 必须保持 opt-in，不能把 accept-plan 变成自动写回。"
+    "这轮仍不做自动多 agent 调度。",
+    "当前 bridge 是 local project state store + handoff/proposal workflow，不是 hosted backend 或 direct external write system。"
   ],
   "finalState": "accepted"
 }

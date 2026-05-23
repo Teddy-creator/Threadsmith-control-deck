@@ -1,30 +1,29 @@
 {
-  "phaseName": "Proposal Adoption and Round-trip v1",
-  "phaseGoal": "补上显式 proposal adoption 命令，并用隔离 smoke 验证外部 agent proposal -> Threadsmith review -> adoption 写回 truth 的完整链路。",
-  "deliverable": "adopt-proposal CLI、fs-bridge adoption workflow、focused tests、round-trip smoke、docs/truth closeout。",
+  "phaseName": "Bridge Operator Workflow v1",
+  "phaseGoal": "把已实现的 Cross-Agent State Bridge 能力整理成操作者能照着执行的日常流程，明确 truth、handoff、proposal、review、adoption 与 verification 的边界。",
+  "deliverable": "一份可执行 operator workflow guide 更新、copy-paste external-agent prompts、命令速查、恢复分支说明，以及对应 truth reset。",
   "inScope": [
-    "实现 npm run threadsmith:adopt-proposal -- . <proposal-id>",
-    "只允许采纳已 review 为 accept-plan 的 proposal",
-    "采纳前校验 targetPath、targetPointer 和写入后的 JSON schema",
-    "新增 isolated round-trip smoke 覆盖 external proposal -> review -> adoption",
-    "更新 Cross-Agent Bridge operator docs 和 truth"
+    "把 operator guide 收敛成 prepare truth -> refresh bridge -> delegate -> receive proposal -> status -> review -> adopt/recover -> verify -> closeout 的流程",
+    "补充 reviewer、researcher、verifier、docs helper、executor-without-acceptance 的安全委托提示词",
+    "补充 bridge refresh、proposal status、review、adoption、smoke verification 的命令速查",
+    "解释 committed truth、derived handoff/adapters、runtime proposal artifacts、adopted truth 的读写边界",
+    "补充 stale handoff、stale adapter、stale proposal、wrong phase、unsafe proposal、missing evidence 的恢复分支"
   ],
   "outOfScope": [
     "自动多 agent 调度",
     "外部 agent 直接写 committed truth",
-    "采纳 source-code 变更",
-    "前端维护或 UI 改造",
+    "前端 UI 改造",
     "发布 release",
-    "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md"
+    "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
+    "hosted state store、embeddings 或 semantic memory"
   ],
-  "stopCondition": "操作者能用显式命令安全采纳已通过 review 的 proposal，并看到完整跨 agent handoff/review/adoption 链路已被 smoke 验证。",
+  "stopCondition": "操作者能从一份 guide 理解并执行 Threadsmith 作为项目级状态存储与跨 agent 交接桥的 v1 流程，同时现有 bridge smoke 继续通过。",
   "verificationForThisPhase": [
-    "npm run smoke:proposal-roundtrip",
-    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalAdoption",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
-    "git diff --check",
-    "jq empty .threadsmith/*.json docs/fixtures/cross-agent-proposals/*.json"
+    "npm run smoke:proposal-status",
+    "npm run smoke:proposal-roundtrip",
+    "git diff --check"
   ],
   "activeOwners": [
     "planner",
