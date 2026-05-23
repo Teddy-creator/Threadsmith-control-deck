@@ -1,28 +1,27 @@
 {
-  "phaseName": "Proposal Review / Adoption v1",
-  "phaseGoal": "定义 writeback proposal 的审查/采纳计划，让 Threadsmith 能明确拒绝、要求恢复或生成可人工采纳的计划，同时不自动修改 committed truth。",
-  "deliverable": "proposal review domain contract、fs-bridge review artifact helper、action/runtime contract 文档与对应测试。",
+  "phaseName": "Cross-Agent State Bridge Smoke v1",
+  "phaseGoal": "用隔离 smoke 验证外部 agent writeback proposal -> Threadsmith review -> adoption plan 的完整状态桥链路，同时证明 accept-plan 不会自动修改 committed truth。",
+  "deliverable": "deterministic cross-agent state bridge smoke script、npm script、对应验证证据。",
   "inScope": [
-    "定义 writeback proposal review decision schema",
-    "支持 accept-plan / reject / needs-recovery 三种审查结果",
-    "accept-plan 只能生成待人工应用的 adoption plan，不直接写 committed truth",
-    "新增 fs-bridge helper 写入 .threadsmith/proposal-reviews/<proposal-id>.json",
-    "增加 domain / fs-bridge 测试覆盖 review artifact 与 no-auto-adoption 边界"
+    "新增隔离 smoke 脚本，默认创建临时项目",
+    "脚本写入模拟外部 agent 的 writeback proposal",
+    "脚本写入 Threadsmith proposal review artifact 与 adoption plan",
+    "脚本验证 proposal/review artifacts 存在且 committed truth 未被自动修改",
+    "新增 npm run smoke:state-bridge"
   ],
   "outOfScope": [
-    "自动采纳 proposal 并直接写 committed truth",
+    "真实执行外部 provider / CLI",
+    "自动采纳 proposal 并写 committed truth",
     "实现 proposal review UI",
-    "让外部 agent 直接写 committed truth",
     "改动前端 UI",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "proposal review 能产出可审计的 accept-plan / reject / needs-recovery artifact，且测试证明 accept-plan 不会自动写 committed truth。",
+  "stopCondition": "smoke 能在隔离项目中证明 proposal -> review -> adoption plan 链路成立，且 committed truth 不会因 accept-plan 自动改变。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
-    "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",
-    "npm run verify:skill-contract",
+    "npm run smoke:state-bridge",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],

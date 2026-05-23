@@ -1,15 +1,15 @@
 {
   "projectLabel": "Threadsmith",
   "currentTrack": "project state store / cross-agent bridge v1 implementation",
-  "overallState": "in-progress",
-  "currentFocus": "Proposal Review / Adoption v1 已 accepted；下一刀可以进入 Cross-Agent State Bridge Smoke v1。",
-  "projectStatusSummary": "Threadsmith 已有 proposal contract、proposal recovery 路由，以及可审计的 proposal review / adoption plan；accept-plan 不会自动改 committed truth。",
+  "overallState": "stable",
+  "currentFocus": "Cross-Agent State Bridge Smoke v1 已 accepted；下一刀可以进入 Bridge Documentation / Operator Guide v1。",
+  "projectStatusSummary": "Threadsmith 已有 proposal contract、recovery routing、review/adoption plan，并通过隔离 smoke 证明跨 agent 状态桥链路成立且不会自动改 committed truth。",
   "latestAcceptedSlice": {
-    "title": "Proposal Review / Adoption v1",
-    "recordedAt": "2026-05-23T17:03:41+08:00"
+    "title": "Cross-Agent State Bridge Smoke v1",
+    "recordedAt": "2026-05-23T17:24:16+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Cross-Agent State Bridge Smoke v1",
+    "title": "Bridge Documentation / Operator Guide v1",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
@@ -19,5 +19,5 @@
     "让外部 agent 默认直接写 committed truth，增加冲突和错误验收风险。",
     "在设计文档阶段偷偷进入前端或 multi-provider 自动执行实现。"
   ],
-  "updatedAt": "2026-05-23T17:03:41+08:00"
+  "updatedAt": "2026-05-23T17:24:16+08:00"
 }
