@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从 Bridge Documentation / Operator Guide v1 closeout 进入 External Agent Handoff Packet v1，目标是生成固定路径 handoff packet。",
+      "taskSummary": "已从 External Agent Handoff Packet v1 closeout 进入 Adapter Prompt Freshness v1，目标是刷新 adapter prompts。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 threadsmith:handoff 命令并生成当前项目 .threadsmith/handoff/current-agent-handoff.md。",
+      "taskSummary": "已新增 threadsmith:adapters 命令并刷新 .threadsmith/adapters/codex.md、claude.md、generic-agent.md。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 handoff 是派生投影、保持 no direct truth write 边界，并确认 closeout 后需重新生成最终 handoff。",
+      "taskSummary": "已检查 adapters 已刷新到当前 phase，并保持 proposal writeback、derived working context 和 no direct truth write 边界。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 project truth、handoff command、fs-bridge handoff test、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、adapter command、fs-bridge adapter test、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 External Agent Handoff Packet v1 accepted；下一刀建议 Adapter Prompt Freshness v1。",
+      "taskSummary": "已记录 Adapter Prompt Freshness v1 accepted；下一刀建议 Cross-Agent Bridge Contract Closeout v1。",
       "requiresUserDecision": false
     }
   ],

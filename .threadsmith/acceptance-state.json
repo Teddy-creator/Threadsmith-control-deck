@@ -1,29 +1,29 @@
 {
-  "currentClaim": "External Agent Handoff Packet v1 已 accepted：Threadsmith 现在有 threadsmith:handoff 命令和固定路径 current-agent-handoff.md，让外部或新线程 agent 能从 committed truth 的派生投影安全接力。",
+  "currentClaim": "Adapter Prompt Freshness v1 已 accepted：Threadsmith 现在有 threadsmith:adapters 命令，可从当前 committed truth 刷新 codex / claude / generic-agent adapter prompts，避免外部 agent 读到旧 phase。",
   "doneWhenChecklist": [
     {
-      "id": "handoff-command",
-      "label": "新增 threadsmith:handoff 命令，从项目 truth 生成 current-agent-handoff.md",
+      "id": "adapter-command",
+      "label": "新增 threadsmith:adapters 命令，从项目 truth 生成 adapters/*.md",
       "status": "pass"
     },
     {
-      "id": "current-handoff-artifact",
-      "label": "当前 canonical repo 写入 .threadsmith/handoff/current-agent-handoff.md",
+      "id": "adapter-artifacts",
+      "label": "当前 canonical repo 刷新 codex / claude / generic-agent adapter prompts",
       "status": "pass"
     },
     {
-      "id": "derived-boundary",
-      "label": "handoff 明确标注 derived projection，不是 committed truth authority",
+      "id": "fresh-phase",
+      "label": "adapter prompts 标注当前 phase 和 acceptance state，不再停留在旧 phase",
       "status": "pass"
     },
     {
       "id": "writeback-rules",
-      "label": "handoff 明确说明外部 agent 默认只能 proposal writeback",
+      "label": "adapter prompts 保持 external agent proposal writeback 和 no direct truth write 边界",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、handoff command、fs-bridge handoff test、diff hygiene 与 JSON 校验通过",
+      "label": "project truth、adapter command、fs-bridge adapter test、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "当前只做 fixed-path handoff packet，不做真实 multi-provider 执行。",
+    "当前只做 adapter prompt freshness，不做真实 multi-provider 执行。",
     "前端继续冻结；proposal review UI 暂不实现。"
   ],
   "finalState": "accepted"
