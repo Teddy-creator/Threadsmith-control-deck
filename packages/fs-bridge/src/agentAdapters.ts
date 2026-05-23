@@ -99,6 +99,10 @@ function writebackProposalInstructions(adapterName: AgentAdapterName) {
   ];
 }
 
+function committedTruthUpdatedAt(state: ProjectState) {
+  return state.projectStatus.updatedAt ?? "unknown";
+}
+
 function buildAdapterPromptContents(options: {
   adapterName: AgentAdapterName;
   projectRoot: string;
@@ -112,6 +116,7 @@ function buildAdapterPromptContents(options: {
 ## Source
 - project root: ${options.projectRoot}
 - generated at: ${options.createdAt}
+- committed truth updated at: ${committedTruthUpdatedAt(options.state)}
 - adapter file: ${THREADSMITH_DIR}/adapters/${options.adapterName}.md
 - current phase: ${options.state.currentPhase.phaseName}
 - acceptance state: ${options.state.acceptanceState.finalState}
@@ -146,6 +151,7 @@ ${formatBulletList(writebackProposalInstructions(options.adapterName))}
 ## Recover If
 - AGENTS.md and ${THREADSMITH_DIR}/ disagree.
 - current-agent-handoff.md is missing, stale, or references a different phase.
+- this adapter was generated before committed truth updated at.
 - acceptance claims passed verification but evidence is missing.
 - git diff conflicts with accepted truth.
 - the requested action changes scope, provider ownership, or release status.

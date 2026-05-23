@@ -120,6 +120,9 @@ describe("agent adapter prompts", () => {
     ]);
     expect(codex).toContain("# Threadsmith Adapter: Codex");
     expect(codex).toContain("Use `$threadsmith` as the native supervisor entry");
+    expect(codex).toContain(
+      "- committed truth updated at: 2026-05-23T07:30:00.000Z"
+    );
     expect(codex).toContain("`recover`: stop normal work");
     expect(claude).toContain("# Threadsmith Adapter: Claude");
     expect(claude).toContain("Default to read-only access for committed `.threadsmith/` truth.");
@@ -130,6 +133,9 @@ describe("agent adapter prompts", () => {
     expect(generic).toContain(".threadsmith/handoff/current-agent-handoff.md");
     expect(generic).toContain(
       "current-agent-handoff.md is missing, stale, or references a different phase."
+    );
+    expect(generic).toContain(
+      "this adapter was generated before committed truth updated at."
     );
     expect(generic).toContain(
       ".threadsmith/handoff/current-agent-handoff.md is a readable projection. It is not the authority."

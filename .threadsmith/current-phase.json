@@ -1,12 +1,12 @@
 {
-  "phaseName": "Stale Proposal Recovery v1",
-  "phaseGoal": "硬化 proposal review：当 writeback proposal 早于当前 committed truth 更新时，输出 needs-recovery，而不是继续生成 accept-plan。",
-  "deliverable": "stale proposal recovery plan、freshness detection、focused tests、docs/truth closeout。",
+  "phaseName": "Handoff Freshness Hardening v1",
+  "phaseGoal": "让 handoff packet 和 adapter prompts 明确标注 committed truth freshness，避免外部 agent 读到过期派生上下文后继续工作。",
+  "deliverable": "handoff freshness plan、handoff/adapters freshness anchors、focused tests、docs/truth closeout。",
   "inScope": [
-    "用 projectStatus.updatedAt 作为 committed truth freshness 水位线",
-    "proposal.createdAt 早于 committed truth freshness 时输出 needs-recovery",
-    "保持 phase mismatch 进入 needs-recovery",
-    "保持 evidence missing/failed 进入 reject",
+    "在 current-agent-handoff.md 中写入 committed truth updated at",
+    "在 adapter prompts 中写入 committed truth updated at",
+    "明确 generated at 早于 committed truth updated at 时要 recover",
+    "保持 handoff/adapters 只是 derived context，不是 authority",
     "补充 focused tests 和 operator docs"
   ],
   "outOfScope": [
@@ -17,10 +17,12 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "过期 proposal 不会被 accept-plan，操作者会收到明确的 sync / regenerate / rebase recovery 动作。",
+  "stopCondition": "外部 agent 能从 handoff/adapters 直接看出它们基于哪一版 committed truth，并知道过期时要 recover。",
   "verificationForThisPhase": [
-    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalWorkflow",
-    "npm run smoke:review-proposal",
+    "npm run test --workspace @threadsmith/fs-bridge -- agentHandoff",
+    "npm run test --workspace @threadsmith/fs-bridge -- agentAdapters",
+    "npm run threadsmith:handoff -- .",
+    "npm run threadsmith:adapters -- .",
     "npm run verify:project-truth",
     "git diff --check",
     "jq empty .threadsmith/*.json"

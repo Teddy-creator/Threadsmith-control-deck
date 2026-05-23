@@ -138,6 +138,9 @@ describe("current agent handoff", () => {
     expect(summary.recommendedRole).toBe("executor");
     expect(contents).toContain("# Threadsmith Agent Handoff");
     expect(contents).toContain("- generated at: 2026-05-23T07:02:00.000Z");
+    expect(contents).toContain(
+      "- committed truth updated at: 2026-05-23T07:00:00.000Z"
+    );
     expect(contents).toContain(".threadsmith/current-phase.json");
     expect(contents).toContain(
       "This handoff is a readable projection derived from committed Threadsmith truth. It is not the authority."
@@ -151,6 +154,9 @@ describe("current agent handoff", () => {
     );
     expect(contents).toContain(
       "- this agent must only propose: committed truth updates, final acceptance, verification pass claims, or scope changes unless routed through Threadsmith gates."
+    );
+    expect(contents).toContain(
+      "- route to recover if this handoff was generated before committed truth updated at."
     );
   });
 });

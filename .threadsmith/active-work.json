@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将 current phase 重置为 Stale Proposal Recovery v1，并新增实施计划。",
+      "taskSummary": "已将 current phase 重置为 Handoff Freshness Hardening v1，并新增实施计划。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 proposal freshness detection、focused tests 和 operator docs 更新。",
+      "taskSummary": "已实现 handoff/adapters freshness anchors、focused tests 和 operator docs 更新。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已审查 stale proposal 不会误入 accept-plan，且安全 proposal 仍可生成 accept-plan。",
+      "taskSummary": "已审查 handoff/adapters 保持 derived context 边界，freshness 说明不会被误解为 authority。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 focused tests、smoke:review-proposal、project truth、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 focused tests、handoff/adapters generation、project truth、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Stale Proposal Recovery v1 accepted；下一刀建议 Bridge v1 handoff freshness hardening。",
+      "taskSummary": "已记录 Handoff Freshness Hardening v1 accepted；下一刀建议 Bridge v1 operator documentation closeout。",
       "requiresUserDecision": false
     }
   ],

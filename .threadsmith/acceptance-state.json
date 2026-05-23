@@ -1,24 +1,24 @@
 {
-  "currentClaim": "Stale Proposal Recovery v1 已 accepted：Threadsmith 现在会让早于当前 committed truth 的 writeback proposal 进入 needs-recovery，而不是生成 accept-plan。",
+  "currentClaim": "Handoff Freshness Hardening v1 已 accepted：Threadsmith 现在让 handoff/adapters 明确标注 committed truth freshness，避免外部 agent 使用过期派生上下文。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Stale Proposal Recovery v1 实施计划",
+      "label": "新增 Handoff Freshness Hardening v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "freshness-detection",
-      "label": "proposal review 能识别 proposal.createdAt 早于 committed truth freshness",
+      "id": "handoff-anchor",
+      "label": "current-agent-handoff.md 标注 committed truth updated at",
       "status": "pass"
     },
     {
-      "id": "recovery-output",
-      "label": "过期 proposal 输出 needs-recovery 和明确恢复动作",
+      "id": "adapter-anchor",
+      "label": "adapter prompts 标注 committed truth updated at",
       "status": "pass"
     },
     {
       "id": "tests",
-      "label": "safe / stale / phase mismatch / evidence failure 路径有 focused tests",
+      "label": "handoff / adapter freshness anchors 有 focused tests",
       "status": "pass"
     },
     {

@@ -75,9 +75,25 @@ adapter 文件会告诉它：
 
 - 先读哪些 truth 文件；
 - 哪些文件是 authority，哪些只是 context；
+- 它基于哪一次 committed truth freshness 生成；
 - 可以做什么角色动作；
 - 不能直接写哪些 committed truth；
 - 应该如何返回 proposal。
+
+handoff 和 adapter 都会包含：
+
+```text
+generated at: ...
+committed truth updated at: ...
+```
+
+如果 `generated at` 早于 `committed truth updated at`，说明这份派生上下文可能
+已经过期。不要继续按它执行，先重新运行：
+
+```bash
+npm run threadsmith:handoff -- .
+npm run threadsmith:adapters -- .
+```
 
 ### 3. 委托一个窄任务
 
