@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Stale Proposal Recovery v1 已 accepted：过期 writeback proposal 会进入 needs-recovery。",
+  "summary": "Handoff Freshness Hardening v1 已 accepted：handoff/adapters 已标注 committed truth freshness。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已将 current phase 重置为 Stale Proposal Recovery v1，并新增实施计划。",
+      "taskSummary": "已将 current phase 重置为 Handoff Freshness Hardening v1，并新增实施计划。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/stale-proposal-recovery-v1.md",
-      "updatedAt": "2026-05-23T20:51:44+08:00"
+      "latestEvidenceLabel": "docs/plans/handoff-freshness-hardening-v1.md",
+      "updatedAt": "2026-05-23T21:12:33+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 proposal freshness detection、focused tests 和 operator docs 更新。",
+      "taskSummary": "已实现 handoff/adapters freshness anchors、focused tests 和 operator docs 更新。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "writebackProposalWorkflow test passed",
-      "updatedAt": "2026-05-23T20:54:21+08:00"
+      "latestEvidenceLabel": "agentHandoff / agentAdapters tests passed",
+      "updatedAt": "2026-05-23T21:15:27+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已审查 stale proposal 不会误入 accept-plan，且安全 proposal 仍可生成 accept-plan。",
+      "taskSummary": "已审查 handoff/adapters 保持 derived context 边界，freshness 说明不会被误解为 authority。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T20:55:59+08:00"
+      "updatedAt": "2026-05-23T21:16:29+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 focused tests、smoke:review-proposal、project truth、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 focused tests、handoff/adapters generation、project truth、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T20:57:03+08:00"
+      "updatedAt": "2026-05-23T21:19:26+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Stale Proposal Recovery v1 accepted；下一刀建议 Bridge v1 handoff freshness hardening。",
+      "taskSummary": "已记录 Handoff Freshness Hardening v1 accepted；下一刀建议 Bridge v1 operator documentation closeout。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T20:57:03+08:00"
+      "updatedAt": "2026-05-23T21:19:26+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T20:57:03+08:00"
+  "updatedAt": "2026-05-23T21:19:26+08:00"
 }

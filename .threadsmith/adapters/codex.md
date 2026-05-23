@@ -2,9 +2,10 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T12:58:54.990Z
+- generated at: 2026-05-23T13:25:32.152Z
+- committed truth updated at: 2026-05-23T21:19:26+08:00
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Stale Proposal Recovery v1
+- current phase: Handoff Freshness Hardening v1
 - acceptance state: accepted
 
 ## Purpose
@@ -46,6 +47,7 @@ If any source file disagrees with another source file, stop and route to recover
 ## Recover If
 - AGENTS.md and .threadsmith/ disagree.
 - current-agent-handoff.md is missing, stale, or references a different phase.
+- this adapter was generated before committed truth updated at.
 - acceptance claims passed verification but evidence is missing.
 - git diff conflicts with accepted truth.
 - the requested action changes scope, provider ownership, or release status.

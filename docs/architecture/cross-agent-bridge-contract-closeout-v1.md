@@ -90,6 +90,8 @@ This contract is considered valid when:
 - state bridge smoke proves `accept-plan` does not mutate committed truth;
 - handoff packet generation points to the current phase;
 - adapter prompt generation points to the current phase;
+- generated handoff/adapters name the committed truth freshness they were
+  derived from;
 - docs describe proposal review as manual gate, not automatic adoption;
 - `.threadsmith` committed truth records this closeout slice honestly.
 

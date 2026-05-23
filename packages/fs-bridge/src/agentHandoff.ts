@@ -36,6 +36,10 @@ function formatSourceFiles(sourceFiles: string[]) {
   return sourceFiles.map((filePath) => `- ${filePath}`).join("\n");
 }
 
+function committedTruthUpdatedAt(state: ProjectState) {
+  return state.projectStatus.updatedAt ?? "unknown";
+}
+
 function formatRecentEvents(recentEvents: WorkflowEvent[]) {
   return recentEvents.length > 0
     ? recentEvents
@@ -144,6 +148,7 @@ function buildCurrentAgentHandoffContents(options: {
 ## Source
 - project root: ${options.projectRoot}
 - generated at: ${options.createdAt}
+- committed truth updated at: ${committedTruthUpdatedAt(options.state)}
 - generated file: ${THREADSMITH_DIR}/handoff/${CURRENT_AGENT_HANDOFF_FILE}
 - source files:
 ${formatSourceFiles(sourceFiles)}
@@ -181,6 +186,7 @@ ${formatBulletList(options.state.currentPhase.blockedBy)}
 - this agent may write: source/docs/tests for the current phase, plus writeback proposals when acting as an external or unknown agent.
 - this agent must only propose: committed truth updates, final acceptance, verification pass claims, or scope changes unless routed through Threadsmith gates.
 - route to recover if: AGENTS.md and ${THREADSMITH_DIR}/ disagree; packet freshness cannot be proven; evidence is missing; git diff conflicts with accepted truth; or the requested action changes scope.
+- route to recover if this handoff was generated before committed truth updated at.
 `;
 }
 
