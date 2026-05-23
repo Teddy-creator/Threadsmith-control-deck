@@ -50,6 +50,7 @@ In v1, an operator can:
 | Stale proposal recovery | Implemented | proposal review rejects or routes stale proposals to recovery before adoption. |
 | Handoff / adapter freshness anchors | Implemented | generated handoff/adapters include `generated at` and `committed truth updated at`. |
 | Bridge refresh command | Implemented | `npm run threadsmith:bridge-refresh -- .` validates readable truth and regenerates handoff + adapters. |
+| External-agent proposal fixtures | Implemented | `docs/fixtures/cross-agent-proposals/`; `npm run smoke:proposal-fixtures`. |
 | Deterministic bridge smoke | Implemented | `npm run smoke:state-bridge`; `npm run smoke:review-proposal`. |
 | Operator guide | Implemented | `docs/guides/cross-agent-bridge-operator-guide.md`. |
 
@@ -169,7 +170,7 @@ These are intentionally not part of v1:
 | Gap | Classification | Why it matters | Suggested follow-up |
 | --- | --- | --- | --- |
 | Single v1 contract was scattered across several docs | Fixed by this slice | Operators need one map instead of hunting through closeout, guide, and runtime contracts. | Keep this document as the index for v1. |
-| External agent fixtures are still thin | Follow-up | Sample Codex / Claude / generic proposal flows would make adoption easier. | Add fixture pack with valid, stale, conflicting, and self-accepting proposals. |
+| External agent fixtures were thin | Fixed by fixture pack | Sample Codex / Claude / generic proposal flows make adoption easier. | Keep `docs/fixtures/cross-agent-proposals/` aligned with proposal review behavior. |
 | Proposal adoption remains manual | Explicit v1 boundary | This is safer, but users may expect `accept-plan` to apply truth automatically. | Keep manual in v1; consider opt-in adoption command later. |
 | No proposal review UI | Follow-up | CLI review is enough for v1, but visual operators may miss pending proposals. | Only revisit after skill/protocol line stabilizes. |
 | No automatic multi-provider execution | Explicit non-goal | Cross-agent state bridge is a handoff and proposal bridge, not execution automation. | Treat as a separate future milestone. |
@@ -188,15 +189,14 @@ Cross-Agent State Bridge v1 can be considered ready when:
   same committed truth read;
 - `npm run smoke:state-bridge` passes;
 - `npm run smoke:review-proposal` passes;
+- `npm run smoke:proposal-fixtures` passes;
 - stale handoff, stale adapter, and stale proposal behavior is documented;
 - committed truth records that v1 is consolidated rather than still in
   open-ended planning.
 
 ## Recommended Next Slices
 
-1. External-agent fixture pack: add examples for happy path, stale proposal,
-   conflicting proposal, and unsafe self-acceptance.
-2. Pending proposal visibility: expose pending proposal status in CLI/docs
+1. Pending proposal visibility: expose pending proposal status in CLI/docs
    before considering UI.
 
 Do not combine these with this consolidation slice.

@@ -1,0 +1,35 @@
+{
+  "proposalId": "happy-path-claude-review",
+  "createdAt": "2026-05-23T14:20:00.000Z",
+  "agent": {
+    "id": "claude-reviewer",
+    "kind": "external-known",
+    "provider": "claude"
+  },
+  "role": "reviewer",
+  "phaseName": "External-Agent Fixture Pack Smoke",
+  "summary": "Claude-like reviewer proposes moving review status to ready-for-verification.",
+  "proposedTruthUpdates": [
+    {
+      "targetPath": ".threadsmith/acceptance-state.json",
+      "targetPointer": "/reviewStatus",
+      "summary": "Move review status to ready-for-verification.",
+      "proposedValue": "ready-for-verification"
+    }
+  ],
+  "evidence": [
+    {
+      "label": "external review note",
+      "kind": "note",
+      "reference": "Claude reviewer checked the operator guide and fixture docs.",
+      "status": "passed"
+    }
+  ],
+  "residualRisks": [
+    "Verifier still needs to run the project-owned verification commands."
+  ],
+  "recoverIf": [
+    "Committed truth changed after this proposal was generated."
+  ],
+  "status": "proposed"
+}

@@ -1,0 +1,35 @@
+{
+  "proposalId": "stale-generic-review",
+  "createdAt": "2026-05-23T13:59:00.000Z",
+  "agent": {
+    "id": "generic-doc-agent",
+    "kind": "external-known",
+    "provider": "generic-agent"
+  },
+  "role": "reviewer",
+  "phaseName": "External-Agent Fixture Pack Smoke",
+  "summary": "Generic agent proposes a review update from an older truth snapshot.",
+  "proposedTruthUpdates": [
+    {
+      "targetPath": ".threadsmith/acceptance-state.json",
+      "targetPointer": "/reviewStatus",
+      "summary": "Move review status to ready-for-verification.",
+      "proposedValue": "ready-for-verification"
+    }
+  ],
+  "evidence": [
+    {
+      "label": "external review note",
+      "kind": "note",
+      "reference": "Generic agent reviewed an older handoff.",
+      "status": "passed"
+    }
+  ],
+  "residualRisks": [
+    "This proposal may not include the latest committed truth."
+  ],
+  "recoverIf": [
+    "Committed truth changed after this proposal was generated."
+  ],
+  "status": "proposed"
+}

@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将当前 slice 收窄为 Bridge Refresh Command v1。",
+      "taskSummary": "已将当前 slice 收窄为 External-Agent Fixture Pack v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 threadsmith:bridge-refresh 命令、smoke 和文档更新。",
+      "taskSummary": "已新增 proposal fixtures、fixture smoke 和文档链接。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 bridge-refresh 只刷新 derived bridge surface，不改变 committed truth 边界。",
+      "taskSummary": "已检查 fixtures 覆盖 safe/stale/conflicting/unsafe proposal，且不暗示自动采纳。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 bridge refresh smoke、handoff/adapters、project truth、skill contract 和 diff hygiene。",
+      "taskSummary": "已运行 fixture smoke、proposal workflow tests、project truth、skill contract 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Bridge Refresh Command v1 accepted；下一刀建议 External-agent fixture pack。",
+      "taskSummary": "已记录 External-Agent Fixture Pack v1 accepted；下一刀建议 Pending proposal visibility。",
       "requiresUserDecision": false
     }
   ],
