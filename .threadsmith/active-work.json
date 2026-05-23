@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将 current phase 重置为 Handoff Freshness Hardening v1，并新增实施计划。",
+      "taskSummary": "已把下一刀定为 Cross-Agent State Bridge v1 consolidation / gap-check，并明确不是 new design start。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 handoff/adapters freshness anchors、focused tests 和 operator docs 更新。",
+      "taskSummary": "已新增 v1 收束文档、实施计划，并把 operator guide / closeout doc 链到 v1 总图。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已审查 handoff/adapters 保持 derived context 边界，freshness 说明不会被误解为 authority。",
+      "taskSummary": "已检查 v1 文档准确区分已实现能力、缺口、非目标和后续 slice。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 focused tests、handoff/adapters generation、project truth、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 project truth、skill contract、state bridge smoke、proposal review smoke、handoff/adapters generation、diff hygiene 和 JSON 校验。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Handoff Freshness Hardening v1 accepted；下一刀建议 Bridge v1 operator documentation closeout。",
+      "taskSummary": "已记录 Cross-Agent State Bridge v1 consolidation / gap-check accepted；下一刀建议从 fixture pack 或 bridge refresh command 中择一。",
       "requiresUserDecision": false
     }
   ],

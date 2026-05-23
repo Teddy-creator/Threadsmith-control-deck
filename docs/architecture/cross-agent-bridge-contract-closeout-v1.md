@@ -3,6 +3,9 @@
 > Status: implementation closeout in progress.
 > Scope: project state store / cross-agent bridge v1.
 
+For the consolidated v1 map and gap check, see
+[Cross-Agent State Bridge v1](./cross-agent-state-bridge-v1.md).
+
 ## One-Line Contract
 
 Threadsmith v1 can act as a local project state store and cross-agent handoff

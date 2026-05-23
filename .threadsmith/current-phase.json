@@ -1,29 +1,27 @@
 {
-  "phaseName": "Handoff Freshness Hardening v1",
-  "phaseGoal": "让 handoff packet 和 adapter prompts 明确标注 committed truth freshness，避免外部 agent 读到过期派生上下文后继续工作。",
-  "deliverable": "handoff freshness plan、handoff/adapters freshness anchors、focused tests、docs/truth closeout。",
+  "phaseName": "Cross-Agent State Bridge v1 Consolidation & Gap Check",
+  "phaseGoal": "把已经实现的 project state store / cross-agent bridge 能力收束成一份 v1 总图，并列出剩余缺口，避免把已启动方向误讲成重新开题。",
+  "deliverable": "v1 consolidation document、gap check、operator guide links、truth refresh。",
   "inScope": [
-    "在 current-agent-handoff.md 中写入 committed truth updated at",
-    "在 adapter prompts 中写入 committed truth updated at",
-    "明确 generated at 早于 committed truth updated at 时要 recover",
-    "保持 handoff/adapters 只是 derived context，不是 authority",
-    "补充 focused tests 和 operator docs"
+    "明确这是 consolidate + gap-check，不是 new design start",
+    "汇总已实现的 committed truth、handoff、adapter、proposal、proposal review、freshness anchor 和 operator guide 能力",
+    "把能力映射到文档、命令、代码和测试证据",
+    "列出 v1 缺口、非目标和推荐后续 slice",
+    "刷新 .threadsmith current phase / status / active work / supervision truth"
   ],
   "outOfScope": [
-    "真实执行外部 provider / CLI",
-    "自动采纳 proposal 并写 committed truth",
-    "实现 proposal review UI",
-    "改动前端 UI",
+    "前端维护或重构",
+    "multi-provider 自动执行",
+    "外部 agent 直接写 committed truth",
+    "proposal review UI",
+    "发布 release",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
-    "发布 release"
+    "实现新的 runtime 功能"
   ],
-  "stopCondition": "外部 agent 能从 handoff/adapters 直接看出它们基于哪一版 committed truth，并知道过期时要 recover。",
+  "stopCondition": "Cross-Agent State Bridge v1 的已实现能力、权威边界、操作者流程、缺口和下一刀都能从一份文档中读清楚。",
   "verificationForThisPhase": [
-    "npm run test --workspace @threadsmith/fs-bridge -- agentHandoff",
-    "npm run test --workspace @threadsmith/fs-bridge -- agentAdapters",
-    "npm run threadsmith:handoff -- .",
-    "npm run threadsmith:adapters -- .",
     "npm run verify:project-truth",
+    "npm run verify:skill-contract",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],

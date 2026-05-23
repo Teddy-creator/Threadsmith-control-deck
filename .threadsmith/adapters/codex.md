@@ -2,10 +2,10 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T13:25:32.152Z
-- committed truth updated at: 2026-05-23T21:19:26+08:00
+- generated at: 2026-05-23T14:05:25.287Z
+- committed truth updated at: 2026-05-23T22:03:07+08:00
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Handoff Freshness Hardening v1
+- current phase: Cross-Agent State Bridge v1 Consolidation & Gap Check
 - acceptance state: accepted
 
 ## Purpose
