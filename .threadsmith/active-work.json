@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将当前 slice 收窄为 External-Agent Fixture Pack v1。",
+      "taskSummary": "已将当前 slice 收窄为 Pending Proposal Visibility v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 proposal fixtures、fixture smoke 和文档链接。",
+      "taskSummary": "已实现 proposal visibility summary、proposal-status CLI、tests、smoke 和文档更新。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 fixtures 覆盖 safe/stale/conflicting/unsafe proposal，且不暗示自动采纳。",
+      "taskSummary": "已检查 proposal visibility 正确区分 pending/reviewed/invalid，且不暗示自动采纳。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 fixture smoke、proposal workflow tests、project truth、skill contract 和 diff hygiene。",
+      "taskSummary": "已运行 proposal status smoke、focused tests、project truth、skill contract 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 External-Agent Fixture Pack v1 accepted；下一刀建议 Pending proposal visibility。",
+      "taskSummary": "已记录 accepted closeout，准备 PR。",
       "requiresUserDecision": false
     }
   ],
