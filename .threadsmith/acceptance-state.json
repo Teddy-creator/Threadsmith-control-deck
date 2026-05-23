@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Bridge Documentation / Operator Guide v1 已 accepted：Threadsmith 现在有操作者指南说明跨 agent proposal -> review -> adoption plan 链路、manual adoption gate 和 no-auto-adoption 边界。",
+  "currentClaim": "External Agent Handoff Packet v1 已 accepted：Threadsmith 现在有 threadsmith:handoff 命令和固定路径 current-agent-handoff.md，让外部或新线程 agent 能从 committed truth 的派生投影安全接力。",
   "doneWhenChecklist": [
     {
-      "id": "operator-guide",
-      "label": "新增 cross-agent bridge operator guide",
+      "id": "handoff-command",
+      "label": "新增 threadsmith:handoff 命令，从项目 truth 生成 current-agent-handoff.md",
       "status": "pass"
     },
     {
-      "id": "agent-steps",
-      "label": "文档说明 Codex / Claude / generic agent 的读取、执行、proposal 回写步骤",
+      "id": "current-handoff-artifact",
+      "label": "当前 canonical repo 写入 .threadsmith/handoff/current-agent-handoff.md",
       "status": "pass"
     },
     {
-      "id": "truth-boundary",
-      "label": "文档清楚区分 committed truth、derived packet、proposal artifact、proposal review 与 adoption plan",
+      "id": "derived-boundary",
+      "label": "handoff 明确标注 derived projection，不是 committed truth authority",
       "status": "pass"
     },
     {
-      "id": "no-auto-adoption",
-      "label": "文档明确 accept-plan 不会自动修改 committed truth",
+      "id": "writeback-rules",
+      "label": "handoff 明确说明外部 agent 默认只能 proposal writeback",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、state bridge smoke、diff hygiene 与 JSON 校验通过",
+      "label": "project truth、handoff command、fs-bridge handoff test、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "当前只做 operator guide，不做真实 multi-provider 执行。",
+    "当前只做 fixed-path handoff packet，不做真实 multi-provider 执行。",
     "前端继续冻结；proposal review UI 暂不实现。"
   ],
   "finalState": "accepted"

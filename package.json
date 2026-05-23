@@ -33,6 +33,7 @@
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "threadsmith:autopilot": "node --import tsx scripts/threadsmith-autopilot.ts",
+    "threadsmith:handoff": "node --import tsx scripts/threadsmith-handoff.ts",
     "test:e2e": "playwright test",
     "test:e2e:autopilot": "playwright test tests/e2e/autopilot-v1.spec.ts",
     "test:e2e:bridge": "playwright test tests/e2e/agent-run-bridge.spec.ts",
