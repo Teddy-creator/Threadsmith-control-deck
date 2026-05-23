@@ -83,6 +83,19 @@ const checks = [
   },
   {
     file: "references/action-contracts.md",
+    label: "next-step continuity is documented",
+    patterns: [
+      /## Next-Step Continuity Rule/,
+      /Use exactly one continuity label/,
+      /`new`/,
+      /`continue`/,
+      /`consolidate`/,
+      /`gap-check`/,
+      /making an active line of\s+work sound like a brand-new initiative/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
     label: "proposal review recovery action is documented",
     patterns: [
       /### `review-proposal`/,
