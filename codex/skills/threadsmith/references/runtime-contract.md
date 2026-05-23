@@ -233,9 +233,12 @@ Unknown external agents must produce writeback proposals instead of direct
 committed-truth writes.
 
 Writeback proposals live at `.threadsmith/proposals/<proposal-id>.json`.
+Proposal reviews live at `.threadsmith/proposal-reviews/<proposal-id>.json`.
 They are runtime artifacts, not committed truth. A proposal may describe
-proposed truth updates, evidence, residual risks, and recover conditions, but it
-must not self-accept final state or bypass reviewer / verifier / closeout gates.
+proposed truth updates, evidence, residual risks, and recover conditions. A
+proposal review may record `accept-plan`, `reject`, or `needs-recovery`, but an
+`accept-plan` is only a manual Threadsmith gate plan and must not apply
+committed truth by itself.
 
 ## Writeback Failure Handling
 

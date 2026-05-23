@@ -107,6 +107,7 @@ Verifier 不能把缺失 evidence 当成通过。Closeout 也不能在没有 ver
 - `.threadsmith/runs/`
 - `.threadsmith/closeouts/`
 - `.threadsmith/proposals/<proposal-id>.json`
+- `.threadsmith/proposal-reviews/<proposal-id>.json`
 - `.threadsmith-runtime/`
 
 这些路径主要保存：
@@ -114,6 +115,7 @@ Verifier 不能把缺失 evidence 当成通过。Closeout 也不能在没有 ver
 - executor run 的 packet / prompt / stdout / result
 - verification / closeout / handoff 产物
 - external agent 的 writeback proposal
+- Threadsmith 对 writeback proposal 的 review decision / adoption plan
 - smoke 或本地实验使用的临时 workspace
 
 这些文件可以作为证据查看，但默认不应该和 committed truth 一起审查。
@@ -126,6 +128,7 @@ Verifier 不能把缺失 evidence 当成通过。Closeout 也不能在没有 ver
 - 外部已知 agent 默认可以读取 committed truth，并产出 writeback proposal。
 - 外部未知 agent 默认只读 committed truth，不能直接写 `.threadsmith/*.json` 权威状态。
 - Writeback proposal 只能提出建议，不能自己变成 accepted truth；采纳仍必须经过 Threadsmith role gate、evidence 和 closeout。
+- Proposal review artifact 可以记录 accept-plan / reject / needs-recovery，但 accept-plan 只是待人工 gate 应用的计划，不会自动修改 committed truth。
 - Derived packet 可以生成或更新，但必须标明来源文件和生成时间。
 - AGENTS.md 不应被 agent 静默发明；缺失或明显不完整时应先让用户确认。
 

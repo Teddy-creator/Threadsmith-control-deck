@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Recovery Integration v1 已 accepted：待审/不可信 proposal 会路由到 review-proposal / hygiene，不会继续普通 advance-phase。",
+  "summary": "Proposal Review / Adoption v1 已 accepted：proposal 可转成 review decision / adoption plan，但 accept-plan 不会自动写 committed truth。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把 Recovery Integration v1 收口为 accepted，并保持前端冻结、全局 skill 不修改。",
+      "taskSummary": "已把 Proposal Review / Adoption v1 收口为 accepted，并保持前端冻结、全局 skill 不修改。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from Writeback Proposal Contract v1",
-      "updatedAt": "2026-05-23T16:39:42+08:00"
+      "latestEvidenceLabel": "phase reset from Recovery Integration v1",
+      "updatedAt": "2026-05-23T17:03:41+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 proposal recovery signal、truth confidence 映射和 next best step 路由。",
+      "taskSummary": "已实现 proposal review decision schema、adoption plan 与 review artifact helper。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "runtime tests passed locally",
-      "updatedAt": "2026-05-23T16:39:42+08:00"
+      "latestEvidenceLabel": "domain and fs-bridge tests passed locally",
+      "updatedAt": "2026-05-23T17:03:41+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 recovery 路由保持 proposal 不自动采纳和 gate 边界。",
+      "taskSummary": "已检查 review/adoption plan 不会绕过 committed truth gate。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T16:39:42+08:00"
+      "updatedAt": "2026-05-23T17:03:41+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 runtime tests、project truth、skill contract、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 domain tests、fs-bridge tests、project truth、skill contract、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T16:39:42+08:00"
+      "updatedAt": "2026-05-23T17:03:41+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Recovery Integration v1 accepted；下一刀建议 Proposal Review / Adoption v1。",
+      "taskSummary": "已记录 Proposal Review / Adoption v1 accepted；下一刀建议 Cross-Agent State Bridge Smoke v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T16:39:42+08:00"
+      "updatedAt": "2026-05-23T17:03:41+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T16:39:42+08:00"
+  "updatedAt": "2026-05-23T17:03:41+08:00"
 }

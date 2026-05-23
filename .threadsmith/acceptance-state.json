@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Recovery Integration v1 已 accepted：Threadsmith 现在能把待审/不可信 writeback proposal 路由到 review-proposal / hygiene，而不是继续普通 advance-phase。",
+  "currentClaim": "Proposal Review / Adoption v1 已 accepted：Threadsmith 现在能把 writeback proposal 转成可审计 review decision / adoption plan，并且 accept-plan 不会自动写 committed truth。",
   "doneWhenChecklist": [
     {
-      "id": "proposal-recovery-signal",
-      "label": "runtime 能识别待审、不可信或冲突的 writeback proposal，并给出 recover/hygiene action",
+      "id": "review-contract",
+      "label": "domain 层定义 proposal review decision，支持 accept-plan / reject / needs-recovery",
       "status": "pass"
     },
     {
-      "id": "truth-confidence",
-      "label": "truth confidence 能把 proposal recovery reason 展示为 recover 级别信号",
+      "id": "adoption-plan",
+      "label": "accept-plan 只能生成待人工应用的 adoption plan，不直接修改 committed truth",
       "status": "pass"
     },
     {
-      "id": "next-best-step",
-      "label": "next best step 在 proposal recovery 情况下优先建议 hygiene / review，而不是普通 advance-phase",
+      "id": "review-artifact",
+      "label": "fs-bridge 可写入并读取 .threadsmith/proposal-reviews/<proposal-id>.json",
       "status": "pass"
     },
     {
       "id": "no-auto-adoption",
-      "label": "本阶段不自动采纳 proposal，不实现 review UI，不允许外部 agent 直接写 committed truth",
+      "label": "本阶段不实现自动采纳，不实现 review UI，不允许外部 agent 直接写 committed truth",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "runtime tests、project truth schema、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "domain tests、fs-bridge tests、project truth schema、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "当前只做 runtime recover / hygiene 路由，不做 proposal 自动采纳。",
+    "当前只做 proposal review / adoption plan，不做自动采纳。",
     "前端继续冻结；proposal review UI 暂不实现。"
   ],
   "finalState": "accepted"
