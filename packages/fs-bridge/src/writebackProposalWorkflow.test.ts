@@ -28,6 +28,25 @@ async function createProjectRoot() {
   return projectRoot;
 }
 
+async function setProjectStatusFreshness(projectRoot: string, updatedAt: string) {
+  await writeStateFragment(projectRoot, STATE_FILES.projectStatus, {
+    projectLabel: "Proposal Workflow Fixture",
+    currentTrack: "cross-agent bridge",
+    overallState: "in-progress",
+    currentFocus: "Testing proposal freshness.",
+    projectStatusSummary: "Fixture state for proposal freshness.",
+    latestAcceptedSlice: null,
+    nextPlannedSlice: {
+      title: "Proposal Review Workflow v1",
+      recordedAt: null
+    },
+    currentMilestoneId: "bridge-v1",
+    nextMilestoneId: null,
+    topRisks: [],
+    updatedAt
+  });
+}
+
 function proposal(overrides: Record<string, unknown> = {}) {
   return {
     proposalId: "claude-review-1",
@@ -115,6 +134,48 @@ describe("reviewWritebackProposalArtifact", () => {
     expect(result.review.decision).toBe("needs-recovery");
     expect(result.review.recoveryActions[0]).toContain("recover/sync");
     expect(result.review.adoptionPlan).toBeNull();
+  });
+
+  it("routes proposals created before committed truth updates to needs-recovery", async () => {
+    const projectRoot = await createProjectRoot();
+    await setProjectStatusFreshness(projectRoot, "2026-05-23T10:00:00.000Z");
+    await writeWritebackProposalArtifact(
+      projectRoot,
+      proposal({
+        createdAt: "2026-05-23T09:59:00.000Z"
+      })
+    );
+
+    const result = await reviewWritebackProposalArtifact(
+      projectRoot,
+      "claude-review-1",
+      { reviewedAt: "2026-05-23T10:01:00.000Z" }
+    );
+
+    expect(result.review.decision).toBe("needs-recovery");
+    expect(result.review.summary).toContain("before committed truth updated");
+    expect(result.review.recoveryActions[0]).toContain("regenerate or rebase");
+    expect(result.review.adoptionPlan).toBeNull();
+  });
+
+  it("keeps current proposals reviewable when they are newer than committed truth", async () => {
+    const projectRoot = await createProjectRoot();
+    await setProjectStatusFreshness(projectRoot, "2026-05-23T10:00:00.000Z");
+    await writeWritebackProposalArtifact(
+      projectRoot,
+      proposal({
+        createdAt: "2026-05-23T10:01:00.000Z"
+      })
+    );
+
+    const result = await reviewWritebackProposalArtifact(
+      projectRoot,
+      "claude-review-1",
+      { reviewedAt: "2026-05-23T10:02:00.000Z" }
+    );
+
+    expect(result.review.decision).toBe("accept-plan");
+    expect(result.review.adoptionPlan?.stopBeforeApply).toBe(true);
   });
 
   it("rejects proposals with missing or failed evidence", async () => {
