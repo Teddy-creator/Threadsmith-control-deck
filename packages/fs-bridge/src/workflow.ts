@@ -14,6 +14,7 @@ import {
   readAgentRunRecord,
   readAgentRunResult
 } from "./agentRuns.ts";
+import { writeCurrentAgentHandoff } from "./agentHandoff.ts";
 import { recordCommandBridgeRunFinished } from "./commandBridge.ts";
 import { writeContinuationPacket } from "./continuationPackets.ts";
 import {
@@ -381,6 +382,14 @@ export async function applyDeckActionState(
       createdAt,
       continuationBehavior: options?.continuationBehavior
     });
+    const currentHandoff =
+      actionId === "create-handoff"
+        ? await writeCurrentAgentHandoff(projectRoot, {
+            state,
+            recentEvents,
+            createdAt
+          })
+        : null;
     const nextActiveWork = mergeActiveWork(
       state,
       {
@@ -400,9 +409,12 @@ export async function applyDeckActionState(
       createdAt,
       kind: "deck-action",
       title: packet.title,
-      detail: `${packet.detail} Packet：${packet.relativePath}`,
+      detail: `${packet.detail} Packet：${packet.relativePath}${
+        currentHandoff ? ` Current handoff：${currentHandoff.relativePath}` : ""
+      }`,
       role: "hygiene",
-      actionId
+      actionId,
+      artifactPath: currentHandoff?.relativePath ?? packet.relativePath
     });
     return;
   }
@@ -705,16 +717,21 @@ export async function applyWorkflowTransition(
       continuationBehavior:
         acceptedHandoffState.preferences.resolved.continuationBehavior
     });
+    const currentHandoff = await writeCurrentAgentHandoff(projectRoot, {
+      state: acceptedHandoffState,
+      recentEvents,
+      createdAt: packetCreatedAt
+    });
 
     await appendEvent(projectRoot, {
       id: crypto.randomUUID(),
       createdAt: packetCreatedAt,
       kind: "workflow-transition",
       title: packet.title,
-      detail: `${packet.detail} Packet：${packet.relativePath}（closeout 自动生成）`,
+      detail: `${packet.detail} Packet：${packet.relativePath} Current handoff：${currentHandoff.relativePath}（closeout 自动生成）`,
       role: "hygiene",
       actionId: "create-handoff",
-      artifactPath: packet.relativePath
+      artifactPath: currentHandoff.relativePath
     });
   }
 }

@@ -3,6 +3,7 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
+import { readCurrentAgentHandoff } from "./agentHandoff.ts";
 import { readLatestContinuationPacket } from "./continuationPackets.ts";
 import { appendEvent, readRecentEvents } from "./events.ts";
 import {
@@ -125,7 +126,9 @@ describe("workflow", () => {
       state.activeWork.items.find((item) => item.role === "hygiene")?.status
     ).toBe("done");
     expect(events[0]?.actionId).toBe("create-handoff");
-    expect(events[0]?.artifactPath).toContain(".threadsmith/packets/");
+    expect(events[0]?.artifactPath).toBe(
+      ".threadsmith/handoff/current-agent-handoff.md"
+    );
     expect(events[0]?.detail).toContain("closeout 自动生成");
     expect(events[1]?.transitionId).toBe("closeout-complete");
     expect(events[1]?.artifactPath).toContain(".threadsmith/closeouts/");
@@ -142,6 +145,9 @@ describe("workflow", () => {
     );
     expect(latestPacket?.kind).toBe("handoff");
     expect(latestPacket?.detail).toContain("已为 phase");
+    await expect(readCurrentAgentHandoff(projectRoot)).resolves.toContain(
+      "This handoff is a readable projection derived from committed Threadsmith truth. It is not the authority."
+    );
   });
 
   it("surfaces blocking review findings back into active work", async () => {
@@ -186,14 +192,19 @@ describe("workflow", () => {
     const state = await loadProjectState(projectRoot);
     const events = await readRecentEvents(projectRoot);
     const latestPacket = await readLatestContinuationPacket(projectRoot);
+    const currentHandoff = await readCurrentAgentHandoff(projectRoot);
 
     expect(
       state.activeWork.items.find((item) => item.role === "hygiene")?.status
     ).toBe("done");
     expect(events[0]?.actionId).toBe("create-handoff");
     expect(events[0]?.detail).toContain(".threadsmith/packets/");
+    expect(events[0]?.detail).toContain(
+      ".threadsmith/handoff/current-agent-handoff.md"
+    );
     expect(latestPacket?.kind).toBe("handoff");
     expect(latestPacket?.detail).toContain("已为 phase");
+    expect(currentHandoff).toContain("- recommended role: planner");
   });
 
   it("writes a hygiene packet when run-hygiene is executed", async () => {

@@ -1,17 +1,15 @@
 {
-  "phaseName": "State Boundary Contract v1",
-  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第一刀落成可测试的状态边界 contract，明确权威真相、派生 packet、证据、审计和运行产物的边界。",
-  "deliverable": "domain stateBoundary contract、truth-boundary 文档更新、threadsmith runtime contract 检查更新、对应测试与验证证据。",
+  "phaseName": "Handoff Packet Generator v1",
+  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第二刀落成可测试的固定 handoff 投影，让外部 agent 能从稳定路径读取当前项目状态与下一步安全动作。",
+  "deliverable": ".threadsmith/handoff/current-agent-handoff.md 生成器、workflow 集成、对应测试与验证证据。",
   "inScope": [
-    "新增 domain 层 State Boundary Contract",
-    "定义状态层级、authority、write mode 和外部 agent 默认写回边界",
-    "定义 planner / executor / reviewer / verifier / closeout / hygiene 的写入边界",
-    "更新 docs/architecture/threadsmith-truth-boundary.md",
-    "更新 codex/skills/threadsmith/references/runtime-contract.md",
-    "扩展 verify:skill-contract，防止状态边界文案回退"
+    "新增固定路径 handoff packet 生成 helper",
+    "在 create-handoff 与 closeout 自动 handoff 中写入 current-agent-handoff.md",
+    "保留 legacy .threadsmith/packets/<timestamp>-handoff.md 行为",
+    "在 handoff 内容中声明 source refs、freshness、当前状态、下一步安全动作、架构边界和写回规则",
+    "增加 fs-bridge 测试覆盖固定 handoff 内容与 workflow 集成"
   ],
   "outOfScope": [
-    "实现 handoff packet generator",
     "实现 adapter prompt generator",
     "实现 writeback proposal 文件格式",
     "让外部 agent 直接写 committed truth",
@@ -19,11 +17,10 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "State Boundary Contract 已在 domain/docs/skill contract 三层落地，相关测试与 contract 验证通过，并进入 reviewer/verifier gate。",
+  "stopCondition": "固定 handoff 投影已可由 workflow 生成，旧 continuation packet 兼容性保持，相关测试与 project truth 验证通过，并进入 closeout。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
-    "npm run test --workspace @threadsmith/domain",
-    "npm run verify:skill-contract",
+    "npm run test --workspace @threadsmith/fs-bridge",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],

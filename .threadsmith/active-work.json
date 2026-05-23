@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第一刀：State Boundary Contract v1。",
+      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第二刀：Handoff Packet Generator v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 domain stateBoundary contract、测试、truth-boundary 文档和 skill runtime contract 检查。",
+      "taskSummary": "已实现固定路径 current-agent-handoff.md 生成器，并接入 create-handoff / closeout 自动 handoff。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查实现保持 conservative boundary：没有扩大到 handoff generator、adapter generator、frontend 或外部 agent 直接写 truth。",
+      "taskSummary": "已检查 handoff 投影保持非权威、只读兼容和旧 packet 兼容，没有扩大到 adapter 或前端。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 domain tests、skill contract、JSON、project truth schema 和 diff hygiene，均通过。",
+      "taskSummary": "已运行 fs-bridge tests、project truth、skill contract、diff hygiene 和 JSON 校验。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 State Boundary Contract v1 accepted，下一刀为 Handoff Packet Generator v1。",
+      "taskSummary": "已记录 Handoff Packet Generator v1 accepted，下一刀建议进入 Adapter Prompt Generator v1。",
       "requiresUserDecision": false
     }
   ],
