@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Proposal Review / Adoption v1 已 accepted：Threadsmith 现在能把 writeback proposal 转成可审计 review decision / adoption plan，并且 accept-plan 不会自动写 committed truth。",
+  "currentClaim": "Cross-Agent State Bridge Smoke v1 已 accepted：Threadsmith 现在有 deterministic smoke 证明 proposal -> review -> adoption plan 链路成立，且 accept-plan 不会自动写 committed truth。",
   "doneWhenChecklist": [
     {
-      "id": "review-contract",
-      "label": "domain 层定义 proposal review decision，支持 accept-plan / reject / needs-recovery",
+      "id": "smoke-script",
+      "label": "新增 deterministic cross-agent state bridge smoke script",
       "status": "pass"
     },
     {
-      "id": "adoption-plan",
-      "label": "accept-plan 只能生成待人工应用的 adoption plan，不直接修改 committed truth",
+      "id": "proposal-artifact",
+      "label": "smoke 写入并读取模拟外部 agent 的 proposal artifact",
       "status": "pass"
     },
     {
       "id": "review-artifact",
-      "label": "fs-bridge 可写入并读取 .threadsmith/proposal-reviews/<proposal-id>.json",
+      "label": "smoke 写入并读取 Threadsmith proposal review / adoption plan artifact",
       "status": "pass"
     },
     {
       "id": "no-auto-adoption",
-      "label": "本阶段不实现自动采纳，不实现 review UI，不允许外部 agent 直接写 committed truth",
+      "label": "smoke 证明 accept-plan 不会自动修改 committed truth",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "domain tests、fs-bridge tests、project truth schema、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "fs-bridge tests、state bridge smoke、project truth、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "当前只做 proposal review / adoption plan，不做自动采纳。",
+    "当前只做 deterministic smoke，不做真实 multi-provider 执行。",
     "前端继续冻结；proposal review UI 暂不实现。"
   ],
   "finalState": "accepted"

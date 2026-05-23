@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Proposal Review / Adoption v1 已 accepted：proposal 可转成 review decision / adoption plan，但 accept-plan 不会自动写 committed truth。",
+  "summary": "Cross-Agent State Bridge Smoke v1 已 accepted：proposal -> review -> adoption plan 已有隔离 smoke 验证，且不自动写 committed truth。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把 Proposal Review / Adoption v1 收口为 accepted，并保持前端冻结、全局 skill 不修改。",
+      "taskSummary": "已把下一刀重置为 Cross-Agent State Bridge Smoke v1，并保持前端冻结、全局 skill 不修改。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from Recovery Integration v1",
-      "updatedAt": "2026-05-23T17:03:41+08:00"
+      "latestEvidenceLabel": "phase reset from Proposal Review / Adoption v1",
+      "updatedAt": "2026-05-23T17:18:10+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 proposal review decision schema、adoption plan 与 review artifact helper。",
+      "taskSummary": "已实现 deterministic state bridge smoke script 与 npm run smoke:state-bridge。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "domain and fs-bridge tests passed locally",
-      "updatedAt": "2026-05-23T17:03:41+08:00"
+      "latestEvidenceLabel": "smoke:state-bridge passed locally",
+      "updatedAt": "2026-05-23T17:20:56+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 review/adoption plan 不会绕过 committed truth gate。",
+      "taskSummary": "已检查 smoke 真实验证 artifact 与 no-auto-adoption 边界。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T17:03:41+08:00"
+      "updatedAt": "2026-05-23T17:20:56+08:00"
     },
     {
       "id": "verifier-logical",
@@ -48,12 +48,13 @@
       "threadLabel": "Verifier",
       "provider": "codex",
       "presence": "logical",
+      "status": "running",
       "status": "done",
-      "taskSummary": "已运行 domain tests、fs-bridge tests、project truth、skill contract、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 fs-bridge tests、state bridge smoke、project truth、JSON 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T17:03:41+08:00"
+      "updatedAt": "2026-05-23T17:24:16+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +63,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Proposal Review / Adoption v1 accepted；下一刀建议 Cross-Agent State Bridge Smoke v1。",
+      "taskSummary": "已记录 Cross-Agent State Bridge Smoke v1 accepted；下一刀建议 Bridge Documentation / Operator Guide v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T17:03:41+08:00"
+      "updatedAt": "2026-05-23T17:24:16+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T17:03:41+08:00"
+  "updatedAt": "2026-05-23T17:24:16+08:00"
 }
