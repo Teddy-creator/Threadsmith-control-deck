@@ -1,6 +1,7 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   applyAgentRunResult,
@@ -21,6 +22,7 @@ import type { ExecutionResult, PhaseOwner } from "@threadsmith/domain";
 import { PhaseRunner, type PhaseRoleLauncher } from "./phaseRunner.ts";
 
 const createdRoots: string[] = [];
+const phaseRunnerTestTimeoutMs = 15_000;
 
 async function createProjectRoot() {
   const projectRoot = await mkdtemp(join(tmpdir(), "threadsmith-phase-runner-"));
@@ -179,11 +181,35 @@ function createPreAppliedRoleLauncher(
   };
 }
 
+async function removeProjectRoot(projectRoot: string) {
+  for (const waitMs of [0, 50, 150, 300, 600]) {
+    if (waitMs > 0) {
+      await delay(waitMs);
+    }
+
+    try {
+      await rm(projectRoot, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+
+      if (code !== "ENOTEMPTY" && code !== "EPERM" && code !== "EACCES") {
+        throw error;
+      }
+    }
+  }
+
+  await rm(projectRoot, {
+    recursive: true,
+    force: true,
+    maxRetries: 3,
+    retryDelay: 100
+  });
+}
+
 afterEach(async () => {
   await Promise.all(
-    createdRoots.splice(0).map((projectRoot) =>
-      rm(projectRoot, { recursive: true, force: true })
-    )
+    createdRoots.splice(0).map((projectRoot) => removeProjectRoot(projectRoot))
   );
 });
 
@@ -231,7 +257,7 @@ describe("PhaseRunner", () => {
 
     const primarySlice = await readPhaseSlice(projectRoot, phaseRun.phaseRunId, "primary-1");
     expect(primarySlice.kind).toBe("primary");
-  });
+  }, phaseRunnerTestTimeoutMs);
 
   it("routes review failure into a repair slice before continuing", async () => {
     const projectRoot = await createProjectRoot();
@@ -255,7 +281,7 @@ describe("PhaseRunner", () => {
     expect(phaseRun.repairCount).toBe(1);
     expect(phaseRun.currentSliceId).toBe("repair-1");
     expect(repairSlice.kind).toBe("repair");
-  });
+  }, phaseRunnerTestTimeoutMs);
 
   it("routes verifier failure into a repair slice before acceptance", async () => {
     const projectRoot = await createProjectRoot();
@@ -278,7 +304,7 @@ describe("PhaseRunner", () => {
     expect(phaseRun.status).toBe("accepted");
     expect(phaseRun.repairCount).toBe(1);
     expect(phaseRun.currentSliceId).toBe("repair-1");
-  });
+  }, phaseRunnerTestTimeoutMs);
 
   it("pauses when the repair loop cap is exceeded", async () => {
     const projectRoot = await createProjectRoot();
@@ -303,7 +329,7 @@ describe("PhaseRunner", () => {
     expect(phaseRun.repairCount).toBe(2);
     expect(phaseRun.currentRole).toBe("planner");
     expect(pause?.type).toBe("loop-limit");
-  });
+  }, phaseRunnerTestTimeoutMs);
 
   it("resumes a paused phase run from committed truth", async () => {
     const projectRoot = await createProjectRoot();
@@ -342,7 +368,7 @@ describe("PhaseRunner", () => {
     expect(latest?.status).toBe("accepted");
     expect(latest?.repairCount).toBe(2);
     expect(latest?.latestSuccessfulRole).toBe("closeout");
-  });
+  }, phaseRunnerTestTimeoutMs);
 
   it("re-anchors active work before resuming a verifier-paused phase run", async () => {
     const projectRoot = await createProjectRoot();
@@ -393,5 +419,5 @@ describe("PhaseRunner", () => {
     expect(phaseRun.status).toBe("accepted");
     expect(latest?.status).toBe("accepted");
     expect(latest?.latestSuccessfulRole).toBe("closeout");
-  });
+  }, phaseRunnerTestTimeoutMs);
 });

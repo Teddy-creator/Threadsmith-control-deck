@@ -2,10 +2,10 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T15:28:28.699Z
-- committed truth updated at: 2026-05-23T23:26:04+08:00
+- generated at: 2026-05-23T15:58:18.553Z
+- committed truth updated at: 2026-05-23T23:56:58+08:00
 - adapter file: .threadsmith/adapters/claude.md
-- current phase: Cross-Agent State Bridge v1 closeout / release decision
+- current phase: Proposal Adoption and Round-trip v1
 - acceptance state: accepted
 
 ## Purpose

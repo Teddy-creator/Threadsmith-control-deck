@@ -11,6 +11,7 @@ export * from "./bridgeRefresh.ts";
 export * from "./writebackProposals.ts";
 export * from "./writebackProposalReviews.ts";
 export * from "./writebackProposalWorkflow.ts";
+export * from "./writebackProposalAdoption.ts";
 export * from "./proposalVisibility.ts";
 export * from "./agentRuns.ts";
 export * from "./commandBridge.ts";

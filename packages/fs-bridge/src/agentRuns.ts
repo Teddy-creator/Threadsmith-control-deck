@@ -3,9 +3,11 @@ import {
   readFile,
   readdir,
   rename,
+  rm,
   stat,
   writeFile
 } from "node:fs/promises";
+import { setTimeout as delay } from "node:timers/promises";
 import { join, relative } from "node:path";
 import {
   agentRunRecordSchema,
@@ -37,6 +39,39 @@ function formatJson(value: unknown) {
 
 function runRelativePath(runId: string, fileName: string) {
   return `.threadsmith/runs/${runId}/${fileName}`;
+}
+
+function isWindowsReplaceError(error: unknown) {
+  const code = (error as NodeJS.ErrnoException).code;
+  return code === "EPERM" || code === "EACCES" || code === "EEXIST";
+}
+
+async function replaceJsonFile(targetPath: string, temporaryPath: string, contents: string) {
+  await writeFile(temporaryPath, contents, "utf8");
+
+  for (const waitMs of [0, 25, 75]) {
+    if (waitMs > 0) {
+      await delay(waitMs);
+    }
+
+    try {
+      await rename(temporaryPath, targetPath);
+      return;
+    } catch (error) {
+      if (!isWindowsReplaceError(error)) {
+        throw error;
+      }
+
+      try {
+        await rm(targetPath, { force: true });
+      } catch {
+        // Windows can briefly lock files that Playwright or Node just read.
+      }
+    }
+  }
+
+  await writeFile(targetPath, contents, "utf8");
+  await rm(temporaryPath, { force: true });
 }
 
 function inferStatusFromOutcome(outcome: ExecutionResultOutcome): AgentRunStatus {
@@ -105,8 +140,7 @@ async function writeRunRecord(projectRoot: string, record: AgentRunRecord) {
   const temporaryStatusPath = `${statusPath}.${process.pid}.${Date.now()}.tmp`;
 
   await mkdir(getRunDir(projectRoot, parsed.runId), { recursive: true });
-  await writeFile(temporaryStatusPath, formatJson(parsed), "utf8");
-  await rename(temporaryStatusPath, statusPath);
+  await replaceJsonFile(statusPath, temporaryStatusPath, formatJson(parsed));
 
   return parsed;
 }

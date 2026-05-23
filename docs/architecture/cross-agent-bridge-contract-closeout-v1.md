@@ -32,6 +32,8 @@ mutate committed project truth by default.
   committed truth read.
 - Proposal status command that lists pending, reviewed, and invalid proposal
   artifacts before review.
+- Proposal adoption command that applies already reviewed `accept-plan`
+  adoption plans through an explicit operator action.
 - Manual adoption plan semantics for `accept-plan`.
 
 ## What V1 Does Not Support
@@ -88,8 +90,10 @@ If layers disagree, resolve in this order:
 | `npm run threadsmith:bridge-refresh -- .` | Validates committed truth and refreshes handoff plus adapter prompts together. |
 | `npm run threadsmith:proposal-status -- .` | Lists pending, reviewed, and invalid proposal artifacts. |
 | `npm run threadsmith:review-proposal -- . <proposal-id>` | Reviews one writeback proposal and writes a proposal-review artifact without applying truth. |
+| `npm run threadsmith:adopt-proposal -- . <proposal-id>` | Explicitly applies an `accept-plan` adoption plan to allowed committed truth files after schema validation. |
 | `npm run smoke:review-proposal` | Verifies the proposal review command path in an isolated project. |
 | `npm run smoke:proposal-status` | Verifies proposal visibility for pending, reviewed, and invalid artifacts in an isolated project. |
+| `npm run smoke:proposal-roundtrip` | Verifies external proposal -> review -> explicit adoption -> committed truth update. |
 | `npm run smoke:proposal-fixtures` | Verifies safe, stale, wrong-phase, and unsafe fixture behavior. |
 | `git diff --check` | Catches whitespace and diff hygiene issues before closeout. |
 | `jq empty .threadsmith/*.json` | Catches malformed top-level committed truth JSON. |
@@ -111,8 +115,9 @@ This contract is considered valid when:
 
 Cross-Agent State Bridge v1 is ready as an accepted Threadsmith capability:
 operators can refresh project handoff context, delegate a narrow role to another
-agent, receive a proposal, inspect the pending proposal queue, and review the
-proposal without allowing external agents to mutate committed truth directly.
+agent, receive a proposal, inspect the pending proposal queue, review the
+proposal, and explicitly adopt an accepted adoption plan without allowing
+external agents to mutate committed truth directly.
 
 This does not require an immediate public release by itself. It is a bridge
 foundation slice, not a user-facing app release. The safer release decision is:
@@ -137,8 +142,6 @@ Route to recover if:
 
 ## Next Recommended Slices
 
-- Proposal adoption command design: decide whether to add an opt-in command that
-  applies accepted proposal truth updates through native Threadsmith gates.
 - Bridge UX hardening: make stale handoff / stale adapter / stale proposal
   warnings clearer in operator-facing output.
 - Cross-agent state contract tests: expand schema checks around proposal

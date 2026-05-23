@@ -47,6 +47,7 @@ In v1, an operator can:
 | Read-only external agent default | Implemented | `docs/guides/cross-agent-bridge-operator-guide.md`; adapter prompt output rules. |
 | Writeback proposal artifact | Implemented | `.threadsmith/proposals/<proposal-id>.json` contract in runtime/action docs and fs bridge tests. |
 | Proposal review command | Implemented | `npm run threadsmith:review-proposal -- . <proposal-id>`; `scripts/threadsmith-review-proposal.ts`. |
+| Proposal adoption command | Implemented | `npm run threadsmith:adopt-proposal -- . <proposal-id>`; `scripts/threadsmith-adopt-proposal.ts`; `npm run smoke:proposal-roundtrip`. |
 | Pending proposal visibility | Implemented | `npm run threadsmith:proposal-status -- .`; `scripts/threadsmith-proposal-status.ts`; `npm run smoke:proposal-status`. |
 | Stale proposal recovery | Implemented | proposal review rejects or routes stale proposals to recovery before adoption. |
 | Handoff / adapter freshness anchors | Implemented | generated handoff/adapters include `generated at` and `committed truth updated at`. |
@@ -153,7 +154,24 @@ The review result can be:
 
 `accept-plan` is not `accepted`. It does not mutate committed truth by itself.
 
-### 5. Apply Through Native Gates
+### 5. Explicitly Adopt An Accepted Proposal
+
+When a proposal review returns `accept-plan`, an operator can apply its adoption
+plan through an explicit Threadsmith gate:
+
+```bash
+npm run threadsmith:adopt-proposal -- . <proposal-id>
+```
+
+This command refuses missing reviews, rejected reviews, `needs-recovery`
+reviews, unsafe target files, and schema-invalid resulting truth. It only
+applies adoption plan steps to allowed `.threadsmith` committed truth files.
+
+This is still not automatic external-agent write access. The external agent
+submits a proposal, Threadsmith reviews it, and the operator explicitly adopts
+it.
+
+### 6. Apply Through Native Gates
 
 Only the correct Threadsmith role boundary should write committed truth:
 
@@ -202,6 +220,7 @@ Cross-Agent State Bridge v1 can be considered ready when:
 - `npm run smoke:state-bridge` passes;
 - `npm run smoke:review-proposal` passes;
 - `npm run smoke:proposal-status` passes;
+- `npm run smoke:proposal-roundtrip` passes;
 - `npm run smoke:proposal-fixtures` passes;
 - stale handoff, stale adapter, and stale proposal behavior is documented;
 - committed truth records that v1 is consolidated rather than still in
@@ -209,9 +228,9 @@ Cross-Agent State Bridge v1 can be considered ready when:
 
 ## Recommended Next Slices
 
-1. Proposal adoption command design: only consider after operators are comfortable
-   with manual review and status visibility.
-2. Bridge UX hardening: make stale handoff, stale adapter, and stale proposal
+1. Bridge UX hardening: make stale handoff, stale adapter, and stale proposal
    warnings clearer before adding more automation.
+2. Automatic multi-agent scheduling: keep out of v1 unless a separate execution
+   contract is designed.
 
 Do not combine these with this consolidation slice.

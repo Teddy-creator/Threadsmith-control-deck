@@ -242,7 +242,27 @@ Threadsmith 会把它判定为 stale proposal，并输出 `needs-recovery`。这
 - 不应该直接采纳；
 - 操作者应先 sync / recover，然后让外部 agent 重新生成或 rebase proposal。
 
-### 7. 人工采纳或拒绝
+### 7. 显式采纳 proposal
+
+如果 review 结果是 `accept-plan`，可以用显式命令采纳：
+
+```bash
+npm run threadsmith:adopt-proposal -- . <proposal-id>
+```
+
+这条命令会做安全检查：
+
+- proposal 必须已经有 review artifact；
+- review decision 必须是 `accept-plan`；
+- adoption plan 必须存在；
+- targetPath 必须是允许的 `.threadsmith` committed truth 文件；
+- 写入后的 JSON 必须通过对应 schema；
+- rejected / needs-recovery / invalid proposal 都不能采纳。
+
+这不是自动多 agent 调度，也不是外部 agent 直接写 truth。外部 agent 仍然只提交
+proposal，Threadsmith 先 review，操作者再显式 adopt。
+
+### 8. 人工采纳或拒绝
 
 采纳前检查：
 
@@ -253,7 +273,7 @@ Threadsmith 会把它判定为 stale proposal，并输出 `needs-recovery`。这
 - 当前 role 是否有权写这类状态；
 - 是否需要 verifier 再跑命令。
 
-如果通过，再按 adoption plan 手动应用 truth 更新，并运行验证。
+如果通过，可以用 `threadsmith:adopt-proposal` 显式应用 truth 更新，并运行验证。
 
 如果不通过，记录 reject 或 needs-recovery，不要把 proposal 内容悄悄塞进
 committed truth。
@@ -320,6 +340,15 @@ npm run smoke:review-proposal
 
 它会验证安全 proposal 能生成 `accept-plan` review artifact，并保持
 `committedTruthMutation: "none"`。
+
+完整 round-trip smoke：
+
+```bash
+npm run smoke:proposal-roundtrip
+```
+
+它会验证 external proposal -> Threadsmith review -> explicit adoption ->
+committed truth update 的完整链路。
 
 ## 和日常 Threadsmith 工作流的关系
 
