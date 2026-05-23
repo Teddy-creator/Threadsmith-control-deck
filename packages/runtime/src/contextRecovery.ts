@@ -17,6 +17,7 @@ export type ContextRecoveryAction =
   | "continue"
   | "sync-context"
   | "run-hygiene"
+  | "review-proposal"
   | "wait-for-run"
   | "repair-run"
   | "resume-phase-run"
@@ -34,6 +35,17 @@ export interface ContextRecoverySignal {
   rolePacketStatus: "fresh" | "stale" | "missing" | "not-required";
 }
 
+export type WritebackProposalRecoverySeverity = "watch" | "recover";
+
+export interface WritebackProposalRecoverySignal {
+  proposalId: string;
+  status: "proposed" | "needs-review" | "rejected" | "accepted" | "invalid";
+  severity: WritebackProposalRecoverySeverity;
+  headline: string;
+  detail: string;
+  reasons: string[];
+}
+
 export interface DeriveContextRecoveryOptions {
   currentPacket?: ContextPacket | null;
   rolePackets?: RoleContextPacket[];
@@ -43,6 +55,7 @@ export interface DeriveContextRecoveryOptions {
   latestRun?: AgentRunRecord | null;
   latestPhaseRun?: PhaseRunSummary;
   latestPhasePause?: PhasePauseSummary;
+  writebackProposals?: WritebackProposalRecoverySignal[];
 }
 
 const ALL_ROLES: PhaseOwner[] = [
@@ -95,6 +108,16 @@ function inferSelectedRole(state: ProjectState): PhaseOwner {
   }
 
   return state.currentPhase.activeOwners[0] ?? "planner";
+}
+
+function strongestProposalSignal(
+  proposals: WritebackProposalRecoverySignal[] = []
+) {
+  return (
+    proposals.find((proposal) => proposal.severity === "recover") ??
+    proposals.find((proposal) => proposal.severity === "watch") ??
+    null
+  );
 }
 
 function packetMatchesState(packet: ContextPacket, state: ProjectState) {
@@ -236,6 +259,23 @@ export function deriveContextRecovery(
       detail: "先把失败结果、当前 truth 和修复目标重新对齐，再继续执行。",
       reasons: ["latest-run-failed"],
       selectedRole,
+      currentPacketStatus: currentStatus,
+      rolePacketStatus: roleStatus
+    });
+  }
+
+  const proposalSignal = strongestProposalSignal(options.writebackProposals);
+  if (proposalSignal) {
+    return signal({
+      status: proposalSignal.severity,
+      action: "review-proposal",
+      headline: proposalSignal.headline,
+      detail: proposalSignal.detail,
+      reasons:
+        proposalSignal.reasons.length > 0
+          ? proposalSignal.reasons
+          : [`writeback-proposal-${proposalSignal.status}`],
+      selectedRole: "hygiene",
       currentPacketStatus: currentStatus,
       rolePacketStatus: roleStatus
     });

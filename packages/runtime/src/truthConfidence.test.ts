@@ -188,6 +188,32 @@ describe("deriveTruthConfidence", () => {
     expect(confidence.primaryReason.detail).toContain("测试失败");
   });
 
+  it("marks invalid writeback proposals as recover-level proposal issues", () => {
+    const packet = packetFor();
+    const confidence = confidenceFor(state, {
+      currentPacket: packet,
+      rolePackets: [deriveRoleContextPacket(packet, "executor")],
+      selectedRole: "executor",
+      contextArtifactsLoaded: true,
+      writebackProposals: [
+        {
+          proposalId: "external-self-accept",
+          status: "invalid",
+          severity: "recover",
+          headline: "writeback proposal 不可信",
+          detail: "外部 proposal 试图自己设置 finalState accepted。",
+          reasons: ["writeback-proposal-self-accepted"]
+        }
+      ]
+    });
+
+    expect(confidence.level).toBe("recover");
+    expect(confidence.safeAction).toBe("review-proposal");
+    expect(confidence.primaryReason.id).toBe("writeback-proposal-self-accepted");
+    expect(confidence.primaryReason.surface).toBe("writeback-proposal");
+    expect(confidence.canContinue).toBe(false);
+  });
+
   it("marks running phase-runs as watch and recommends waiting", () => {
     const packet = packetFor();
     const runningPhaseRun = {

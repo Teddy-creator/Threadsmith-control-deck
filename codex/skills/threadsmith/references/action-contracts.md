@@ -163,6 +163,14 @@ Route to verifier. Requires implementation and review to be ready.
 
 Route to hygiene. Prefer this when truth freshness is questionable.
 
+### `review-proposal`
+
+Route to hygiene / reviewer. Prefer this when a writeback proposal exists but
+has not been reviewed, conflicts with committed truth, lacks required evidence,
+or appears to self-accept final state. Do not continue normal execution from a
+proposal until it is explicitly accepted, rejected, or converted into a safe
+recovery action.
+
 ### `create-handoff`
 
 Route to hygiene and produce a continuation artifact.

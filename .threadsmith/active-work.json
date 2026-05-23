@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第四刀：Writeback Proposal Contract v1。",
+      "taskSummary": "已从 Writeback Proposal Contract v1 closeout 进入下一刀：Recovery Integration v1，目标是把不可信 proposal / stale context 接入 recover/hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 writeback proposal contract、proposal artifact helper，并更新 adapter prompt 指向该 contract。",
+      "taskSummary": "已实现 runtime proposal recovery signal、truth confidence 映射与 next best step 路由。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 proposal contract 阻止外部 agent 绕过 review / verifier / closeout gate。",
+      "taskSummary": "已检查 recovery 路由保留 proposal 不自动采纳和 role gate 边界。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 domain tests、fs-bridge tests、project truth、skill contract、diff hygiene 和 JSON 校验。",
+      "taskSummary": "已运行 runtime tests、project truth、skill contract、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Writeback Proposal Contract v1 accepted，下一刀建议进入 Recovery Integration v1。",
+      "taskSummary": "已记录 Recovery Integration v1 accepted；下一刀建议进入 Proposal Review / Adoption v1。",
       "requiresUserDecision": false
     }
   ],

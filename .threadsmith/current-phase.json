@@ -1,13 +1,12 @@
 {
-  "phaseName": "Writeback Proposal Contract v1",
-  "phaseGoal": "把 Project State Store / Cross-Agent Bridge v1 的第四刀落成可测试的 writeback proposal contract，让外部 agent 能提交结构化建议写回，而不是直接改 committed truth。",
-  "deliverable": "writeback proposal domain contract、fs-bridge proposal artifact helper、adapter prompt 更新、对应测试与验证证据。",
+  "phaseName": "Recovery Integration v1",
+  "phaseGoal": "把 writeback proposal、stale handoff、缺失证据和外部自我验收等不可信状态接入 recovery / hygiene 判断，避免 Threadsmith 从有风险的 truth 继续普通推进。",
+  "deliverable": "runtime recovery signal、truth confidence 映射、next best step 路由、对应测试与验证证据。",
   "inScope": [
-    "定义 writeback proposal JSON contract",
-    "区分 proposed truth updates、evidence、residual risks、stop/recover reasons",
-    "新增 fs-bridge helper 写入 .threadsmith/proposals/<id>.json",
-    "更新 adapter prompt，要求外部 agent 使用 proposal contract",
-    "增加 domain / fs-bridge 测试覆盖 proposal validation 与 artifact 写入"
+    "识别待审或不可信 writeback proposal 并路由到 hygiene / recover",
+    "把 proposal recovery reason 映射到 truth confidence",
+    "让 next best step 优先显示 proposal review / hygiene，而不是继续普通推进",
+    "增加 runtime 测试覆盖 proposal recovery 路径"
   ],
   "outOfScope": [
     "自动采纳 proposal 并写 committed truth",
@@ -17,16 +16,16 @@
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "writeback proposal contract 与 artifact helper 已落地，adapter prompt 指向该 contract，相关测试与 project truth 验证通过，并进入 closeout。",
+  "stopCondition": "runtime 能把 proposal / stale handoff / missing evidence 等不可信状态转成明确 recover/hygiene 建议，并有测试证明不会直接继续普通推进。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
-    "npm run test --workspace @threadsmith/domain",
-    "npm run test --workspace @threadsmith/fs-bridge",
+    "npm run test --workspace @threadsmith/runtime",
     "npm run verify:skill-contract",
     "git diff --check",
     "jq empty .threadsmith/*.json"
   ],
   "activeOwners": [
+    "planner",
     "executor",
     "reviewer",
     "verifier",

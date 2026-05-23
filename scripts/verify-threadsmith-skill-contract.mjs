@@ -82,6 +82,16 @@ const checks = [
     ]
   },
   {
+    file: "references/action-contracts.md",
+    label: "proposal review recovery action is documented",
+    patterns: [
+      /### `review-proposal`/,
+      /writeback proposal exists/,
+      /self-accept final state/,
+      /Do not continue normal execution from a\s+proposal/
+    ]
+  },
+  {
     file: "references/runtime-contract.md",
     label: "AGENTS.md first-run and gate matrix are documented",
     patterns: [
