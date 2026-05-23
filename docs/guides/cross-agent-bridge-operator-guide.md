@@ -43,6 +43,8 @@ Threadsmith 再负责 review 这份 proposal，决定是生成人工采纳计划
 
 更完整的层级说明见
 [Threadsmith Truth Boundary](../architecture/threadsmith-truth-boundary.md)。
+v1 总览、能力地图和缺口检查见
+[Cross-Agent State Bridge v1](../architecture/cross-agent-state-bridge-v1.md)。
 v1 已实现能力、未承诺能力和验证命令见
 [Cross-Agent Bridge Contract Closeout v1](../architecture/cross-agent-bridge-contract-closeout-v1.md)。
 
