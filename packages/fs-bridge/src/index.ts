@@ -6,6 +6,7 @@ export * from "./actionQueue.ts";
 export * from "./events.ts";
 export * from "./continuationPackets.ts";
 export * from "./agentHandoff.ts";
+export * from "./agentAdapters.ts";
 export * from "./agentRuns.ts";
 export * from "./commandBridge.ts";
 export * from "./providerRouting.ts";

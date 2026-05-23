@@ -82,6 +82,14 @@ export function getCurrentAgentHandoffPath(projectRoot: string) {
   return join(getHandoffDir(projectRoot), "current-agent-handoff.md");
 }
 
+export function getAdaptersDir(projectRoot: string) {
+  return join(getThreadsmithDir(projectRoot), "adapters");
+}
+
+export function getAdapterPromptPath(projectRoot: string, adapterName: string) {
+  return join(getAdaptersDir(projectRoot), `${adapterName}.md`);
+}
+
 export function getContextFilePath(
   projectRoot: string,
   fileName: (typeof CONTEXT_FILES)[keyof typeof CONTEXT_FILES]

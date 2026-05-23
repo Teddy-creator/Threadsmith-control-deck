@@ -3,19 +3,19 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第二刀：Handoff Packet Generator v1。",
+      "taskSummary": "已从已合并的 Project State Store / Cross-Agent Bridge v1 设计文档中选定第三刀：Adapter Prompt Generator v1。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现固定路径 current-agent-handoff.md 生成器，并接入 create-handoff / closeout 自动 handoff。",
+      "taskSummary": "已实现 Codex / Claude / Generic Agent adapter prompt 生成器，并保持外部 agent 默认只读 + proposal。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 handoff 投影保持非权威、只读兼容和旧 packet 兼容，没有扩大到 adapter 或前端。",
+      "taskSummary": "已检查 adapter provider-safe，且没有允许外部 agent 直接写 committed truth。",
       "requiresUserDecision": false
     },
     {
@@ -27,7 +27,7 @@
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Handoff Packet Generator v1 accepted，下一刀建议进入 Adapter Prompt Generator v1。",
+      "taskSummary": "已记录 Adapter Prompt Generator v1 accepted，下一刀建议进入 Writeback Proposal Contract v1。",
       "requiresUserDecision": false
     }
   ],
