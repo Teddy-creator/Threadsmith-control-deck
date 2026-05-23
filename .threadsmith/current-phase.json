@@ -1,25 +1,27 @@
 {
-  "phaseName": "Recovery Integration v1",
-  "phaseGoal": "把 writeback proposal、stale handoff、缺失证据和外部自我验收等不可信状态接入 recovery / hygiene 判断，避免 Threadsmith 从有风险的 truth 继续普通推进。",
-  "deliverable": "runtime recovery signal、truth confidence 映射、next best step 路由、对应测试与验证证据。",
+  "phaseName": "Proposal Review / Adoption v1",
+  "phaseGoal": "定义 writeback proposal 的审查/采纳计划，让 Threadsmith 能明确拒绝、要求恢复或生成可人工采纳的计划，同时不自动修改 committed truth。",
+  "deliverable": "proposal review domain contract、fs-bridge review artifact helper、action/runtime contract 文档与对应测试。",
   "inScope": [
-    "识别待审或不可信 writeback proposal 并路由到 hygiene / recover",
-    "把 proposal recovery reason 映射到 truth confidence",
-    "让 next best step 优先显示 proposal review / hygiene，而不是继续普通推进",
-    "增加 runtime 测试覆盖 proposal recovery 路径"
+    "定义 writeback proposal review decision schema",
+    "支持 accept-plan / reject / needs-recovery 三种审查结果",
+    "accept-plan 只能生成待人工应用的 adoption plan，不直接写 committed truth",
+    "新增 fs-bridge helper 写入 .threadsmith/proposal-reviews/<proposal-id>.json",
+    "增加 domain / fs-bridge 测试覆盖 review artifact 与 no-auto-adoption 边界"
   ],
   "outOfScope": [
-    "自动采纳 proposal 并写 committed truth",
+    "自动采纳 proposal 并直接写 committed truth",
     "实现 proposal review UI",
     "让外部 agent 直接写 committed truth",
     "改动前端 UI",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
     "发布 release"
   ],
-  "stopCondition": "runtime 能把 proposal / stale handoff / missing evidence 等不可信状态转成明确 recover/hygiene 建议，并有测试证明不会直接继续普通推进。",
+  "stopCondition": "proposal review 能产出可审计的 accept-plan / reject / needs-recovery artifact，且测试证明 accept-plan 不会自动写 committed truth。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
-    "npm run test --workspace @threadsmith/runtime",
+    "npm run test --workspace @threadsmith/domain",
+    "npm run test --workspace @threadsmith/fs-bridge",
     "npm run verify:skill-contract",
     "git diff --check",
     "jq empty .threadsmith/*.json"

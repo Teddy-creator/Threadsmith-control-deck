@@ -117,7 +117,8 @@ const checks = [
       /Summary is not state/,
       /External agents default to read-only plus writeback proposals/,
       /\.threadsmith\/proposals\/<proposal-id>\.json/,
-      /must not self-accept final state/
+      /\.threadsmith\/proposal-reviews\/<proposal-id>\.json/,
+      /manual Threadsmith gate plan/
     ]
   },
   {

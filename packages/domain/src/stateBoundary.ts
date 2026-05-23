@@ -293,6 +293,13 @@ export const defaultStateBoundaryContract = stateBoundaryContractSchema.parse({
       authority: "runtime",
       description: "Structured writeback proposal from an external or native agent; never accepted committed truth until reviewed and verified.",
       defaultWriteMode: "proposal"
+    },
+    {
+      path: ".threadsmith/proposal-reviews/<proposal-id>.json",
+      layer: "runtime-artifact",
+      authority: "runtime",
+      description: "Structured Threadsmith review decision for a writeback proposal; may contain an adoption plan but never applies committed truth by itself.",
+      defaultWriteMode: "proposal"
     }
   ],
   roleRules: [

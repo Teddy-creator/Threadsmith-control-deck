@@ -95,6 +95,17 @@ describe("stateBoundaryContractSchema", () => {
     expect(proposal.description).toContain("never accepted committed truth");
   });
 
+  it("treats proposal reviews as runtime artifacts with no direct truth adoption", () => {
+    const review = defaultStateBoundaryContract.artifacts.find(
+      (artifact) => artifact.path === ".threadsmith/proposal-reviews/<proposal-id>.json"
+    )!;
+
+    expect(review.layer).toBe("runtime-artifact");
+    expect(review.authority).toBe("runtime");
+    expect(review.defaultWriteMode).toBe("proposal");
+    expect(review.description).toContain("never applies committed truth");
+  });
+
   it("allows native Threadsmith workflow to use direct writes where the contract allows it", () => {
     const currentPhase = defaultStateBoundaryContract.artifacts.find(
       (artifact) => artifact.path === ".threadsmith/current-phase.json"

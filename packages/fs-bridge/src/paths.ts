@@ -98,6 +98,17 @@ export function getWritebackProposalPath(projectRoot: string, proposalId: string
   return join(getProposalsDir(projectRoot), `${proposalId}.json`);
 }
 
+export function getProposalReviewsDir(projectRoot: string) {
+  return join(getThreadsmithDir(projectRoot), "proposal-reviews");
+}
+
+export function getWritebackProposalReviewPath(
+  projectRoot: string,
+  proposalId: string
+) {
+  return join(getProposalReviewsDir(projectRoot), `${proposalId}.json`);
+}
+
 export function getContextFilePath(
   projectRoot: string,
   fileName: (typeof CONTEXT_FILES)[keyof typeof CONTEXT_FILES]

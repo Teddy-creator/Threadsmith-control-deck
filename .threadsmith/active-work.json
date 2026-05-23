@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已从 Writeback Proposal Contract v1 closeout 进入下一刀：Recovery Integration v1，目标是把不可信 proposal / stale context 接入 recover/hygiene。",
+      "taskSummary": "已从 Recovery Integration v1 closeout 进入 Proposal Review / Adoption v1，目标是定义可审计的 proposal review / adoption plan。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 runtime proposal recovery signal、truth confidence 映射与 next best step 路由。",
+      "taskSummary": "已实现 proposal review decision schema、adoption plan 与 review artifact helper。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 recovery 路由保留 proposal 不自动采纳和 role gate 边界。",
+      "taskSummary": "已检查 review/adoption plan 不会绕过 committed truth gate。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 runtime tests、project truth、skill contract、JSON 和 diff hygiene。",
+      "taskSummary": "已运行 domain tests、fs-bridge tests、project truth、skill contract、JSON 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 Recovery Integration v1 accepted；下一刀建议进入 Proposal Review / Adoption v1。",
+      "taskSummary": "已记录 Proposal Review / Adoption v1 accepted；下一刀建议进入 Cross-Agent State Bridge Smoke v1。",
       "requiresUserDecision": false
     }
   ],
