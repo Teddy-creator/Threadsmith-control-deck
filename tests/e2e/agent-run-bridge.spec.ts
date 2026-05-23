@@ -114,8 +114,9 @@ async function launchBridgeFromDeck(page: import("@playwright/test").Page, proje
   await page.getByRole("textbox", { name: "项目根目录" }).fill(projectRoot);
   await page.getByRole("button", { name: "连接项目" }).click();
 
-  await expect(page.getByText(`项目根目录：${projectRoot}`)).toBeVisible();
+  await expect(page.getByRole("button", { name: "来源：自定义项目" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "当前总命令" })).toBeVisible();
+  await expect(page.getByText("Codex bridge smoke")).toBeVisible();
   await page.getByRole("button", { name: "查看为什么" }).click();
   await expect(page.getByRole("heading", { name: "推进参考" })).toBeVisible();
   await page.getByRole("button", { name: "手动启动桥接" }).click();

@@ -43,6 +43,8 @@ Threadsmith 再负责 review 这份 proposal，决定是生成人工采纳计划
 
 更完整的层级说明见
 [Threadsmith Truth Boundary](../architecture/threadsmith-truth-boundary.md)。
+v1 已实现能力、未承诺能力和验证命令见
+[Cross-Agent Bridge Contract Closeout v1](../architecture/cross-agent-bridge-contract-closeout-v1.md)。
 
 ## 操作者流程
 
@@ -250,4 +252,3 @@ Project Brief -> Current Phase -> Planner -> Executor -> Reviewer -> Verifier ->
 
 跨 agent bridge 只是让外部 agent 能安全进入某个角色，并通过 proposal 把结果交
 回 Threadsmith。它不跳过 role gate，也不跳过 evidence。
-

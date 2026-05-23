@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T12:02:08.381Z
+- generated at: 2026-05-23T12:19:33.554Z
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Adapter Prompt Freshness v1
+- current phase: Cross-Agent Bridge Contract Closeout v1
 - acceptance state: accepted
 
 ## Purpose
