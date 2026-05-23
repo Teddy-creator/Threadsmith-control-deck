@@ -7,6 +7,7 @@ export * from "./events.ts";
 export * from "./continuationPackets.ts";
 export * from "./agentHandoff.ts";
 export * from "./agentAdapters.ts";
+export * from "./bridgeRefresh.ts";
 export * from "./writebackProposals.ts";
 export * from "./writebackProposalReviews.ts";
 export * from "./writebackProposalWorkflow.ts";

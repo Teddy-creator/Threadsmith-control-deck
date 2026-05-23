@@ -1,13 +1,13 @@
 {
-  "phaseName": "Cross-Agent State Bridge v1 Consolidation & Gap Check",
-  "phaseGoal": "把已经实现的 project state store / cross-agent bridge 能力收束成一份 v1 总图，并列出剩余缺口，避免把已启动方向误讲成重新开题。",
-  "deliverable": "v1 consolidation document、gap check、operator guide links、truth refresh。",
+  "phaseName": "Bridge Refresh Command v1",
+  "phaseGoal": "为 Cross-Agent State Bridge v1 增加一条 operator 命令，把 truth 校验、handoff 刷新和 adapter 刷新合成一个可重复入口。",
+  "deliverable": "threadsmith:bridge-refresh command、smoke coverage、operator docs update、truth closeout。",
   "inScope": [
-    "明确这是 consolidate + gap-check，不是 new design start",
-    "汇总已实现的 committed truth、handoff、adapter、proposal、proposal review、freshness anchor 和 operator guide 能力",
-    "把能力映射到文档、命令、代码和测试证据",
-    "列出 v1 缺口、非目标和推荐后续 slice",
-    "刷新 .threadsmith current phase / status / active work / supervision truth"
+    "新增 npm run threadsmith:bridge-refresh -- .",
+    "命令先加载并校验 committed truth，再刷新 fixed handoff 和 provider adapter prompts",
+    "输出 project root、phase、final state、handoff path、adapter paths 和 freshness anchor",
+    "新增 isolated smoke，证明命令会写出 handoff/adapters",
+    "更新 Cross-Agent State Bridge v1 文档和 operator guide"
   ],
   "outOfScope": [
     "前端维护或重构",
@@ -16,10 +16,14 @@
     "proposal review UI",
     "发布 release",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
-    "实现新的 runtime 功能"
+    "External-agent fixture pack"
   ],
-  "stopCondition": "Cross-Agent State Bridge v1 的已实现能力、权威边界、操作者流程、缺口和下一刀都能从一份文档中读清楚。",
+  "stopCondition": "操作者能用一条 bridge-refresh 命令刷新跨 agent 交接面，而不需要手动记住 verify + handoff + adapters 三步。",
   "verificationForThisPhase": [
+    "npm run smoke:bridge-refresh",
+    "npm run threadsmith:bridge-refresh -- .",
+    "npm run threadsmith:handoff -- .",
+    "npm run threadsmith:adapters -- .",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
     "git diff --check",
