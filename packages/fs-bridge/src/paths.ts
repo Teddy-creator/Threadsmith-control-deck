@@ -74,6 +74,14 @@ export function getContextDir(projectRoot: string) {
   return join(getThreadsmithDir(projectRoot), "context");
 }
 
+export function getHandoffDir(projectRoot: string) {
+  return join(getThreadsmithDir(projectRoot), "handoff");
+}
+
+export function getCurrentAgentHandoffPath(projectRoot: string) {
+  return join(getHandoffDir(projectRoot), "current-agent-handoff.md");
+}
+
 export function getContextFilePath(
   projectRoot: string,
   fileName: (typeof CONTEXT_FILES)[keyof typeof CONTEXT_FILES]

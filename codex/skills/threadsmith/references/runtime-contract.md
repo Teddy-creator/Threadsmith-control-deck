@@ -160,9 +160,15 @@ Context artifacts are derived from committed truth and repo signals. They are us
 Handoff and adapter artifacts are also derived packets:
 
 - `.threadsmith/handoff/current-agent-handoff.md`
+- `.threadsmith/packets/<timestamp>-handoff.md`
+- `.threadsmith/packets/<timestamp>-hygiene.md`
 - `.threadsmith/adapters/codex.md`
 - `.threadsmith/adapters/claude.md`
 - `.threadsmith/adapters/generic-agent.md`
+
+`current-agent-handoff.md` is the stable cross-agent entry point. Timestamped
+handoff and hygiene packets are historical snapshots. Both are readable
+projections, not authority.
 
 If their source files, generated timestamp, or phase reference cannot be checked,
 fall back to committed truth and route high-risk work to recover.
