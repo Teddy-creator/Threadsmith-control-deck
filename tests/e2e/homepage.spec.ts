@@ -1,4 +1,5 @@
 import { basename, resolve } from "node:path";
+import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 import { openSourceWorkbench } from "./helpers";
 
@@ -68,6 +69,12 @@ test("current Threadsmith repo can be read as a real project from the source and
 }) => {
   const projectRoot = resolve(process.cwd());
   const projectName = basename(projectRoot);
+  const currentPhase = JSON.parse(
+    await readFile(resolve(projectRoot, ".threadsmith/current-phase.json"), "utf8")
+  ) as { phaseName: string };
+  const acceptanceState = JSON.parse(
+    await readFile(resolve(projectRoot, ".threadsmith/acceptance-state.json"), "utf8")
+  ) as { currentClaim: string };
 
   await page.goto("/?appHome=1");
   await expect(page.getByRole("button", { name: "来源：前门入口" })).toBeVisible();
@@ -119,15 +126,13 @@ test("current Threadsmith repo can be read as a real project from the source and
   await expect(inspectorPanel.getByRole("heading", { name: "Context 状态" })).toBeVisible();
   await expect(
     inspectorPanel
-      .getByText("Handoff Packet Generator v1")
+      .getByText(currentPhase.phaseName)
       .first()
   ).toBeVisible();
 
   await page.getByRole("button", { name: "验收", exact: true }).click();
   await expect(inspectorPanel.getByText("验收工作台")).toBeVisible();
   await expect(
-    inspectorPanel.getByText(
-      "Handoff Packet Generator v1 已 accepted：固定路径 current-agent-handoff.md 已接入 create-handoff 与 closeout 自动 handoff，并保持 legacy continuation packet 兼容。"
-    ).first()
+    inspectorPanel.getByText(acceptanceState.currentClaim).first()
   ).toBeVisible();
 });

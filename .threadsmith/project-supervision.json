@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Handoff Packet Generator v1 已 accepted：固定路径 handoff 投影已接入 workflow，下一刀建议进入 Adapter Prompt Generator v1。",
+  "summary": "Adapter Prompt Generator v1 已 accepted：三份 provider-safe adapter prompt 已生成，下一刀建议进入 Writeback Proposal Contract v1。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把 Project State Store / Cross-Agent Bridge v1 的第二刀收束为 Handoff Packet Generator v1。",
+      "taskSummary": "已把 Project State Store / Cross-Agent Bridge v1 的第三刀收束为 Adapter Prompt Generator v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "phase reset from State Boundary Contract v1",
-      "updatedAt": "2026-05-23T15:11:54+08:00"
+      "latestEvidenceLabel": "phase reset from Handoff Packet Generator v1",
+      "updatedAt": "2026-05-23T15:47:42+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已新增 current-agent-handoff.md 生成器，并接入 create-handoff / closeout 自动 handoff。",
+      "taskSummary": "已实现 adapter prompt 生成器，并覆盖 Codex / Claude / Generic Agent 三种入口。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "fs-bridge tests passed locally",
-      "updatedAt": "2026-05-23T15:11:54+08:00"
+      "latestEvidenceLabel": "fs-bridge adapter tests passed locally",
+      "updatedAt": "2026-05-23T15:47:42+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查实现保持 conservative boundary，不扩大到 adapter generator、UI 或 direct external writes。",
+      "taskSummary": "已检查 adapter prompt 保持 provider-safe 和 non-authoritative boundary。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T15:11:54+08:00"
+      "updatedAt": "2026-05-23T15:47:42+08:00"
     },
     {
       "id": "verifier-logical",
@@ -53,7 +53,7 @@
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T15:11:54+08:00"
+      "updatedAt": "2026-05-23T15:47:42+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "保持前端冻结，不修改全局 installed skill，不发布 release。",
+      "taskSummary": "保持前端冻结，不修改全局 installed skill，不发布 release；本刀已 closeout。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "scope guardrails active",
-      "updatedAt": "2026-05-23T15:11:54+08:00"
+      "updatedAt": "2026-05-23T15:47:42+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T15:11:54+08:00"
+  "updatedAt": "2026-05-23T15:47:42+08:00"
 }
