@@ -1,0 +1,35 @@
+{
+  "proposalId": "wrong-phase-codex-review",
+  "createdAt": "2026-05-23T14:21:00.000Z",
+  "agent": {
+    "id": "codex-delegated-reviewer",
+    "kind": "external-known",
+    "provider": "codex"
+  },
+  "role": "reviewer",
+  "phaseName": "Old Bridge Phase",
+  "summary": "Codex-like delegated reviewer proposes an update for a phase that is no longer current.",
+  "proposedTruthUpdates": [
+    {
+      "targetPath": ".threadsmith/acceptance-state.json",
+      "targetPointer": "/reviewStatus",
+      "summary": "Move old phase review status to ready-for-verification.",
+      "proposedValue": "ready-for-verification"
+    }
+  ],
+  "evidence": [
+    {
+      "label": "old phase review note",
+      "kind": "note",
+      "reference": "Delegated reviewer checked an old phase packet.",
+      "status": "passed"
+    }
+  ],
+  "residualRisks": [
+    "The proposal may belong to a completed or superseded phase."
+  ],
+  "recoverIf": [
+    "Current phase differs from this proposal phase."
+  ],
+  "status": "proposed"
+}

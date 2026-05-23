@@ -1,13 +1,14 @@
 {
-  "phaseName": "Bridge Refresh Command v1",
-  "phaseGoal": "为 Cross-Agent State Bridge v1 增加一条 operator 命令，把 truth 校验、handoff 刷新和 adapter 刷新合成一个可重复入口。",
-  "deliverable": "threadsmith:bridge-refresh command、smoke coverage、operator docs update、truth closeout。",
+  "phaseName": "External-Agent Fixture Pack v1",
+  "phaseGoal": "为 Cross-Agent State Bridge v1 增加一组外部 agent proposal 样例，帮助操作者理解 safe / stale / conflicting / unsafe proposal 会如何被 Threadsmith review。",
+  "deliverable": "proposal fixture pack、isolated smoke、operator docs update、truth closeout。",
   "inScope": [
-    "新增 npm run threadsmith:bridge-refresh -- .",
-    "命令先加载并校验 committed truth，再刷新 fixed handoff 和 provider adapter prompts",
-    "输出 project root、phase、final state、handoff path、adapter paths 和 freshness anchor",
-    "新增 isolated smoke，证明命令会写出 handoff/adapters",
-    "更新 Cross-Agent State Bridge v1 文档和 operator guide"
+    "新增 happy-path proposal fixture，预期 review 结果为 accept-plan",
+    "新增 stale proposal fixture，预期 review 结果为 needs-recovery",
+    "新增 wrong-phase/conflicting proposal fixture，预期 review 结果为 needs-recovery",
+    "新增 unsafe self-acceptance fixture，预期 schema/review 阶段拒绝",
+    "新增 npm run smoke:proposal-fixtures",
+    "更新 Cross-Agent State Bridge v1 文档"
   ],
   "outOfScope": [
     "前端维护或重构",
@@ -16,14 +17,12 @@
     "proposal review UI",
     "发布 release",
     "修改或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
-    "External-agent fixture pack"
+    "pending proposal visibility"
   ],
-  "stopCondition": "操作者能用一条 bridge-refresh 命令刷新跨 agent 交接面，而不需要手动记住 verify + handoff + adapters 三步。",
+  "stopCondition": "操作者能从 fixture pack 看懂外部 agent proposal 的正确形状，以及 Threadsmith 如何 accept-plan、needs-recovery 或拒绝不安全输入。",
   "verificationForThisPhase": [
-    "npm run smoke:bridge-refresh",
-    "npm run threadsmith:bridge-refresh -- .",
-    "npm run threadsmith:handoff -- .",
-    "npm run threadsmith:adapters -- .",
+    "npm run smoke:proposal-fixtures",
+    "npm run test --workspace @threadsmith/fs-bridge -- writebackProposalWorkflow",
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
     "git diff --check",

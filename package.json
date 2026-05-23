@@ -54,6 +54,7 @@
     "smoke:state-bridge": "node --import tsx scripts/cross-agent-state-bridge-smoke.ts",
     "smoke:review-proposal": "node --import tsx scripts/threadsmith-review-proposal-smoke.ts",
     "smoke:bridge-refresh": "node --import tsx scripts/threadsmith-bridge-refresh-smoke.ts",
+    "smoke:proposal-fixtures": "node --import tsx scripts/threadsmith-proposal-fixtures-smoke.ts",
     "smoke:deck-route": "node --import tsx scripts/deck-route-smoke.ts"
   },
   "devDependencies": {

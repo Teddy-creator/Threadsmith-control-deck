@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "project state store / cross-agent bridge v1 operator surface",
+  "currentTrack": "project state store / cross-agent bridge v1 proposal examples",
   "overallState": "stable",
-  "currentFocus": "Bridge Refresh Command v1 已 accepted：一条命令可刷新跨 agent bridge 交接面。",
-  "projectStatusSummary": "Threadsmith 已有 Cross-Agent State Bridge v1 总图、proposal review、stale proposal recovery、handoff/adapters freshness anchors 和 bridge-refresh command；操作者现在可以用一条命令读取校验 committed truth 并刷新 handoff + adapters。",
+  "currentFocus": "External-Agent Fixture Pack v1 已 accepted：safe/stale/wrong-phase/unsafe proposal 样例与 smoke 已完成。",
+  "projectStatusSummary": "Threadsmith 已有 Cross-Agent State Bridge v1 总图、proposal review、stale proposal recovery、handoff/adapters freshness anchors、bridge-refresh command 和 external-agent proposal fixture pack；操作者现在能用样例理解 safe/stale/conflicting/unsafe proposal 的区别。",
   "latestAcceptedSlice": {
-    "title": "Bridge Refresh Command v1",
-    "recordedAt": "2026-05-23T22:26:55+08:00"
+    "title": "External-Agent Fixture Pack v1",
+    "recordedAt": "2026-05-23T22:44:55+08:00"
   },
   "nextPlannedSlice": {
-    "title": "External-agent fixture pack 或 Pending proposal visibility",
+    "title": "Pending proposal visibility",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "把 bridge-refresh 误做成外部 agent 执行入口，而不是派生上下文刷新入口。",
-    "命令刷新 derived context 后没有暴露 freshness anchor，导致用户仍不清楚它基于哪版 truth。",
-    "在这个 slice 中扩张到 frontend 或 multi-provider 自动执行。"
+    "fixture 只成为静态样例，没有被 smoke 验证。",
+    "unsafe self-acceptance fixture 如果直接走 schema parse，会被拒绝；smoke 必须把这种拒绝当作预期结果。",
+    "在这个 slice 中扩张到 proposal UI 或 multi-provider 自动执行。"
   ],
-  "updatedAt": "2026-05-23T22:26:55+08:00"
+  "updatedAt": "2026-05-23T22:44:55+08:00"
 }

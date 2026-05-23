@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Bridge Refresh Command v1 已 accepted：跨 agent bridge 刷新步骤已合成一条 operator command。",
+  "summary": "External-Agent Fixture Pack v1 已 accepted：proposal 样例与验证已完成。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已将当前 slice 收窄为 Bridge Refresh Command v1。",
+      "taskSummary": "已将当前 slice 收窄为 External-Agent Fixture Pack v1。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/bridge-refresh-command-v1.md",
-      "updatedAt": "2026-05-23T22:18:17+08:00"
+      "latestEvidenceLabel": "docs/plans/external-agent-fixture-pack-v1.md",
+      "updatedAt": "2026-05-23T22:37:25+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 threadsmith:bridge-refresh 命令、smoke 和文档更新。",
+      "taskSummary": "已新增 proposal fixtures、fixture smoke 和文档链接。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "scripts/threadsmith-bridge-refresh.ts",
-      "updatedAt": "2026-05-23T22:26:55+08:00"
+      "latestEvidenceLabel": "docs/fixtures/cross-agent-proposals/",
+      "updatedAt": "2026-05-23T22:44:55+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 bridge-refresh 只刷新 derived bridge surface，不改变 committed truth 边界。",
+      "taskSummary": "已检查 fixtures 覆盖 safe/stale/conflicting/unsafe proposal，且不暗示自动采纳。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "review passed",
-      "updatedAt": "2026-05-23T22:26:55+08:00"
+      "updatedAt": "2026-05-23T22:44:55+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 bridge refresh smoke、handoff/adapters、project truth、skill contract 和 diff hygiene。",
+      "taskSummary": "已运行 fixture smoke、proposal workflow tests、project truth、skill contract 和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "verification passed",
-      "updatedAt": "2026-05-23T22:26:55+08:00"
+      "updatedAt": "2026-05-23T22:44:55+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已记录 Bridge Refresh Command v1 accepted；下一刀建议 External-agent fixture pack。",
+      "taskSummary": "已记录 External-Agent Fixture Pack v1 accepted；下一刀建议 Pending proposal visibility。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "closeout done",
-      "updatedAt": "2026-05-23T22:26:55+08:00"
+      "updatedAt": "2026-05-23T22:44:55+08:00"
     }
   ],
-  "updatedAt": "2026-05-23T22:26:55+08:00"
+  "updatedAt": "2026-05-23T22:44:55+08:00"
 }

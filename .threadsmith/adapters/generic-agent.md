@@ -2,10 +2,10 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T14:30:24.986Z
-- committed truth updated at: 2026-05-23T22:26:55+08:00
+- generated at: 2026-05-23T14:46:36.983Z
+- committed truth updated at: 2026-05-23T22:44:55+08:00
 - adapter file: .threadsmith/adapters/generic-agent.md
-- current phase: Bridge Refresh Command v1
+- current phase: External-Agent Fixture Pack v1
 - acceptance state: accepted
 
 ## Purpose

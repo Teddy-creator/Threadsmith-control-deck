@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Bridge Refresh Command v1 已 accepted：Threadsmith 现在可以用一条 operator 命令刷新 committed truth check、handoff 和 adapter prompts。",
+  "currentClaim": "External-Agent Fixture Pack v1 已 accepted：Threadsmith 现在有 safe / stale / wrong-phase / unsafe self-acceptance proposal 样例，并用 smoke 验证预期 review 结果。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Bridge Refresh Command v1 实施计划",
+      "label": "新增 External-Agent Fixture Pack v1 实施计划",
       "status": "pass"
     },
     {
-      "id": "command",
-      "label": "新增 npm run threadsmith:bridge-refresh -- .",
+      "id": "fixtures",
+      "label": "新增 happy/stale/wrong-phase/unsafe proposal fixtures",
       "status": "pass"
     },
     {
       "id": "smoke",
-      "label": "新增 isolated bridge-refresh smoke",
+      "label": "新增 proposal fixture smoke 并覆盖预期 review 结果",
       "status": "pass"
     },
     {
       "id": "docs",
-      "label": "operator guide 与 v1 架构文档说明 bridge refresh command",
+      "label": "Cross-Agent State Bridge v1 文档链接 fixture pack",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "bridge refresh、handoff、adapters、project truth、skill contract、diff hygiene 与 JSON 校验通过",
+      "label": "fixture smoke、proposal workflow tests、project truth、skill contract、diff hygiene 与 JSON 校验通过",
       "status": "pass"
     }
   ],
@@ -32,7 +32,7 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只合并 bridge refresh 入口，不做 fixture pack。",
+    "这轮只补 proposal fixture pack，不做 pending proposal visibility。",
     "这轮不改变 proposal review 的人工采纳边界。"
   ],
   "finalState": "accepted"

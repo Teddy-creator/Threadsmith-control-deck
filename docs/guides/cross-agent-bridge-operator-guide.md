@@ -171,6 +171,11 @@ proposal 的最小字段是：
 }
 ```
 
+可复制的完整样例见
+[`docs/fixtures/cross-agent-proposals/`](../fixtures/cross-agent-proposals/)。
+这些样例覆盖 safe、stale、wrong-phase 和 unsafe self-acceptance proposal，并可用
+`npm run smoke:proposal-fixtures` 验证。
+
 安全规则：
 
 - `status` 不能直接写成 `accepted`。
