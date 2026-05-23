@@ -2,9 +2,9 @@
 
 ## Source
 - project root: /Users/cloud/Code/threadsmith-control-deck
-- generated at: 2026-05-23T16:10:10+08:00
+- generated at: 2026-05-23T12:02:08.381Z
 - adapter file: .threadsmith/adapters/codex.md
-- current phase: Writeback Proposal Contract v1
+- current phase: Adapter Prompt Freshness v1
 - acceptance state: accepted
 
 ## Purpose
