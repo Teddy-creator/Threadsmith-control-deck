@@ -1,7 +1,7 @@
 interface:
   display_name: "Threadsmith"
   short_description: "Drive the current project through committed Threadsmith truth and context packets."
-  default_prompt: "Use $threadsmith to sync or drive this project with Project Brief, Current Phase, Acceptance State, Context Packet, and Role-specific Packets as truth."
+  default_prompt: "Use $threadsmith to resolve mode, read committed Threadsmith truth, continue the current phase chain when safe, and stop only at real gates or closeout boundaries."
 
 policy:
   allow_implicit_invocation: false

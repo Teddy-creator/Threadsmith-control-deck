@@ -33,6 +33,10 @@ const checks = [
     patterns: [
       /## Phase Execution Cadence/,
       /pause between phases, not between roles/,
+      /## Execution Cadence Selector/,
+      /Choose execution cadence by state, not only by wording/,
+      /continuous.*approved phase can run through executor -> reviewer ->\s+verifier -> closeout/s,
+      /npm run threadsmith:autopilot -- continue <project-root>/,
       /executor -> reviewer -> verifier -> closeout/,
       /Do not ask the operator to approve routine transitions/,
       /Do not stop merely because the next internal role is reviewer, verifier, or\s+closeout/,
@@ -47,6 +51,10 @@ const checks = [
       /exact field skeleton/,
       /Do not\s+satisfy full output by writing only these section headings with free-form\s+paragraphs/,
       /Full output sections/,
+      /Internal progress output/,
+      /已完成内部 gate/,
+      /下一内部 gate/,
+      /当前 stop reason/,
       /Compact sync output/,
       /Conceptual answer/,
       /### 本 phase 的结果/,
@@ -67,6 +75,7 @@ const checks = [
       /phase 名称:/,
       /交付物:/,
       /结果一句话:/,
+      /架构影响:/,
       /Before/,
       /Changed/,
       /After/,
@@ -115,6 +124,7 @@ const checks = [
       /free-form paragraphs only/,
       /phase 名称/,
       /结果一句话/,
+      /架构影响/,
       /Before/,
       /Changed/,
       /After/,
@@ -144,7 +154,20 @@ const checks = [
       /Load references only when needed/,
       /Read `references\/runtime-contract\.md`/,
       /Read `references\/role-contracts\.md`/,
-      /Read `references\/action-contracts\.md`/
+      /Read `references\/action-contracts\.md`/,
+      /Read `references\/external-agent-entry\.md`/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "mode-specific read sets are documented",
+    patterns: [
+      /## Mode-Specific Read Sets/,
+      /Read only what the selected mode needs/,
+      /`sync`:/,
+      /`drive`:/,
+      /`continuous`:/,
+      /`recover`:/
     ]
   },
   {
@@ -160,6 +183,7 @@ const checks = [
     label: "action state machine and anti-repeat invariant are documented",
     patterns: [
       /## Decision Ladder/,
+      /Execution Cadence Selector/,
       /Anti-repeat invariant/,
       /execution-shaped/,
       /must not restate/,
@@ -177,6 +201,19 @@ const checks = [
       /Internal role transitions are not operator approval points/,
       /Use `下一内部 gate`/,
       /Reserve\s+`下一 phase 预览` for closeout/
+    ]
+  },
+  {
+    file: "references/role-contracts.md",
+    label: "role transition table is documented",
+    patterns: [
+      /## Role Transition Table/,
+      /Committed state signal/,
+      /Next role/,
+      /ready-for-verification/,
+      /accepted-with-closeout-pending/,
+      /Final state is accepted/,
+      /Internal transitions inside an approved phase are not operator approval points/
     ]
   },
   {
@@ -199,6 +236,15 @@ const checks = [
       /role-complete, not approval-heavy/,
       /Hot-path governance must prefer deterministic checks/,
       /friction\s+budgets/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "deck-facing actions are marked deferred",
+    patterns: [
+      /Deck-facing actions are a deferred UI surface/,
+      /frontend maintenance is\s+frozen/,
+      /skill\/protocol truth is the authority/
     ]
   },
   {
@@ -312,6 +358,27 @@ const checks = [
       /Verifier may write evidence and verification result/,
       /Closeout may record accepted state/,
       /Hygiene may refresh derived packets/
+    ]
+  },
+  {
+    file: "references/external-agent-entry.md",
+    label: "external agent entry contract is documented",
+    patterns: [
+      /# External Agent Entry/,
+      /read-only plus writeback proposals/,
+      /\.threadsmith\/proposals\/<proposal-id>\.json/,
+      /\.threadsmith\/proposal-reviews\/<proposal-id>\.json/,
+      /does not by itself launch Claude, Codex CLI, or other providers automatically/
+    ]
+  },
+  {
+    file: "agents/openai.yaml",
+    label: "default prompt reflects current workflow contract",
+    patterns: [
+      /resolve mode/,
+      /committed Threadsmith truth/,
+      /current phase chain/,
+      /real gates or closeout boundaries/
     ]
   }
 ];

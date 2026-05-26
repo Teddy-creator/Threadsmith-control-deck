@@ -8,6 +8,24 @@ Threadsmith uses role-first orchestration. Each role should prefer its matching 
 
 If the packet is missing or stale, use committed truth and the main Context Packet.
 
+## Role Transition Table
+
+Use committed acceptance state before selecting a role. Do not infer role order
+from chat memory when committed truth is available.
+
+| Committed state signal | Next role | Meaning | Stop condition |
+| --- | --- | --- | --- |
+| No usable current phase, stale phase, or contradictory truth | hygiene | Repair the state boundary before normal work | safe next action or recovery blocker identified |
+| Current phase exists but lacks executable scope, done-when, or verification plan | planner | Narrow the phase contract | phase contract is executable or needs operator decision |
+| Implementation is not ready for review | executor | Produce the scoped implementation or artifact | implementation is ready for review or blocked |
+| Implementation is ready for review, but review has not passed | reviewer | Check scope, risk, and implementation quality | ready-for-verification or review-blocked |
+| Review has passed, but verification has not passed | verifier | Run or inspect required evidence | accepted-with-closeout-pending or verification-failed |
+| Verification passed and final state is accepted-with-closeout-pending | closeout | Record final accepted truth and next planned slice | accepted or closeout blocker |
+| Final state is accepted | planner | Start only a new phase reset or next phase review | next phase approved or stop at boundary |
+
+Internal transitions inside an approved phase are not operator approval points.
+Use the stop reasons in `action-contracts.md` when a transition cannot continue.
+
 ## Planner
 
 Role packet: `.threadsmith/context/role-packets/planner.json`
