@@ -1,6 +1,6 @@
 {
   "projectGoal": "交付稳定、诚实、可公开使用的 Threadsmith v0.3.x：在 Context OS 与 Harness Skill Orchestrator 基础上，把 Codex-first workflow supervision、skill routing metadata、fallback mini protocols 和 release hygiene 打磨成真实可用闭环。",
-  "currentVersionScope": "project state store / cross-agent bridge v1 planning：当前先把 Threadsmith 的项目级状态底座与跨 agent 交接层写成审核用设计文档，不进入产品实现。",
+  "currentVersionScope": "threadsmith role runtime speedup：当前已把 full governance 的速度问题从“少停顿”推进到 role runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 与 packet-slimming regression fixtures；全局 installed skill 本轮仍不同步。",
   "nonGoals": [
     "立即发布新版本或继续 v0.3.2 release closeout",
     "维护、优化或重构前端 UI",
@@ -20,7 +20,7 @@
   ],
   "successFrame": "开发者能清楚区分 threadsmith-control-deck、全局 installed skill 与历史 Threadsmith 仓库；后续功能和修复都回到 canonical source 上执行。",
   "priorityOrder": [
-    "先收口 Project State Store / Cross-Agent Bridge v1 设计文档并走 PR",
+    "先收口 Threadsmith role runtime speedup，再决定是否做 lane routing 或同步全局 installed skill",
     "保持 skill/protocol/truth 线优先，前端维护默认冻结",
     "保持 canonical source 边界",
     "增加 drift 防护，避免 canonical source 与 installed skill 再次分叉"

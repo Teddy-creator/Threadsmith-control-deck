@@ -1,29 +1,39 @@
 {
-  "currentClaim": "Threadsmith Role Chain Execution Cadence v1 已 accepted：$threadsmith drive 现在要求已批准 phase 内连续执行 executor -> reviewer -> verifier -> closeout，只在真实 gate 或 closeout 后停。",
+  "currentClaim": "Threadsmith Role Runtime Speedup v1 已完成：full governance 现在不仅减少无效停顿，也通过 role runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 和 packet-slimming regression fixtures 降低每个角色的运行负担，同时保留安全门禁。",
   "doneWhenChecklist": [
     {
-      "id": "plan",
-      "label": "新增 Threadsmith Role Chain Execution Cadence v1 计划文档",
+      "id": "role-runtime-metrics",
+      "label": "phase run 会记录每个角色的 duration、packet size、context refs 与结果摘要指标",
       "status": "pass"
     },
     {
-      "id": "output-contract",
-      "label": "SKILL.md drive 语义要求 phase 内 role chain 连续推进",
+      "id": "evidence-bundle",
+      "label": "packet 构建会预生成 phase evidence bundle，避免每个角色重复做广泛状态发现",
       "status": "pass"
     },
     {
-      "id": "cadence-rule",
-      "label": "action contract 要求 phase 间暂停而不是 role 间暂停",
+      "id": "role-scoped-packets",
+      "label": "planner / executor / reviewer / verifier / closeout 会收到按角色裁剪的 context refs",
       "status": "pass"
     },
     {
-      "id": "contract-verifier",
-      "label": "skill contract verifier 覆盖 role-chain cadence rule",
+      "id": "planner-mode-routing",
+      "label": "planner mode routing 已区分 planning-phase、planner-reset、planner-lite 与 direct-executor",
+      "status": "pass"
+    },
+    {
+      "id": "staged-verification",
+      "label": "verifier 已有 narrow / standard / release verification policy，并写入 packet 与 evidence bundle",
+      "status": "pass"
+    },
+    {
+      "id": "packet-slimming-regression",
+      "label": "已补充回归测试，防止验收标准、blocker、上游结果和 required checks 被 packet slimming 误删",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、skill contract、skill sync 与 diff hygiene 通过",
+      "label": "domain / fs-bridge / runtime / orchestrator / skill contract / project truth / diff hygiene 验证通过",
       "status": "pass"
     }
   ],
@@ -32,8 +42,10 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只改 Threadsmith skill / action contract 的推进节奏语义，不改前端或自动多 agent 调度。",
-    "这仍是 skill 契约层修复，不是 runtime autopilot engine 的新实现。"
+    "本轮没有同步全局 installed skill；用户实际调用全局 $threadsmith 前仍需后续显式同步。",
+    "本轮没有实现自动多 agent 调度，也没有移除任何 full governance 安全角色。",
+    "本轮建立了 runtime metrics，但尚未积累真实项目的前后耗时基准。",
+    "verification policy 已从命令关键词升级为规则策略，但仍是第一版粗粒度规则，后续可继续按真实失败案例细化。"
   ],
   "finalState": "accepted"
 }
