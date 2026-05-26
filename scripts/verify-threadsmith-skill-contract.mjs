@@ -158,6 +158,75 @@ const checks = [
     ]
   },
   {
+    file: "SKILL.md",
+    label: "full governance speed contract is explicit",
+    patterns: [
+      /## Full Governance Speed Contract/,
+      /Hot-path governance should be rule-shaped/,
+      /Named stop reasons/,
+      /Context and observation budget/,
+      /Verification levels/,
+      /Sparse course-correction checks/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "full governance speed rule is documented",
+    patterns: [
+      /## Full Governance Speed Rule/,
+      /role-complete, not approval-heavy/,
+      /Hot-path governance must prefer deterministic checks/,
+      /friction\s+budgets/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "deterministic stop reasons are documented",
+    patterns: [
+      /## Deterministic Stop Reasons/,
+      /`continue`/,
+      /`pause_for_operator_decision`/,
+      /`pause_for_blocker`/,
+      /`pause_for_recovery`/,
+      /`pause_for_release_action`/,
+      /`pause_for_destructive_action`/,
+      /`closeout_boundary`/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "context and observation budget rule is documented",
+    patterns: [
+      /## Context and Observation Budget Rule/,
+      /current packet over full thread replay/,
+      /selected role packet over all-role context/,
+      /masked, trimmed, or summarized command output/,
+      /proof of acceptance/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "staged verification rule is documented",
+    patterns: [
+      /## Staged Verification Rule/,
+      /`narrow`/,
+      /`standard`/,
+      /`release`/,
+      /Escalate on failed verification/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "sparse course-correction rule is documented",
+    patterns: [
+      /## Sparse Course-Correction Rule/,
+      /lightweight course-correction check/,
+      /repeating a recommendation/,
+      /drifting from the approved phase/,
+      /did verification evidence prove the done-when/
+    ]
+  },
+  {
     file: "references/action-contracts.md",
     label: "next-step continuity is documented",
     patterns: [

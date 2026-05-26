@@ -251,6 +251,89 @@ Use `下一内部 gate` for these transitions if they need to be named. Reserve
 `下一 phase 预览` for closeout or a genuine new phase. This avoids presenting
 reviewer, verifier, or closeout as a fresh user decision.
 
+## Full Governance Speed Rule
+
+Full governance means role-complete, not approval-heavy.
+
+When a phase plan is approved, Threadsmith should run the approved phase as one
+continuous chain and preserve planner, executor, reviewer, verifier, and
+closeout responsibilities. The speed improvement comes from removing redundant
+operator stops, not from removing review or verification.
+
+Hot-path governance must prefer deterministic checks over repeated LLM-heavy
+judgment. Use stop reasons, verification levels, context budgets, and friction
+budgets before asking the operator or launching a broad re-plan. These friction
+budgets cap repeated restatements, repair loops, and verification breadth.
+
+## Deterministic Stop Reasons
+
+Use one named stop reason whenever full governance pauses:
+
+- `continue`: no real gate; proceed through the current approved role chain
+- `pause_for_operator_decision`: scope, non-goals, acceptance, or product
+  direction would change
+- `pause_for_blocker`: reviewer, verifier, repo, dependency, or test evidence
+  blocks progress
+- `pause_for_recovery`: committed truth, role packet, Context Packet, evidence,
+  or git state is stale or contradictory
+- `pause_for_release_action`: merge, publish, tag, public sync, release notes,
+  or external release action is required
+- `pause_for_destructive_action`: destructive git, file, data, credential, or
+  irreversible environment action is required
+- `closeout_boundary`: the approved phase is complete and the next phase needs
+  operator review
+
+Do not stop with vague language such as "next step?" when one of these reasons
+applies. If none applies, continue the internal role chain.
+
+## Context and Observation Budget Rule
+
+Full governance must reduce context drag before adding more process.
+
+Default context preference:
+
+1. current packet over full thread replay
+2. selected role packet over all-role context
+3. recent high-fidelity failing evidence over old verbose logs
+4. masked, trimmed, or summarized command output when exact output is not needed
+5. exact full output for failures, user-requested diagnostics, audit evidence,
+   and proof of acceptance
+
+This keeps the role focused on the current phase while preserving evidence that
+actually proves or disproves the done-when.
+
+## Staged Verification Rule
+
+Choose the smallest verification level that matches risk, then escalate only
+when the evidence requires it.
+
+- `narrow`: changed-file, contract, fixture, or focused evidence checks
+- `standard`: package tests plus relevant contract checks
+- `release`: full release, launcher, sync, changelog, package, and public
+  surface checks
+
+Use `narrow` for small contract/docs/test slices, `standard` for skill or
+workflow behavior, and `release` for release-facing or public-surface work.
+Escalate on failed verification, broad impact, release work, or contradictory
+evidence.
+
+## Sparse Course-Correction Rule
+
+Full governance should catch inefficient trajectories without restarting the
+whole plan after every role.
+
+Run a lightweight course-correction check at phase boundaries, after repeated
+repair, or when output begins to loop:
+
+- are we repeating a recommendation instead of executing it?
+- are we drifting from the approved phase?
+- did verification evidence prove the done-when?
+- are protocol labels replacing operator-facing explanation?
+- did the same blocker occur twice?
+
+If the check passes, continue. If it fails, use a named stop reason or route to
+recovery. Do not convert this check into a routine approval prompt.
+
 ## Output Level Rule
 
 Full output is required for:

@@ -80,6 +80,59 @@ Stop mid-chain only when a real gate appears:
 internal role handoff, say which role/gate will run next, but do not present it
 as something the operator must approve.
 
+## Full Governance Speed Contract
+
+Full governance keeps all role gates, but it must not turn every role handoff
+into an operator stop. Once a phase plan is approved, optimize for one
+continuous, evidence-backed phase run.
+
+Hot-path governance should be rule-shaped before it is model-judgment-shaped:
+use deterministic stop reasons, verification levels, role-scoped context, and
+friction budgets before asking the operator or launching another broad review.
+
+Named stop reasons:
+
+- `continue`: no real gate; proceed through the current approved role chain
+- `pause_for_operator_decision`: scope, non-goals, acceptance, or product
+  direction would change
+- `pause_for_blocker`: reviewer, verifier, repo, or dependency evidence blocks
+  progress
+- `pause_for_recovery`: truth, role packet, Context Packet, evidence, or git
+  state is stale or contradictory
+- `pause_for_release_action`: merge, publish, tag, public sync, or external
+  release action is required
+- `pause_for_destructive_action`: destructive git, file, data, credential, or
+  irreversible environment action is required
+- `closeout_boundary`: the approved phase completed and the next phase needs
+  operator review
+
+Context and observation budget:
+
+- prefer current packet over full thread replay
+- prefer the selected role packet over all-role context
+- keep recent failing evidence high fidelity
+- mask, trim, or summarize old verbose command output when exact output is not
+  needed for audit or diagnosis
+- keep exact full output for failures, user-requested diagnostics, and evidence
+  that proves or disproves acceptance
+
+Verification levels:
+
+- `narrow`: changed-file, contract, or focused evidence checks
+- `standard`: package tests plus relevant contract checks
+- `release`: full release, launcher, sync, changelog, package, and public
+  surface checks
+
+Start with the smallest verification level that matches the risk, then escalate
+on failure, broad impact, release-facing work, or contradictory evidence.
+
+Sparse course-correction checks run at phase boundaries, after repeated repair,
+or when output starts to loop. Check whether Threadsmith is repeating a
+recommendation instead of executing, drifting from the approved phase, missing
+done-when evidence, overusing protocol labels, or hitting the same blocker
+twice. This is a lightweight trajectory check, not a full re-plan after every
+role.
+
 ## Output Matrix
 
 Use the full output only for `drive`, `continuous`, `recover`, bootstrap,
@@ -205,6 +258,9 @@ If a role packet exists and is consistent with the current phase, use it as the 
 16. Do not stop merely because the next internal role is reviewer, verifier, or
     closeout. Stop for phase boundaries and real gates; otherwise continue the
     role chain.
+17. In full-governance work, apply the Full Governance Speed Contract: named
+    stop reasons, role-scoped context, staged verification, and sparse
+    course-correction before adding operator pauses or broad LLM review.
 
 ## Contracts
 
