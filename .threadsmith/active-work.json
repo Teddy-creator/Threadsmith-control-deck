@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将下一刀收窄为 Bridge Operator Workflow v1，并新增实施计划。",
+      "taskSummary": "已将用户反馈收窄为 Threadsmith Phase Narrative Output v1，并新增计划文档。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已更新 operator guide：加入日常流程、可复制提示词、命令速查和恢复分支。",
+      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求 closeout 输出解释功能变化与下一 phase brief。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查 guide 保持 external agents read-only + proposal，没有暗示自动调度。",
+      "taskSummary": "已检查改动只影响输出契约，不扩大到 runtime command、前端或自动调度。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 project truth、skill contract、proposal status、round-trip smoke、fixtures smoke 和 diff hygiene。",
+      "taskSummary": "已运行 skill contract 和 diff hygiene；project truth 与 skill sync 在全局同步后复验。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 accepted closeout，可准备 PR。",
+      "taskSummary": "已记录 accepted closeout，准备提交与 PR。",
       "requiresUserDecision": false
     }
   ],
