@@ -58,6 +58,17 @@ const checks = [
   },
   {
     file: "SKILL.md",
+    label: "operator translation layer is explicit",
+    patterns: [
+      /### Operator Translation Rule/,
+      /Every dense technical noun/,
+      /技术名词：它在人话里意味着/,
+      /capability-first phrasing/,
+      /Do not let filenames, enum values, command names, or internal function names be the main explanation/
+    ]
+  },
+  {
+    file: "SKILL.md",
     label: "architecture layer explanation is explicit",
     patterns: [
       /架构\/流程缺口/,
@@ -79,6 +90,17 @@ const checks = [
       /Not changed/,
       /planner-style brief/,
       /what changed in this phase/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "operator translation rule is documented",
+    patterns: [
+      /## Operator Translation Rule/,
+      /must not make the operator decode implementation vocabulary/,
+      /capability-first wording/,
+      /what it means in plain operator language/,
+      /already user-facing or still only an internal foundation/
     ]
   },
   {

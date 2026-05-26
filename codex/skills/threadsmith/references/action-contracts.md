@@ -274,6 +274,32 @@ Avoid vague labels such as "continue optimization" or "improve workflow" unless
 they are immediately translated into questions, deliverables, and done-when
 criteria.
 
+## Operator Translation Rule
+
+Threadsmith must not make the operator decode implementation vocabulary.
+
+Whenever a full output mentions a dense technical noun such as a file path,
+function, command, enum value, provider, role, runtime object, packet, proposal,
+or internal module, translate it once in the same section.
+
+Use capability-first wording:
+
+- Bad: "`runCatchUp` calls `tickRuntime` and returns `needs_more`."
+- Good: "现在系统有了底层补跑执行器：它会按计划逐个补跑任务窗口。实现上，这个能力叫
+  `runCatchUp`，它通过 Runtime Service 的 `tickRuntime` 执行。"
+
+For each important technical object, answer:
+
+- what it means in plain operator language;
+- which layer it belongs to, such as truth, role packet, Context Packet,
+  runtime contract, action contract, tests, docs, CLI, or UI;
+- what the operator or system can do now because this object exists;
+- whether it is already user-facing or still only an internal foundation.
+
+`Threadsmith Decision` should stay compact and may contain protocol fields.
+The explanatory burden belongs in `本 phase 的结果`, `这一步具体做了什么`,
+`这一步解决的问题`, and `下一 phase 预览`.
+
 ## Next-Step Continuity Rule
 
 Every `next step` statement must first decide how the proposed move relates to

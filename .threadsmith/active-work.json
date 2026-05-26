@@ -3,13 +3,13 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将用户反馈收窄为 Threadsmith Phase Narrative Output v1，并新增计划文档。",
+      "taskSummary": "已将用户反馈收窄为 Threadsmith Operator Translation Layer v1，并新增计划文档。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求 closeout 输出解释功能变化与下一 phase brief。",
+      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求技术名词翻译成操作者能理解的能力变化与架构位置。",
       "requiresUserDecision": false
     },
     {

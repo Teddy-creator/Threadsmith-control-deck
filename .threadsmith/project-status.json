@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "threadsmith skill output contract / phase narrative",
+  "currentTrack": "threadsmith skill output contract / operator translation",
   "overallState": "stable",
-  "currentFocus": "Threadsmith Phase Narrative Output v1 已完成：closeout 输出现在要求解释本 phase 功能变化、解决的问题和下一 phase brief。",
-  "projectStatusSummary": "Threadsmith 的 full output contract 已从协议字段总结升级为 phase narrative：本 phase 结果、Before/Changed/After/Not changed、解决的问题、验证、下一 phase 预览和审核点。",
+  "currentFocus": "Threadsmith Operator Translation Layer v1 已完成：full output 现在要求把技术名词翻译成操作者能理解的能力变化与架构位置。",
+  "projectStatusSummary": "Threadsmith 的 full output contract 已从 phase narrative 继续加强为 operator translation：文件名、函数名、命令、枚举和 runtime 名词不能单独承担解释，必须说明它们的人话含义、所在层和用户/系统现在多了什么能力。",
   "latestAcceptedSlice": {
-    "title": "Threadsmith Phase Narrative Output v1",
-    "recordedAt": "2026-05-26T22:15:00+08:00"
+    "title": "Threadsmith Operator Translation Layer v1",
+    "recordedAt": "2026-05-26T23:05:00+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Use real Threadsmith closeout outputs to validate the new narrative structure before deeper automation work",
+    "title": "Use real Threadsmith outputs to validate whether operator translation reduces follow-up questions",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "输出结构变清楚不等于模型每次都完美遵守，需要用真实 closeout 样例继续观察。",
+    "输出契约变清楚不等于模型每次都完美遵守，需要用真实输出样例继续观察。",
     "这轮没有改变 runtime command，也没有解决自动多 agent 调度问题。",
     "如果 repo skill 与全局 installed skill 漂移，用户实际调用仍可能看不到新输出。"
   ],
-  "updatedAt": "2026-05-26T22:15:00+08:00"
+  "updatedAt": "2026-05-26T23:05:00+08:00"
 }

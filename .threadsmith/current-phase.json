@@ -1,13 +1,13 @@
 {
-  "phaseName": "Threadsmith Phase Narrative Output v1",
-  "phaseGoal": "把 $threadsmith 的 closeout / next phase 输出从协议字段总结升级为能解释功能变化、解决问题和下一 phase brief 的可审核叙事结构。",
-  "deliverable": "更新 repository skill 输出契约、action contract narrative rule、contract verifier、计划文档与对应 truth closeout。",
+  "phaseName": "Threadsmith Operator Translation Layer v1",
+  "phaseGoal": "把 $threadsmith 的 full output 从技术名词解释推进到操作者能理解的能力变化解释，避免用户继续自己解码文件名、函数名和枚举状态。",
+  "deliverable": "更新 repository skill 输出契约、action contract translation rule、contract verifier、计划文档与对应 truth closeout。",
   "inScope": [
-    "把 full output sections 改成 本 phase 的结果 / 这一步具体做了什么 / 这一步解决的问题 / 验证 / 下一 phase 预览 / 你需要审核的点",
-    "要求 这一步具体做了什么 使用 Before / Changed / After / Not changed",
-    "要求 下一 phase 预览 使用 Phase / continuity / Why now / Questions / Deliverables / Non-goals / Done when / Stop condition",
-    "在 action-contracts.md 中新增 Phase Narrative Rule",
-    "更新 verify-threadsmith-skill-contract.mjs，防止后续丢失这个结构",
+    "要求 dense technical nouns 在同一 section 中翻译成人话",
+    "要求解释优先写能力变化，再写内部技术对象",
+    "要求说明技术对象位于哪一层，以及是否已经 user-facing",
+    "在 action-contracts.md 中新增 Operator Translation Rule",
+    "更新 verify-threadsmith-skill-contract.mjs，防止后续丢失这个翻译层",
     "同步全局 installed skill 并验证 repo/global 一致"
   ],
   "outOfScope": [
@@ -18,7 +18,7 @@
     "runtime command 行为改造",
     "hosted state store、embeddings 或 semantic memory"
   ],
-  "stopCondition": "Threadsmith 输出契约已要求 phase closeout 解释 Before / Changed / After / Not changed，并用 planner-style brief 介绍下一 phase；repo skill 与全局 installed skill 保持同步。",
+  "stopCondition": "Threadsmith 输出契约已要求技术名词必须伴随操作者语言翻译，且 repo skill 与全局 installed skill 保持同步。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
     "npm run verify:skill-contract",
