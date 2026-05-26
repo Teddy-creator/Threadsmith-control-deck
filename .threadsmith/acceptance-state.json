@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Bridge Operator Workflow v1 已 accepted：Threadsmith 现在有一条可照着执行的跨 agent 状态桥日常流程，明确 truth、handoff/adapters、proposal、review、adoption、verification 与 closeout 边界。",
+  "currentClaim": "Threadsmith Phase Narrative Output v1 已 accepted：full output 现在必须解释本 phase 的功能变化和问题解决，并以可审核 brief 预览下一 phase。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Bridge Operator Workflow v1 实施计划",
+      "label": "新增 Threadsmith Phase Narrative Output v1 计划文档",
       "status": "pass"
     },
     {
-      "id": "workflow-guide",
-      "label": "operator guide 收敛成一条可执行日常流程",
+      "id": "output-contract",
+      "label": "SKILL.md full output 使用新的 phase narrative 结构",
       "status": "pass"
     },
     {
-      "id": "prompts",
-      "label": "补充常见外部 agent 角色的可复制提示词",
+      "id": "narrative-rule",
+      "label": "action contract 要求 Before / Changed / After / Not changed 与下一 phase brief",
       "status": "pass"
     },
     {
-      "id": "recovery",
-      "label": "补充 stale / wrong-phase / unsafe / missing-evidence 恢复分支",
+      "id": "contract-verifier",
+      "label": "skill contract verifier 覆盖新的输出结构",
       "status": "pass"
     },
     {
       "id": "verification",
-      "label": "project truth、skill contract、proposal status、round-trip smoke、fixtures smoke 与 diff hygiene 通过",
+      "label": "project truth、skill contract、skill sync 与 diff hygiene 通过",
       "status": "pass"
     }
   ],
@@ -32,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮仍不做自动多 agent 调度。",
-    "当前 bridge 是 local project state store + handoff/proposal workflow，不是 hosted backend 或 direct external write system。"
+    "这轮只改 Threadsmith 输出契约，不改 runtime command 或自动多 agent 调度。",
+    "新的输出质量仍依赖模型遵守 contract；后续可用真实使用样例继续校验可读性。"
   ],
   "finalState": "accepted"
 }

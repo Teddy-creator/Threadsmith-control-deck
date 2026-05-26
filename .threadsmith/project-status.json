@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "project state store / cross-agent bridge operator workflow",
+  "currentTrack": "threadsmith skill output contract / phase narrative",
   "overallState": "stable",
-  "currentFocus": "Bridge Operator Workflow v1 已完成：跨 agent 状态桥现在有可照着执行的日常操作流程。",
-  "projectStatusSummary": "Threadsmith 已完成 handoff/adapters、proposal status、proposal review、explicit adoption、isolated round-trip 和 operator workflow guide；当前仍不进入自动多 agent 调度。",
+  "currentFocus": "Threadsmith Phase Narrative Output v1 已完成：closeout 输出现在要求解释本 phase 功能变化、解决的问题和下一 phase brief。",
+  "projectStatusSummary": "Threadsmith 的 full output contract 已从协议字段总结升级为 phase narrative：本 phase 结果、Before/Changed/After/Not changed、解决的问题、验证、下一 phase 预览和审核点。",
   "latestAcceptedSlice": {
-    "title": "Bridge Operator Workflow v1",
-    "recordedAt": "2026-05-24T00:35:30+08:00"
+    "title": "Threadsmith Phase Narrative Output v1",
+    "recordedAt": "2026-05-26T22:15:00+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Pause before automatic scheduling; consider UX/doc review or state-store positioning next",
+    "title": "Use real Threadsmith closeout outputs to validate the new narrative structure before deeper automation work",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "操作者仍需要显式 review/adopt proposal，不能误解为自动多 agent 调度。",
-    "外部 agent 默认仍是只读 + proposal，不能直接写 committed truth。",
-    "如果未来做自动调度，需要单独 execution contract 和更强 stop/recovery 机制。"
+    "输出结构变清楚不等于模型每次都完美遵守，需要用真实 closeout 样例继续观察。",
+    "这轮没有改变 runtime command，也没有解决自动多 agent 调度问题。",
+    "如果 repo skill 与全局 installed skill 漂移，用户实际调用仍可能看不到新输出。"
   ],
-  "updatedAt": "2026-05-24T00:35:30+08:00"
+  "updatedAt": "2026-05-26T22:15:00+08:00"
 }

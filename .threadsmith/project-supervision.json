@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Bridge Operator Workflow v1 已 accepted：跨 agent 状态桥的日常操作流程、委托提示词、命令速查和恢复分支已补齐。",
+  "summary": "Threadsmith Phase Narrative Output v1 已 accepted：closeout 输出现在必须解释本 phase 的功能变化、解决的问题和下一 phase brief。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已将下一刀收窄为 Bridge Operator Workflow v1，并新增实施计划。",
+      "taskSummary": "已将下一刀收窄为 Threadsmith Phase Narrative Output v1，并新增计划文档。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/bridge-operator-workflow-v1.md",
-      "updatedAt": "2026-05-24T00:35:30+08:00"
+      "latestEvidenceLabel": "docs/plans/threadsmith-phase-narrative-output-v1.md",
+      "updatedAt": "2026-05-26T22:15:00+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已更新 operator guide：加入日常流程、可复制提示词、命令速查和恢复分支。",
+      "taskSummary": "已更新 SKILL.md 和 action contract：closeout 输出改为 phase narrative。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/guides/cross-agent-bridge-operator-guide.md",
-      "updatedAt": "2026-05-24T00:35:30+08:00"
+      "latestEvidenceLabel": "codex/skills/threadsmith/SKILL.md",
+      "updatedAt": "2026-05-26T22:15:00+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查 guide 保持 external agents read-only + proposal，没有暗示自动调度。",
+      "taskSummary": "已检查新输出结构没有越过既有 role / truth / verification 边界。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "rg automatic/direct-write/proposal boundaries",
-      "updatedAt": "2026-05-24T00:35:30+08:00"
+      "latestEvidenceLabel": "codex/skills/threadsmith/references/action-contracts.md",
+      "updatedAt": "2026-05-26T22:15:00+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已运行 project truth、skill contract、proposal status、round-trip smoke、fixtures smoke 和 diff hygiene。",
+      "taskSummary": "已运行 skill contract、skill sync 与 diff hygiene；project truth 也已同步更新。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run smoke:proposal-roundtrip",
-      "updatedAt": "2026-05-24T00:35:30+08:00"
+      "latestEvidenceLabel": "npm run verify:skill-sync",
+      "updatedAt": "2026-05-26T22:15:00+08:00"
     },
     {
       "id": "hygiene",
@@ -66,8 +66,8 @@
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/acceptance-state.json",
-      "updatedAt": "2026-05-24T00:35:30+08:00"
+      "updatedAt": "2026-05-26T22:15:00+08:00"
     }
   ],
-  "updatedAt": "2026-05-24T00:35:30+08:00"
+  "updatedAt": "2026-05-26T22:15:00+08:00"
 }

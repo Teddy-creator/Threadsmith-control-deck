@@ -35,20 +35,50 @@ const checks = [
       /Full output sections/,
       /Compact sync output/,
       /Conceptual answer/,
-      /### 上一步做了什么/,
-      /### 下一步具体要做什么/,
-      /### 当前架构位置/
+      /### 本 phase 的结果/,
+      /### 这一步具体做了什么/,
+      /### 下一 phase 预览/,
+      /### 你需要审核的点/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "phase narrative output structure is explicit",
+    patterns: [
+      /Before/,
+      /Changed/,
+      /After/,
+      /Not changed/,
+      /Why now/,
+      /Questions/,
+      /Deliverables/,
+      /Non-goals/,
+      /Done when/
     ]
   },
   {
     file: "SKILL.md",
     label: "architecture layer explanation is explicit",
     patterns: [
-      /架构影响或涉及对象/,
-      /项目层/,
-      /流程层/,
-      /状态层/,
-      /风险层/
+      /架构\/流程缺口/,
+      /项目 truth/,
+      /role packet/,
+      /Context Packet/,
+      /runtime contract/,
+      /action contract/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "phase narrative rule is documented",
+    patterns: [
+      /## Phase Narrative Rule/,
+      /Before/,
+      /Changed/,
+      /After/,
+      /Not changed/,
+      /planner-style brief/,
+      /what changed in this phase/
     ]
   },
   {

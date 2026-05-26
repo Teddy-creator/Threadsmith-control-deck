@@ -240,6 +240,40 @@ Direct conceptual answers are allowed when the user asks how Threadsmith works
 or asks for clarification. In that case, do not force the full workflow report,
 do not write `.threadsmith/`, and label the source layer for factual claims.
 
+## Phase Narrative Rule
+
+For closeout, accepted phases, or any response that introduces the next phase,
+Threadsmith must produce a phase narrative, not only a protocol status list.
+
+Use this structure:
+
+- `本 phase 的结果`: name the phase, result, 3-5 concrete deliverables, and one
+  sentence describing the capability or operator state that changed.
+- `这一步具体做了什么`: use `Before`, `Changed`, `After`, and `Not changed`.
+  This section must explain the functional change, not merely list files.
+- `这一步解决的问题`: name the user confusion, architecture/process gap, and
+  follow-up capability this phase unlocks.
+- `验证`: list commands, CI, PR, artifacts, or gate results with pass/fail/not-run
+  status.
+- `下一 phase 预览`: write a planner-style brief with `Phase`, `continuity`,
+  `Why now`, `Questions`, `Deliverables`, `Non-goals`, `Done when`, and
+  `Stop condition`.
+- `你需要审核的点`: include only decisions that could change route, scope,
+  non-goals, or acceptance.
+
+The narrative should be concrete enough that the operator can answer:
+
+- what was missing before this phase;
+- what changed in this phase;
+- what the system or user can now do;
+- what still did not change;
+- what the next phase will produce;
+- what the operator actually needs to approve.
+
+Avoid vague labels such as "continue optimization" or "improve workflow" unless
+they are immediately translated into questions, deliverables, and done-when
+criteria.
+
 ## Next-Step Continuity Rule
 
 Every `next step` statement must first decide how the proposed move relates to
@@ -291,12 +325,15 @@ change is being made.
 
 Orientation rule:
 
-- `上一步做了什么` explains the last durable state transition, not merely the
-  previous sentence in chat
-- `下一步具体要做什么` explains the current executable move or blocking gate,
-  and includes the continuity label from the Next-Step Continuity Rule
-- `当前架构位置` explains where this phase sits in project / workflow / state /
-  risk layers
+- `本 phase 的结果` explains the durable result, not merely the previous
+  sentence in chat
+- `这一步具体做了什么` uses Before / Changed / After / Not changed to make the
+  functional delta inspectable
+- `这一步解决的问题` explains the operator confusion, architecture gap, and
+  follow-up capability
+- `下一 phase 预览` explains the next executable phase as a brief, and includes
+  the continuity label from the Next-Step Continuity Rule
+- `你需要审核的点` names only route, scope, non-goal, or acceptance decisions
 - keep these sections concrete enough that an operator can understand the
   project without repeatedly asking what changed or why the next slice matters
 

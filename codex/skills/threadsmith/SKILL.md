@@ -60,10 +60,12 @@ when making status claims.
 Full output sections:
 
 1. `Threadsmith Decision`
-2. `上一步做了什么`
-3. `下一步具体要做什么`
-4. `当前架构位置`
-5. `需要确认的点`
+2. `本 phase 的结果`
+3. `这一步具体做了什么`
+4. `这一步解决的问题`
+5. `验证`
+6. `下一 phase 预览`
+7. `你需要审核的点`
 
 Compact sync output:
 
@@ -194,18 +196,37 @@ When using the full output, start with:
 - next best step
 - active gate or stop condition
 
-### 上一步做了什么
-- 结果：一句话说明刚刚完成、阻塞、恢复或仅同步了什么
-- 改了什么：列出 durable truth / code / tests / docs / no-change
-- 证据：命令、文件、PR、packet、gate decision，或说明本轮是只读同步
+### 本 phase 的结果
+- phase 名称
+- result: accepted / blocked / needs-recovery / read-only sync / in-progress
+- 交付物：列出 3-5 个真实产物，例如 PR、commit、docs、tests、truth、packet、command
+- 结果一句话：说明系统或用户现在多了什么能力，避免只说“已更新文件”
 
-### 下一步具体要做什么
+### 这一步具体做了什么
+- Before：原来缺什么、哪里让操作者困惑、系统处于什么限制
+- Changed：这次新增或修改了什么对象、流程、边界、测试或文档
+- After：现在用户或系统能做什么，和之前相比有什么明确变化
+- Not changed：哪些边界没有变，尤其是 non-goals、权限、自动化范围、未发布事项
+
+### 这一步解决的问题
+- 用户困惑：这一步让操作者少问什么问题、少踩什么坑
+- 架构/流程缺口：这一步补的是项目 truth、role packet、Context Packet、runtime contract、action contract、tests、docs、UI、CLI 还是 operator workflow
+- 为下一步铺路：这一步让哪个后续 phase 变得可判断或可执行
+
+### 验证
+- 已运行的命令、CI、PR、artifact 或 gate result
+- 明确 pass / fail / not run
+- 如果未运行某项验证，说明原因和残余风险
+
+### 下一 phase 预览
+- Phase：候选 phase 名称
 - continuity: new / continue / consolidate / gap-check / handoff / blocked
-- 目标
-- 具体动作
-- 架构影响或涉及对象：说明影响的是哪一层（项目 truth、role packet、Context Packet、runtime contract、action contract、tests、docs），以及为什么这层变化会影响后续流程
-- 成功标准
-- 停止条件
+- Why now：为什么现在做这一步，不做会卡在哪里
+- Questions：这一 phase 要回答哪些具体问题
+- Deliverables：会产出什么，不要只写“优化”或“继续推进”
+- Non-goals：明确不会做什么
+- Done when：怎么判断完成
+- Stop condition：遇到什么情况必须停下或让用户决策
 
 If `accepted previous recommendation` is `yes`, this section must describe the
 step being executed now or the blocking gate. It must not repeat the same
@@ -223,14 +244,10 @@ that work has not started. Use:
 - `handoff` when packaging the state for another thread or agent
 - `blocked` when a gate prevents execution
 
-### 当前架构位置
-- 项目层：当前目标、非目标、关键约束来自哪里
-- 流程层：当前 phase、role、gate 在整条 workflow 中的位置
-- 状态层：本轮依据的是 committed truth、role packet、Context Packet、repo evidence 还是 chat memory
-- 风险层：哪些架构边界、验证边界或人工确认门正在约束下一步
-
-### 需要确认的点
-- 仅保留会改变路线、范围或验收的事项
+### 你需要审核的点
+- 仅保留会改变路线、范围、non-goals 或验收标准的事项
+- 用操作者能判断的语言写，例如“是否先做 UX gap check，而不是自动调度”
+- 不要把已完成事实或无须决策的提醒放进这里
 
 Then perform the next narrow move unless the correct result is to stop and ask.
 
