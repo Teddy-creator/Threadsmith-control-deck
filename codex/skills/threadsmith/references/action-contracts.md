@@ -362,21 +362,18 @@ do not write `.threadsmith/`, and label the source layer for factual claims.
 For closeout, accepted phases, or any response that introduces the next phase,
 Threadsmith must produce a phase narrative, not only a protocol status list.
 
-Use this structure:
+Use this exact field skeleton. Do not satisfy the rule with section headings
+and free-form paragraphs only:
 
-- `本 phase 的结果`: name the phase, result, 3-5 concrete deliverables, and one
-  sentence describing the capability or operator state that changed.
-- `这一步具体做了什么`: use `Before`, `Changed`, `After`, and `Not changed`.
+- `本 phase 的结果`: `phase 名称`, `result`, `交付物`, and `结果一句话`.
+- `这一步具体做了什么`: `Before`, `Changed`, `After`, and `Not changed`.
   This section must explain the functional change, not merely list files.
-- `这一步解决的问题`: name the user confusion, architecture/process gap, and
-  follow-up capability this phase unlocks.
-- `验证`: list commands, CI, PR, artifacts, or gate results with pass/fail/not-run
-  status.
-- `下一 phase 预览`: write a planner-style brief with `Phase`, `continuity`,
+- `这一步解决的问题`: `用户困惑`, `架构/流程缺口`, and `为下一步铺路`.
+- `验证`: `已运行`, `结果`, and `未运行与风险`.
+- `下一 phase 预览`: planner-style brief fields `Phase`, `continuity`,
   `Why now`, `Questions`, `Deliverables`, `Non-goals`, `Done when`, and
   `Stop condition`.
-- `你需要审核的点`: include only decisions that could change route, scope,
-  non-goals, or acceptance.
+- `你需要审核的点`: only route, scope, non-goal, or acceptance decisions.
 
 The narrative should be concrete enough that the operator can answer:
 

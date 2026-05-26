@@ -141,7 +141,11 @@ read-only `sync`. For ordinary conceptual questions about Threadsmith, answer
 directly without the full contract, but still cite the relevant source layer
 when making status claims.
 
-Full output sections:
+Full output must use the exact field skeleton in `Output Contract`. Do not
+satisfy full output by writing only these section headings with free-form
+paragraphs underneath.
+
+Full output sections, each with required child fields:
 
 1. `Threadsmith Decision`
 2. `本 phase 的结果`
@@ -274,27 +278,29 @@ Load references only when needed:
 
 ## Output Contract
 
-When using the full output, start with:
+When using the full output, render this exact skeleton. Keep answers concise,
+but do not omit required labels. If a field has no content, write `none` or
+`not run` with the reason.
 
 ### Threadsmith Decision
 - mode: `sync`, `drive`, `continuous`, or `recover`
 - accepted previous recommendation: yes / no
 - source layer: committed truth / role packet / Context Packet / repo evidence / chat memory
-- project state
-- current phase state
-- acceptance state
-- selected role and role packet status
+- project state:
+- current phase state:
+- acceptance state:
+- selected role and role packet status:
 - role-chain status: internal continuing / stopped at closeout / blocked
-- action taken now or blocking gate
-- last completed step
-- next best step
-- active gate or stop condition
+- action taken now or blocking gate:
+- last completed step:
+- next best step:
+- active gate or stop condition:
 
 ### 本 phase 的结果
-- phase 名称
+- phase 名称:
 - result: accepted / blocked / needs-recovery / read-only sync / in-progress
-- 交付物：列出 3-5 个真实产物，例如 PR、commit、docs、tests、truth、packet、command
-- 结果一句话：说明系统或用户现在多了什么能力，避免只说“已更新文件”
+- 交付物: 3-5 个真实产物，例如 PR、commit、docs、tests、truth、packet、command
+- 结果一句话: 说明系统或用户现在多了什么能力，避免只说“已更新文件”
 
 ### 这一步具体做了什么
 - Before：原来缺什么、哪里让操作者困惑、系统处于什么限制
@@ -308,9 +314,9 @@ When using the full output, start with:
 - 为下一步铺路：这一步让哪个后续 phase 变得可判断或可执行
 
 ### 验证
-- 已运行的命令、CI、PR、artifact 或 gate result
-- 明确 pass / fail / not run
-- 如果未运行某项验证，说明原因和残余风险
+- 已运行:
+- 结果: pass / fail / not run
+- 未运行与风险:
 
 ### 下一 phase 预览
 - Phase：候选 phase 名称
