@@ -1,12 +1,17 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import {
   lockedPhaseSnapshotSchema,
+  phaseRunEvidenceBundleSchema,
+  phaseRunRoleRuntimeLedgerSchema,
+  phaseRunRoleRuntimeRecordSchema,
   phaseRunPauseSchema,
   phaseRunRecordSchema,
   phaseSliceArtifactSchema,
   type LockedPhaseSnapshot,
+  type PhaseRunEvidenceBundle,
   type PhaseRunPause,
   type PhaseRunRecord,
+  type PhaseRunRoleRuntimeRecord,
   type PhaseSliceArtifact
 } from "@threadsmith/domain";
 import {
@@ -142,6 +147,89 @@ export async function readPhasePause(projectRoot: string, phaseRunId: string) {
       "utf8"
     );
     return phaseRunPauseSchema.parse(JSON.parse(raw));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return null;
+    }
+    throw error;
+  }
+}
+
+export async function appendPhaseRunRoleRuntime(
+  projectRoot: string,
+  phaseRunId: string,
+  value: PhaseRunRoleRuntimeRecord,
+  updatedAt = value.finishedAt
+) {
+  const parsedRecord = phaseRunRoleRuntimeRecordSchema.parse({
+    ...value,
+    phaseRunId
+  });
+  const current = await readPhaseRunRoleRuntime(projectRoot, phaseRunId);
+  const ledger = phaseRunRoleRuntimeLedgerSchema.parse({
+    phaseRunId,
+    updatedAt,
+    records: [...(current?.records ?? []), parsedRecord]
+  });
+
+  await mkdir(getPhaseRunDir(projectRoot, phaseRunId), { recursive: true });
+  await writeFile(
+    getPhaseRunFilePath(projectRoot, phaseRunId, PHASE_RUN_FILES.roleRuntime),
+    formatJson(ledger),
+    "utf8"
+  );
+
+  return ledger;
+}
+
+export async function readPhaseRunRoleRuntime(
+  projectRoot: string,
+  phaseRunId: string
+) {
+  try {
+    const raw = await readFile(
+      getPhaseRunFilePath(projectRoot, phaseRunId, PHASE_RUN_FILES.roleRuntime),
+      "utf8"
+    );
+    return phaseRunRoleRuntimeLedgerSchema.parse(JSON.parse(raw));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return null;
+    }
+    throw error;
+  }
+}
+
+export async function writePhaseRunEvidenceBundle(
+  projectRoot: string,
+  phaseRunId: string,
+  value: PhaseRunEvidenceBundle
+) {
+  const parsed = phaseRunEvidenceBundleSchema.parse({
+    ...value,
+    phaseRunId
+  });
+
+  await mkdir(getPhaseRunDir(projectRoot, phaseRunId), { recursive: true });
+  await writeFile(
+    getPhaseRunFilePath(projectRoot, phaseRunId, PHASE_RUN_FILES.evidenceBundle),
+    formatJson(parsed),
+    "utf8"
+  );
+
+  return parsed;
+}
+
+export async function readPhaseRunEvidenceBundle(
+  projectRoot: string,
+  phaseRunId: string
+) {
+  try {
+    const raw = await readFile(
+      getPhaseRunFilePath(projectRoot, phaseRunId, PHASE_RUN_FILES.evidenceBundle),
+      "utf8"
+    );
+    return phaseRunEvidenceBundleSchema.parse(JSON.parse(raw));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return null;

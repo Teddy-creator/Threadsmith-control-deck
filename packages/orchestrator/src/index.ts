@@ -8,3 +8,4 @@ export * from "./deckActionBridge.ts";
 export * from "./bootstrap.ts";
 export * from "./autopilotContinuation.ts";
 export * from "./projectCharterGate.ts";
+export * from "./verificationPolicy.ts";
