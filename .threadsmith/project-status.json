@@ -1,23 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "threadsmith skill output contract / operator translation",
+  "currentTrack": "threadsmith skill drive cadence / role chain execution",
   "overallState": "stable",
-  "currentFocus": "Threadsmith Operator Translation Layer v1 已完成：full output 现在要求把技术名词翻译成操作者能理解的能力变化与架构位置。",
-  "projectStatusSummary": "Threadsmith 的 full output contract 已从 phase narrative 继续加强为 operator translation：文件名、函数名、命令、枚举和 runtime 名词不能单独承担解释，必须说明它们的人话含义、所在层和用户/系统现在多了什么能力。",
+  "currentFocus": "Threadsmith Role Chain Execution Cadence v1 已完成：drive 现在要求已批准 phase 内连续执行 executor -> reviewer -> verifier -> closeout，只在真实 gate 或 closeout 后停。",
+  "projectStatusSummary": "Threadsmith 的 skill contract 已把推进节奏从每个角色都要用户确认，收敛为 phase 内 role-chain 自动推进、phase 边界再停下给用户审核。",
   "latestAcceptedSlice": {
-    "title": "Threadsmith Operator Translation Layer v1",
-    "recordedAt": "2026-05-26T23:05:00+08:00"
+    "title": "Threadsmith Role Chain Execution Cadence v1",
+    "recordedAt": "2026-05-26T23:45:00+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Use real Threadsmith outputs to validate whether operator translation reduces follow-up questions",
+    "title": "Use real Threadsmith drive outputs to validate whether role transitions stop asking for routine approvals",
     "recordedAt": null
   },
   "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
   "nextMilestoneId": null,
   "topRisks": [
-    "输出契约变清楚不等于模型每次都完美遵守，需要用真实输出样例继续观察。",
-    "这轮没有改变 runtime command，也没有解决自动多 agent 调度问题。",
+    "skill 契约变清楚不等于模型每次都完美遵守，需要用真实 drive 样例继续观察。",
+    "这轮没有实现新的 runtime autopilot engine，也没有做自动多 agent 调度。",
     "如果 repo skill 与全局 installed skill 漂移，用户实际调用仍可能看不到新输出。"
   ],
-  "updatedAt": "2026-05-26T23:05:00+08:00"
+  "updatedAt": "2026-05-26T23:45:00+08:00"
 }

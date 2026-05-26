@@ -17,8 +17,9 @@ Use this ladder before choosing an action:
    unless an explicit low-risk read-only bypass applies.
 4. Mode: `continuous` for keep-going/autopilot, `drive` for next-step work,
    `sync` for read-only status, `recover` for repair.
-5. Role: choose planner, executor, reviewer, verifier, closeout, or hygiene from
-   current truth and role packet freshness.
+5. Role chain: choose the next required role from current truth and role packet
+   freshness, then decide whether it is an internal gate in an already-approved
+   phase.
 6. Output: use the smallest output level that still orients the operator.
 
 Gate handling:
@@ -52,7 +53,8 @@ Stop condition:
 
 Meaning:
 
-- move the current project through the next narrow Threadsmith step
+- move the current project through the approved phase's role chain until
+  closeout or a real stop condition
 
 Use when:
 
@@ -71,12 +73,22 @@ Typical routes:
 
 Stop condition:
 
-- the selected role completes its narrow artifact
+- closeout completes and the next phase needs operator review
 - a gate blocks progress
 - verification fails
 - writeback fails
 - if the user already accepted the previous recommended next step, do not repeat it as a new recommendation; either execute it or report the blocking gate
 - if acceptance is `accepted-with-closeout-pending`, the narrow step is closeout; do not re-run planning, review, or verification unless evidence has become stale or contradictory
+
+Do not stop merely because executor completed and reviewer is next, reviewer
+completed and verifier is next, or verifier completed and closeout is next.
+Those are internal role gates inside the same approved phase. Preserve the
+gates by running them, not by asking the operator to approve each transition.
+
+Stop mid-chain only when scope, non-goals, acceptance criteria, destructive
+actions, credentials, external services, failed verification, missing evidence,
+writeback failure, stale truth, or contradictory role packets require a human
+decision or recovery.
 
 ## `continuous`
 
@@ -195,8 +207,8 @@ a concrete next step. In that case:
 
 - mark `accepted previous recommendation` as `yes`
 - inherit the previous recommended action
-- inherit the selected mode and role when still valid
-- execute the accepted step or report the blocking gate
+- inherit the selected mode and role-chain when still valid
+- execute the accepted phase chain or report the blocking gate
 - do not end by asking for the same approval again
 - do not choose `sync` merely because the user's reply is short
 
@@ -214,8 +226,30 @@ Anti-repeat invariant:
 - execution-shaped means it contains an action attempt, artifact creation,
   verification command, truth writeback, or explicit blocking gate
 - it must not restate "next I recommend..." as the main result
+- it must not stop only to ask whether to run the next internal role gate
 - if no execution is possible because the previous recommendation is not
   recoverable from context, switch to `recover` and say exactly what is missing
+
+## Role Chain Cadence Rule
+
+Threadsmith pauses between phases, not between routine roles.
+
+Once a phase plan or concrete next-step recommendation is accepted, the default
+execution cadence is:
+
+```text
+planner approval -> executor -> reviewer -> verifier -> closeout -> stop for next phase review
+```
+
+Internal role transitions are not operator approval points:
+
+- executor -> reviewer means "review the just-created artifact";
+- reviewer -> verifier means "verify the reviewed artifact";
+- verifier -> closeout means "record accepted truth and package the result".
+
+Use `下一内部 gate` for these transitions if they need to be named. Reserve
+`下一 phase 预览` for closeout or a genuine new phase. This avoids presenting
+reviewer, verifier, or closeout as a fresh user decision.
 
 ## Output Level Rule
 

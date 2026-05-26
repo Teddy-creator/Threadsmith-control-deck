@@ -1,13 +1,14 @@
 {
-  "phaseName": "Threadsmith Operator Translation Layer v1",
-  "phaseGoal": "把 $threadsmith 的 full output 从技术名词解释推进到操作者能理解的能力变化解释，避免用户继续自己解码文件名、函数名和枚举状态。",
-  "deliverable": "更新 repository skill 输出契约、action contract translation rule、contract verifier、计划文档与对应 truth closeout。",
+  "phaseName": "Threadsmith Role Chain Execution Cadence v1",
+  "phaseGoal": "把 $threadsmith 的 drive 节奏从每个角色都停一次，修正为已批准 phase 内自动执行 executor -> reviewer -> verifier -> closeout，只在真实 gate 或 closeout 后停。",
+  "deliverable": "更新 repository skill drive 语义、action contract role-chain cadence rule、contract verifier、计划文档与对应 truth closeout。",
   "inScope": [
-    "要求 dense technical nouns 在同一 section 中翻译成人话",
-    "要求解释优先写能力变化，再写内部技术对象",
-    "要求说明技术对象位于哪一层，以及是否已经 user-facing",
-    "在 action-contracts.md 中新增 Operator Translation Rule",
-    "更新 verify-threadsmith-skill-contract.mjs，防止后续丢失这个翻译层",
+    "定义默认节奏为 phase 间暂停，而不是 role 间暂停",
+    "要求已批准 phase 下 executor -> reviewer -> verifier -> closeout 作为内部 role chain 连续推进",
+    "明确 reviewer / verifier / closeout 只是下一内部 gate，不是需要用户批准的新 phase",
+    "列出 mid-chain stop 条件：scope 变化、review blocker、verification fail、missing evidence、destructive action、credentials、writeback failure、stale truth、contradictory packet",
+    "在 action-contracts.md 中新增 Role Chain Cadence Rule",
+    "更新 verify-threadsmith-skill-contract.mjs，防止后续丢失这个节奏规则",
     "同步全局 installed skill 并验证 repo/global 一致"
   ],
   "outOfScope": [
@@ -15,10 +16,10 @@
     "外部 agent 直接写 committed truth",
     "前端 UI 改造",
     "发布 release",
-    "runtime command 行为改造",
+    "runtime command 实现改造",
     "hosted state store、embeddings 或 semantic memory"
   ],
-  "stopCondition": "Threadsmith 输出契约已要求技术名词必须伴随操作者语言翻译，且 repo skill 与全局 installed skill 保持同步。",
+  "stopCondition": "Threadsmith drive 契约已要求已批准 phase 内连续执行 role chain，并只在 closeout 或真实 gate 停下；repo skill 与全局 installed skill 保持同步。",
   "verificationForThisPhase": [
     "npm run verify:project-truth",
     "npm run verify:skill-contract",

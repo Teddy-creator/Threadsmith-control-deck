@@ -39,15 +39,46 @@ Resolve every invocation in this order. Do not skip ahead.
    request, `drive` for advance / implement / verify / closeout, `sync` for
    read-only status / refresh / "do not implement", and `recover` for repair.
    If unclear, prefer `sync`.
-5. **Role selection:** select the next role from acceptance state and current
-   phase: planner -> executor -> reviewer -> verifier -> closeout, with hygiene
-   for stale, contradictory, or handoff work.
+5. **Role selection / chain:** select the next required role from acceptance
+   state and current phase, then decide whether it belongs to the
+   already-approved phase chain: planner -> executor -> reviewer -> verifier ->
+   closeout, with hygiene for stale, contradictory, or handoff work.
 6. **Output level:** choose the smallest output shape that still orients the
    operator. Use the Output Matrix below.
 
 If the current acceptance state is `accepted-with-closeout-pending` and the user
 approves continuing, select `drive` with role `closeout` unless a blocking gate
 or new user decision is discovered.
+
+## Phase Execution Cadence
+
+Default rhythm: pause between phases, not between roles.
+
+When the user has approved the current phase plan or accepts a concrete
+Threadsmith recommendation, `drive` should continue the internal role chain
+until closeout or a real stop condition. The normal chain is:
+
+```text
+planner approval -> executor -> reviewer -> verifier -> closeout -> stop for next phase review
+```
+
+Do not ask the operator to approve routine transitions such as executor ->
+reviewer, reviewer -> verifier, or verifier -> closeout. Those are internal
+gates inside the same phase, not new phases.
+
+Stop mid-chain only when a real gate appears:
+
+- scope, non-goals, or acceptance criteria would change
+- reviewer finds a blocker or scope drift
+- verifier fails or evidence is missing
+- destructive git, publishing, unavailable credentials, or external services
+  are required
+- truth, role packet, or repo evidence contradicts the selected action
+- writeback fails or recovery is required
+
+`下一 phase 预览` belongs at closeout or phase-boundary reporting. During an
+internal role handoff, say which role/gate will run next, but do not present it
+as something the operator must approve.
 
 ## Output Matrix
 
@@ -101,11 +132,14 @@ Use when the user asks to advance, continue, implement, verify, close out, or ru
 Behavior:
 
 - read truth and context artifacts
-- choose the next role from the phase and acceptance state
+- choose the next role-chain segment from the phase and acceptance state
 - prefer the matching role packet when present
-- perform only the next narrow move
+- after phase approval, run executor -> reviewer -> verifier -> closeout as one
+  internal chain unless a stop condition appears
 - update `.threadsmith/` at material boundaries
 - do not skip review, verification, or closeout gates
+- stop after closeout with a next-phase preview instead of asking for approval
+  between internal roles
 
 ### `continuous`
 
@@ -168,6 +202,9 @@ If a role packet exists and is consistent with the current phase, use it as the 
     a new direction, continuation, consolidation, gap check, handoff, or blocked
     recovery. If the direction has already started, say "continue",
     "consolidate", or "gap-check" instead of presenting it as a new start.
+16. Do not stop merely because the next internal role is reviewer, verifier, or
+    closeout. Stop for phase boundaries and real gates; otherwise continue the
+    role chain.
 
 ## Contracts
 
@@ -191,6 +228,7 @@ When using the full output, start with:
 - current phase state
 - acceptance state
 - selected role and role packet status
+- role-chain status: internal continuing / stopped at closeout / blocked
 - action taken now or blocking gate
 - last completed step
 - next best step
@@ -228,6 +266,11 @@ When using the full output, start with:
 - Done when：怎么判断完成
 - Stop condition：遇到什么情况必须停下或让用户决策
 
+Only use this section for a real next phase or phase-boundary closeout. If the
+next action is merely reviewer, verifier, or closeout inside the current phase,
+describe it as `下一内部 gate` in the current section and continue unless a
+stop condition applies.
+
 ### Operator Translation Rule
 - Every dense technical noun must be translated once in the same section.
 - Use this pattern when a term could be unclear: `技术名词：它在人话里意味着...；它位于...层；它让操作者现在能...`
@@ -257,7 +300,8 @@ that work has not started. Use:
 - 用操作者能判断的语言写，例如“是否先做 UX gap check，而不是自动调度”
 - 不要把已完成事实或无须决策的提醒放进这里
 
-Then perform the next narrow move unless the correct result is to stop and ask.
+Then continue the approved phase's role chain unless the correct result is to
+stop at closeout or a real gate.
 
 ## Bootstrap
 
