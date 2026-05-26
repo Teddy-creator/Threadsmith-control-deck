@@ -1,24 +1,24 @@
 {
-  "currentClaim": "Threadsmith Operator Translation Layer v1 已 accepted：full output 现在必须把文件名、函数名、命令、枚举和 runtime 名词翻译成操作者能理解的能力变化与架构位置。",
+  "currentClaim": "Threadsmith Role Chain Execution Cadence v1 已 accepted：$threadsmith drive 现在要求已批准 phase 内连续执行 executor -> reviewer -> verifier -> closeout，只在真实 gate 或 closeout 后停。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Threadsmith Operator Translation Layer v1 计划文档",
+      "label": "新增 Threadsmith Role Chain Execution Cadence v1 计划文档",
       "status": "pass"
     },
     {
       "id": "output-contract",
-      "label": "SKILL.md full output 要求技术名词伴随人话解释",
+      "label": "SKILL.md drive 语义要求 phase 内 role chain 连续推进",
       "status": "pass"
     },
     {
-      "id": "translation-rule",
-      "label": "action contract 要求 capability-first wording 和 operator translation",
+      "id": "cadence-rule",
+      "label": "action contract 要求 phase 间暂停而不是 role 间暂停",
       "status": "pass"
     },
     {
       "id": "contract-verifier",
-      "label": "skill contract verifier 覆盖 operator translation rule",
+      "label": "skill contract verifier 覆盖 role-chain cadence rule",
       "status": "pass"
     },
     {
@@ -32,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只改 Threadsmith 输出契约，不改 runtime command、前端或自动多 agent 调度。",
-    "新的翻译层仍依赖模型遵守 contract；后续可用真实输出样例继续校验是否足够清楚。"
+    "这轮只改 Threadsmith skill / action contract 的推进节奏语义，不改前端或自动多 agent 调度。",
+    "这仍是 skill 契约层修复，不是 runtime autopilot engine 的新实现。"
   ],
   "finalState": "accepted"
 }

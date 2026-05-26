@@ -3,19 +3,19 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将用户反馈收窄为 Threadsmith Operator Translation Layer v1，并新增计划文档。",
+      "taskSummary": "已将用户反馈收窄为 Threadsmith Role Chain Execution Cadence v1，并新增计划文档。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求技术名词翻译成操作者能理解的能力变化与架构位置。",
+      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求 drive 在已批准 phase 内连续推进 role chain。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查改动只影响输出契约，不扩大到 runtime command、前端或自动调度。",
+      "taskSummary": "已检查改动只影响 skill 推进节奏契约，不扩大到 runtime command、前端或自动调度。",
       "requiresUserDecision": false
     },
     {

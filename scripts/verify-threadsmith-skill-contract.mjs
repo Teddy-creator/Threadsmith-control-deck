@@ -29,6 +29,18 @@ const checks = [
   },
   {
     file: "SKILL.md",
+    label: "phase execution cadence pauses between phases, not roles",
+    patterns: [
+      /## Phase Execution Cadence/,
+      /pause between phases, not between roles/,
+      /executor -> reviewer -> verifier -> closeout/,
+      /Do not ask the operator to approve routine transitions/,
+      /Do not stop merely because the next internal role is reviewer, verifier, or\s+closeout/,
+      /下一内部 gate/
+    ]
+  },
+  {
+    file: "SKILL.md",
     label: "output matrix and orientation sections are required",
     patterns: [
       /## Output Matrix/,
@@ -131,6 +143,18 @@ const checks = [
       /must not restate/,
       /## Output Level Rule/,
       /Direct conceptual answers are allowed/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "role chain cadence is documented",
+    patterns: [
+      /## Role Chain Cadence Rule/,
+      /pauses between phases, not between routine roles/,
+      /planner approval -> executor -> reviewer -> verifier -> closeout/,
+      /Internal role transitions are not operator approval points/,
+      /Use `下一内部 gate`/,
+      /Reserve\s+`下一 phase 预览` for closeout/
     ]
   },
   {
