@@ -5,6 +5,7 @@ import {
   type ProviderId,
   type SkillCapability,
   type SkillOrchestratorConfig,
+  type VerificationPolicyDecision,
   executionPacketSchema
 } from "@threadsmith/domain";
 import {
@@ -19,35 +20,70 @@ import {
   readRecentEvents
 } from "@threadsmith/fs-bridge";
 import type { RoleExecutionRequest } from "./providerTypes.ts";
+import { buildAndWritePhaseEvidenceBundle } from "./phaseEvidence.ts";
+import { decidePlannerMode, type PlannerMode } from "./plannerMode.ts";
+import { decideVerificationPolicy } from "./verificationPolicy.ts";
 
-function baseStateRefs(): ContextReference[] {
-  return [
-    {
-      kind: "state",
-      path: ".threadsmith/project-brief.json",
-      title: "项目简报"
-    },
-    {
-      kind: "state",
-      path: ".threadsmith/project-status.json",
-      title: "项目状态"
-    },
-    {
-      kind: "state",
-      path: ".threadsmith/current-phase.json",
-      title: "当前 phase"
-    },
-    {
-      kind: "state",
-      path: ".threadsmith/acceptance-state.json",
-      title: "验收状态"
-    },
-    {
-      kind: "state",
-      path: ".threadsmith/active-work.json",
-      title: "进行中的工作"
-    }
-  ];
+const STATE_REF_DEFINITIONS = {
+  projectBrief: {
+    kind: "state",
+    path: ".threadsmith/project-brief.json",
+    title: "项目简报"
+  },
+  projectStatus: {
+    kind: "state",
+    path: ".threadsmith/project-status.json",
+    title: "项目状态"
+  },
+  currentPhase: {
+    kind: "state",
+    path: ".threadsmith/current-phase.json",
+    title: "当前 phase"
+  },
+  acceptanceState: {
+    kind: "state",
+    path: ".threadsmith/acceptance-state.json",
+    title: "验收状态"
+  },
+  activeWork: {
+    kind: "state",
+    path: ".threadsmith/active-work.json",
+    title: "进行中的工作"
+  }
+} as const satisfies Record<string, ContextReference>;
+
+type StateRefKey = keyof typeof STATE_REF_DEFINITIONS;
+
+function stateRefs(keys: StateRefKey[]): ContextReference[] {
+  return keys.map((key) => STATE_REF_DEFINITIONS[key]);
+}
+
+function roleStateRefs(role: PhaseOwner): ContextReference[] {
+  switch (role) {
+    case "planner":
+      return stateRefs([
+        "projectBrief",
+        "projectStatus",
+        "currentPhase",
+        "acceptanceState"
+      ]);
+    case "executor":
+      return stateRefs(["currentPhase", "acceptanceState", "activeWork"]);
+    case "reviewer":
+      return stateRefs(["currentPhase", "acceptanceState"]);
+    case "verifier":
+      return stateRefs(["currentPhase", "acceptanceState"]);
+    case "closeout":
+      return stateRefs(["projectStatus", "currentPhase", "acceptanceState"]);
+    case "hygiene":
+      return stateRefs([
+        "projectBrief",
+        "projectStatus",
+        "currentPhase",
+        "acceptanceState",
+        "activeWork"
+      ]);
+  }
 }
 
 function roadmapRef(): ContextReference {
@@ -85,23 +121,32 @@ function roleContextPacketRef(role: PhaseOwner): ContextReference {
 }
 
 function latestRunRefs(
-  records: Awaited<ReturnType<typeof readLatestAgentRuns>>
+  records: Awaited<ReturnType<typeof readLatestAgentRuns>>,
+  options: {
+    roles?: PhaseOwner[];
+    limit?: number;
+  } = {}
 ): ContextReference[] {
-  return records.slice(0, 2).flatMap((record) => {
-    const artifactPath = record.summaryPath ?? record.resultPath;
+  const roleSet = options.roles ? new Set(options.roles) : null;
 
-    if (!artifactPath) {
-      return [];
-    }
+  return records
+    .filter((record) => !roleSet || roleSet.has(record.role))
+    .slice(0, options.limit ?? 2)
+    .flatMap((record) => {
+      const artifactPath = record.summaryPath ?? record.resultPath;
 
-    return [
-      {
-        kind: "artifact" as const,
-        path: artifactPath,
-        title: `最近运行：${record.role} / ${record.status}`
+      if (!artifactPath) {
+        return [];
       }
-    ];
-  });
+
+      return [
+        {
+          kind: "artifact" as const,
+          path: artifactPath,
+          title: `最近运行：${record.role} / ${record.status}`
+        }
+      ];
+    });
 }
 
 function phaseRunRecordPath(phaseRunId: string) {
@@ -155,6 +200,66 @@ async function latestPhaseRunRefs(projectRoot: string): Promise<ContextReference
   }
 
   return refs;
+}
+
+function roleLatestRunRefs(
+  role: PhaseOwner,
+  records: Awaited<ReturnType<typeof readLatestAgentRuns>>
+): ContextReference[] {
+  switch (role) {
+    case "planner":
+      return latestRunRefs(records, {
+        roles: ["closeout", "reviewer", "verifier"],
+        limit: 2
+      });
+    case "executor":
+      return latestRunRefs(records, {
+        roles: ["planner", "verifier", "reviewer"],
+        limit: 2
+      });
+    case "reviewer":
+      return latestRunRefs(records, {
+        roles: ["executor", "planner"],
+        limit: 2
+      });
+    case "verifier":
+      return latestRunRefs(records, {
+        roles: ["reviewer", "executor"],
+        limit: 2
+      });
+    case "closeout":
+      return latestRunRefs(records, {
+        roles: ["verifier", "reviewer", "executor"],
+        limit: 3
+      });
+    case "hygiene":
+      return latestRunRefs(records, { limit: 4 });
+  }
+}
+
+function roleContextRefs(input: {
+  role: PhaseOwner;
+  events: Awaited<ReturnType<typeof readRecentEvents>>;
+  phaseRefs: ContextReference[];
+  evidenceRefs: ContextReference[];
+  latestRuns: Awaited<ReturnType<typeof readLatestAgentRuns>>;
+}) {
+  const eventLimit = input.role === "hygiene" ? 2 : 1;
+  const eventContext = eventRefs(input.events).slice(0, eventLimit);
+  const runContext = roleLatestRunRefs(input.role, input.latestRuns);
+  const common = [
+    ...roleStateRefs(input.role),
+    ...eventContext,
+    ...input.phaseRefs,
+    ...input.evidenceRefs,
+    ...runContext
+  ];
+
+  if (input.role === "planner" || input.role === "hygiene") {
+    return [...common, roadmapRef()];
+  }
+
+  return common;
 }
 
 function defaultOutput(runId: string) {
@@ -249,15 +354,48 @@ function packetListLines(items: string[], emptyText: string) {
   return items.length > 0 ? items.map((item) => `- ${item}`).join("\n") : `- ${emptyText}`;
 }
 
-function planningMode(finalState: string) {
-  return finalState === "review-blocked" || finalState === "verification-failed"
-    ? "repair"
-    : "primary";
+function packetVerificationPolicyLines(policy: ExecutionPacket["verificationPolicy"]) {
+  if (!policy) {
+    return ["- 未附加 verification policy"];
+  }
+
+  return [
+    `- Level: ${policy.recommendedLevel}`,
+    `- Reason: ${policy.reason}`,
+    "- Required checks:",
+    ...policy.requiredChecks.map((item) => `  - ${item}`),
+    "- Escalation signals:",
+    ...(policy.escalationSignals.length > 0
+      ? policy.escalationSignals.map((item) => `  - ${item}`)
+      : ["  - none"])
+  ];
 }
 
-function plannerDoneWhen(mode: "primary" | "repair") {
+function plannerSliceKindForMode(mode: PlannerMode) {
+  return mode === "planner-reset" ? "repair" : "primary";
+}
+
+function plannerDoneWhen(mode: PlannerMode) {
+  const sliceKind = plannerSliceKindForMode(mode);
+
+  if (mode === "planning-phase") {
+    return [
+      "产出当前 planning phase 要求的计划、边界或 brief",
+      "明确下一步是否可以进入 executor，还是需要 operator 审核",
+      "如果当前真相不足以安全继续，则改为给出 pause recommendation"
+    ];
+  }
+
+  if (mode === "planner-lite") {
+    return [
+      "只收窄下一条最小 slice，不重新规划整个项目",
+      "明确 slice 的 scope、done when 与 verification",
+      "如果当前真相不足以安全继续，则改为给出 pause recommendation"
+    ];
+  }
+
   return [
-    `产出一条不超出当前 phase 的 ${mode} slice 建议`,
+    `产出一条不超出当前 phase 的 ${sliceKind} slice 建议`,
     "明确 slice 的 scope、done when 与 verification",
     "如果当前真相不足以安全继续，则改为给出 pause recommendation"
   ];
@@ -367,6 +505,9 @@ export function renderRolePrompt(packet: ExecutionPacket) {
     "Verification:",
     packetListLines(packet.verification, "本轮没有额外验证命令"),
     "",
+    "Verification Policy:",
+    ...packetVerificationPolicyLines(packet.verificationPolicy),
+    "",
     "Context Refs:",
     packetContextLines(packet.contextRefs),
     "",
@@ -386,11 +527,19 @@ export function renderRolePrompt(packet: ExecutionPacket) {
 
 function buildPlannerObjective(
   phaseGoal: string,
-  mode: "primary" | "repair"
+  mode: PlannerMode,
+  reason: string
 ) {
-  return mode === "repair"
-    ? `为当前锁定 phase 收束下一条 repair slice，并基于失败信号缩小范围。当前 phase goal：${phaseGoal}`
-    : `为当前锁定 phase 收束下一条 primary slice。当前 phase goal：${phaseGoal}`;
+  switch (mode) {
+    case "planning-phase":
+      return `Planner mode: planning-phase。当前 phase 的交付物就是计划/边界/brief；请完成该 planning deliverable，而不是直接写实现。原因：${reason} 当前 phase goal：${phaseGoal}`;
+    case "planner-reset":
+      return `Planner mode: planner-reset。为当前锁定 phase 收束下一条 repair slice，并基于失败或阻塞信号缩小范围。原因：${reason} 当前 phase goal：${phaseGoal}`;
+    case "planner-lite":
+      return `Planner mode: planner-lite。只为当前锁定 phase 收窄下一条最小 slice，不重新规划整个项目。原因：${reason} 当前 phase goal：${phaseGoal}`;
+    case "direct-executor":
+      return `Planner mode: direct-executor。当前 truth 已指向后续执行角色；只有在被显式调用为 planner 时才重新校准。原因：${reason} 当前 phase goal：${phaseGoal}`;
+  }
 }
 
 function buildRolePacket(input: {
@@ -402,6 +551,7 @@ function buildRolePacket(input: {
   scope: string[];
   doneWhen: string[];
   verification: string[];
+  verificationPolicy?: VerificationPolicyDecision;
   contextRefs: ContextReference[];
 }): ExecutionPacket {
   const route = resolveSkillRoute({
@@ -419,6 +569,7 @@ function buildRolePacket(input: {
     scope: input.scope,
     doneWhen: input.doneWhen,
     verification: input.verification,
+    verificationPolicy: input.verificationPolicy,
     protocolInstruction: buildMiniProtocolInstruction({
       route,
       role: input.role,
@@ -440,26 +591,45 @@ export async function buildPacketForRole(
   const recentEvents = await readRecentEvents(input.projectRoot, 4);
   const latestRuns = await readLatestAgentRuns(input.projectRoot, 4);
   const phaseRefs = await latestPhaseRunRefs(input.projectRoot);
-  const sharedRefs = [...baseStateRefs(), ...eventRefs(recentEvents)];
-  const downstreamRefs = latestRunRefs(latestRuns);
+  const evidenceBundle = await buildAndWritePhaseEvidenceBundle(input.projectRoot);
+  const evidenceRefs = evidenceBundle ? [evidenceBundle.ref] : [];
+  const verificationPolicy =
+    evidenceBundle?.bundle.verification ??
+    decideVerificationPolicy({
+      phase: state.currentPhase,
+      acceptance: state.acceptanceState,
+      changedFiles: [],
+      commands: state.currentPhase.verificationForThisPhase
+    });
+  const contextRefs = roleContextRefs({
+    role: input.role,
+    events: recentEvents,
+    phaseRefs,
+    evidenceRefs,
+    latestRuns
+  });
 
   switch (input.role) {
     case "planner": {
-      const mode = planningMode(state.acceptanceState.finalState);
+      const mode = decidePlannerMode(state);
 
       return buildRolePacket({
         projectRoot: input.projectRoot,
         runId: input.runId,
         provider: input.provider,
         role: "planner",
-        objective: buildPlannerObjective(state.currentPhase.phaseGoal, mode),
+        objective: buildPlannerObjective(
+          state.currentPhase.phaseGoal,
+          mode.mode,
+          mode.reason
+        ),
         scope:
           state.currentPhase.inScope.length > 0
             ? state.currentPhase.inScope
             : [state.currentPhase.deliverable],
-        doneWhen: plannerDoneWhen(mode),
+        doneWhen: plannerDoneWhen(mode.mode),
         verification: [],
-        contextRefs: [...sharedRefs, roadmapRef(), ...phaseRefs, ...downstreamRefs]
+        contextRefs
       });
     }
     case "executor":
@@ -478,7 +648,7 @@ export async function buildPacketForRole(
             ? state.acceptanceState.doneWhenChecklist.map((item) => item.label)
             : [state.currentPhase.stopCondition],
         verification: state.currentPhase.verificationForThisPhase,
-        contextRefs: [...sharedRefs, ...phaseRefs, ...downstreamRefs]
+        contextRefs
       });
     case "reviewer":
       return buildRolePacket({
@@ -496,7 +666,7 @@ export async function buildPacketForRole(
           "如果阻塞，明确 blocker 与关键发现"
         ],
         verification: [],
-        contextRefs: [...sharedRefs, ...phaseRefs, ...downstreamRefs]
+        contextRefs
       });
     case "verifier":
       return buildRolePacket({
@@ -514,7 +684,8 @@ export async function buildPacketForRole(
           "如果失败，明确证据缺口或失败命令"
         ],
         verification: state.currentPhase.verificationForThisPhase,
-        contextRefs: [...sharedRefs, ...phaseRefs, ...downstreamRefs]
+        verificationPolicy,
+        contextRefs
       });
     case "closeout":
       return buildRolePacket({
@@ -532,7 +703,7 @@ export async function buildPacketForRole(
           "只在可以安全收尾时给出 accepted"
         ],
         verification: [],
-        contextRefs: [...sharedRefs, ...phaseRefs, ...downstreamRefs]
+        contextRefs
       });
     case "hygiene":
       return buildRolePacket({
@@ -547,7 +718,7 @@ export async function buildPacketForRole(
         ],
         doneWhen: ["产出一份可信的 session hygiene 结果"],
         verification: [],
-        contextRefs: [...sharedRefs, ...phaseRefs, ...downstreamRefs]
+        contextRefs
       });
   }
 }

@@ -7,6 +7,7 @@ import {
   createAgentRun,
   createPhaseRun,
   initializeProjectState,
+  readPhaseRunEvidenceBundle,
   writeAgentRunResult,
   writeLockedPhaseSnapshot,
   writePhasePause,
@@ -163,7 +164,7 @@ describe("rolePackets", () => {
     const prompt = renderRolePrompt(packet);
 
     expect(packet.role).toBe("planner");
-    expect(packet.objective).toContain("primary slice");
+    expect(packet.objective).toContain("Planner mode: planning-phase");
     expect(packet.contextRefs).toEqual(
       expect.arrayContaining([
         {
@@ -179,6 +180,12 @@ describe("rolePackets", () => {
       ])
     );
     expect(packet.contextRefs.some((ref) => ref.path === ".threadsmith/project-roadmap.json")).toBe(
+      true
+    );
+    expect(packet.contextRefs.some((ref) => ref.path === ".threadsmith/project-brief.json")).toBe(
+      true
+    );
+    expect(packet.contextRefs.some((ref) => ref.path === ".threadsmith/project-status.json")).toBe(
       true
     );
     expect(packet.doneWhen).toContain(
@@ -220,6 +227,12 @@ describe("rolePackets", () => {
         (ref) => ref.path === ".threadsmith/context/role-packets/reviewer.json"
       )
     ).toBe(false);
+    expect(packet.contextRefs.some((ref) => ref.path === ".threadsmith/project-brief.json")).toBe(
+      false
+    );
+    expect(packet.contextRefs.some((ref) => ref.path === ".threadsmith/project-roadmap.json")).toBe(
+      false
+    );
     expect(packet.verification.length).toBeGreaterThan(0);
     expect(packet.output.resultPath).toBe(
       ".threadsmith/runs/executor-run/result.json"
@@ -230,12 +243,61 @@ describe("rolePackets", () => {
     expect(prompt).toContain("Protocol guardrails:");
   });
 
+  it("does not slim acceptance criteria out of executor packets", async () => {
+    const projectRoot = await createProjectRoot();
+    await writeStateFragment(projectRoot, STATE_FILES.acceptanceState, {
+      currentClaim: "当前 slice 要实现 packet slimming regression fixtures。",
+      doneWhenChecklist: [
+        {
+          id: "executor-criteria",
+          label: "executor packet 保留当前 slice 的验收标准",
+          status: "unknown"
+        },
+        {
+          id: "verification-criteria",
+          label: "相关 packet 测试通过",
+          status: "unknown"
+        }
+      ],
+      implementationStatus: "implementing",
+      reviewStatus: "not-started",
+      verificationStatus: "not-started",
+      closeoutStatus: "not-started",
+      knownGaps: [],
+      finalState: "not-ready"
+    });
+
+    const packet = await buildExecutorPacket(projectRoot, "executor-run");
+
+    expect(packet.doneWhen).toEqual(
+      expect.arrayContaining([
+        "executor packet 保留当前 slice 的验收标准",
+        "相关 packet 测试通过"
+      ])
+    );
+    expect(packet.contextRefs).toEqual(
+      expect.arrayContaining([
+        {
+          kind: "state",
+          path: ".threadsmith/current-phase.json",
+          title: "当前 phase"
+        },
+        {
+          kind: "state",
+          path: ".threadsmith/acceptance-state.json",
+          title: "验收状态"
+        }
+      ])
+    );
+  });
+
   it("attaches latest phase-run continuity artifacts when a paused repair exists", async () => {
     const projectRoot = await createProjectRoot();
     await seedLatestPhaseRun(projectRoot);
 
     const plannerPacket = await buildPlannerPacket(projectRoot, "planner-run");
     const executorPacket = await buildExecutorPacket(projectRoot, "executor-run");
+    const evidenceBundle = await readPhaseRunEvidenceBundle(projectRoot, "phase-run-1");
 
     expect(plannerPacket.objective).toContain("repair slice");
     expect(
@@ -259,10 +321,50 @@ describe("rolePackets", () => {
       )
     ).toBe(true);
     expect(
+      plannerPacket.contextRefs.some(
+        (ref) => ref.path === ".threadsmith/phase-runs/phase-run-1/evidence-bundle.json"
+      )
+    ).toBe(true);
+    expect(evidenceBundle?.phaseRun.currentSliceId).toBe("repair-1");
+    expect(evidenceBundle?.acceptance.finalState).toBe("review-blocked");
+    expect(evidenceBundle?.verification.recommendedLevel).toBe("standard");
+    expect(
       executorPacket.contextRefs.some(
         (ref) => ref.path === ".threadsmith/phase-runs/phase-run-1/slices/repair-1.json"
       )
     ).toBe(true);
+  });
+
+  it("keeps blocker and failed-gate evidence in planner-reset packets", async () => {
+    const projectRoot = await createProjectRoot();
+    await seedLatestPhaseRun(projectRoot);
+
+    const packet = await buildPlannerPacket(projectRoot, "planner-run");
+    const evidenceBundle = await readPhaseRunEvidenceBundle(projectRoot, "phase-run-1");
+
+    expect(packet.objective).toContain("Planner mode: planner-reset");
+    expect(packet.objective).toContain("失败或阻塞信号");
+    expect(packet.contextRefs).toEqual(
+      expect.arrayContaining([
+        {
+          kind: "artifact",
+          path: ".threadsmith/phase-runs/phase-run-1/pause.json",
+          title: "pause / blocked"
+        },
+        {
+          kind: "artifact",
+          path: ".threadsmith/phase-runs/phase-run-1/evidence-bundle.json",
+          title: "phase evidence bundle / standard"
+        }
+      ])
+    );
+    expect(evidenceBundle?.acceptance.finalState).toBe("review-blocked");
+    expect(evidenceBundle?.acceptance.knownGaps).toContain(
+      "Reviewer 提出了阻塞性发现。"
+    );
+    expect(evidenceBundle?.verification.escalationSignals).toContain(
+      "failed-or-blocked-acceptance"
+    );
   });
 
   it("builds reviewer, verifier, and closeout packets with explicit gate decisions", async () => {
@@ -285,20 +387,60 @@ describe("rolePackets", () => {
     expect(reviewerPrompt).toContain("review-blocked");
     expect(reviewerPacket.protocolInstruction?.protocol.id).toBe("review");
     expect(reviewerPrompt).toContain("Do not convert review confidence into verification pass.");
+    expect(reviewerPacket.contextRefs.some((ref) => ref.path === ".threadsmith/project-status.json")).toBe(
+      false
+    );
+    expect(reviewerPacket.contextRefs.some((ref) => ref.path === ".threadsmith/project-roadmap.json")).toBe(
+      false
+    );
 
     expect(verifierPacket.verification).toEqual(
       expect.arrayContaining(["项目可以从 deck 正常加载"])
     );
+    expect(verifierPacket.verificationPolicy?.recommendedLevel).toBe("standard");
+    expect(verifierPrompt).toContain("Verification Policy:");
+    expect(verifierPrompt).toContain("Level: standard");
     expect(verifierPrompt).toContain("verification-failed");
     expect(verifierPrompt).toContain("accepted-with-closeout-pending");
     expect(verifierPacket.protocolInstruction?.protocol.id).toBe("verify");
     expect(verifierPrompt).toContain("Never convert missing evidence into a pass.");
+    expect(verifierPacket.contextRefs.some((ref) => ref.path === ".threadsmith/active-work.json")).toBe(
+      false
+    );
 
     expect(closeoutPacket.contextRefs.some((ref) => ref.path.includes("run-prev"))).toBe(
+      true
+    );
+    expect(closeoutPacket.contextRefs.some((ref) => ref.path === ".threadsmith/project-status.json")).toBe(
       true
     );
     expect(closeoutPrompt).toContain("accepted");
     expect(closeoutPrompt).toContain("清理临时痕迹");
     expect(closeoutPacket.protocolInstruction?.protocol.id).toBe("closeout");
+  });
+
+  it("does not slim upstream result references out of reviewer and verifier packets", async () => {
+    const projectRoot = await createProjectRoot();
+    await seedLatestExecutorRun(projectRoot);
+
+    const reviewerPacket = await buildReviewerPacket(projectRoot, "reviewer-run");
+    const verifierPacket = await buildVerifierPacket(projectRoot, "verifier-run");
+    const verifierPrompt = renderRolePrompt(verifierPacket);
+
+    expect(
+      reviewerPacket.contextRefs.some(
+        (ref) => ref.path === ".threadsmith/runs/run-prev/result.md"
+      )
+    ).toBe(true);
+    expect(
+      verifierPacket.contextRefs.some(
+        (ref) => ref.path === ".threadsmith/runs/run-prev/result.md"
+      )
+    ).toBe(true);
+    expect(verifierPacket.verificationPolicy?.requiredChecks).toEqual(
+      expect.arrayContaining(["项目可以从 deck 正常加载"])
+    );
+    expect(verifierPrompt).toContain("Required checks:");
+    expect(verifierPrompt).toContain("项目可以从 deck 正常加载");
   });
 });

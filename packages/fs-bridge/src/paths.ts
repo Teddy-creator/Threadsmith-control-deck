@@ -30,7 +30,9 @@ export const AGENT_RUN_FILES = {
 export const PHASE_RUN_FILES = {
   record: "phase-run.json",
   lockedPhase: "locked-phase.json",
-  pause: "pause.json"
+  pause: "pause.json",
+  roleRuntime: "role-runtime.json",
+  evidenceBundle: "evidence-bundle.json"
 } as const;
 
 export const CONTEXT_FILES = {

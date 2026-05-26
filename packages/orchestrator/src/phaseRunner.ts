@@ -12,6 +12,7 @@ import type {
 } from "@threadsmith/domain";
 import {
   STATE_FILES,
+  appendPhaseRunRoleRuntime,
   appendPhaseRunEvent,
   applyAgentRunResult,
   createAgentRun,
@@ -32,6 +33,7 @@ import { buildPacketForRole } from "./packetBuilder.ts";
 import { buildAutopilotCliCommand } from "./autopilotContinuation.ts";
 import { type SpawnProcess } from "./providerTypes.ts";
 import { decidePhaseRunNextStep } from "./stopController.ts";
+import { decidePlannerMode } from "./plannerMode.ts";
 
 function phaseWorkspacePath(projectRoot: string, phaseRunId: string) {
   return join(projectRoot, ".threadsmith-runtime", phaseRunId);
@@ -43,6 +45,25 @@ function eventRef(eventId: string) {
 
 function preferredRunArtifact(record: Awaited<ReturnType<typeof readAgentRunRecord>>) {
   return record.summaryPath ?? record.resultPath;
+}
+
+function estimateChars(value: unknown) {
+  return JSON.stringify(value).length;
+}
+
+function estimateTokens(chars: number) {
+  return Math.ceil(chars / 4);
+}
+
+function durationMs(startedAt: string, finishedAt: string) {
+  const started = Date.parse(startedAt);
+  const finished = Date.parse(finishedAt);
+
+  if (Number.isNaN(started) || Number.isNaN(finished)) {
+    return 0;
+  }
+
+  return Math.max(0, finished - started);
 }
 
 function nextSuccessfulRole(
@@ -189,6 +210,7 @@ export class PhaseRunner {
     const startedAt = input.startedAt ?? this.now();
     const phaseRunId = input.phaseRunId ?? crypto.randomUUID();
     const state = await loadProjectState(input.projectRoot);
+    const plannerMode = decidePlannerMode(state);
     const workspacePath = await ensureWorkspace(input.projectRoot, phaseRunId);
     const lockedPhaseSnapshotRef = `.threadsmith/phase-runs/${phaseRunId}/locked-phase.json`;
 
@@ -196,7 +218,7 @@ export class PhaseRunner {
       phaseRunId,
       projectRoot: input.projectRoot,
       status: "running",
-      currentRole: "planner",
+      currentRole: plannerMode.startRole,
       currentSliceId: null,
       repairCount: 0,
       lockedPhaseSnapshotRef,
@@ -218,8 +240,8 @@ export class PhaseRunner {
     await writeLockedPhaseSnapshot(input.projectRoot, phaseRunId, lockedSnapshot);
     phaseRun = await appendRunEvent(input.projectRoot, phaseRun, {
       title: `phase-run ${phaseRunId} started`,
-      detail: `Autopilot 已为当前 locked phase 建立 serial run。Workspace：${workspacePath}`,
-      role: "planner",
+      detail: `Autopilot 已为当前 locked phase 建立 serial run。Planner mode=${plannerMode.mode}，startRole=${plannerMode.startRole}。原因：${plannerMode.reason} Workspace：${workspacePath}`,
+      role: plannerMode.startRole,
       artifactPath: lockedPhaseSnapshotRef,
       createdAt: startedAt
     });
@@ -365,8 +387,9 @@ export class PhaseRunner {
         runId
       });
       await createAgentRun(input.projectRoot, packet, this.now());
+      const roleStartedAt = this.now();
       const launch = await this.roleLauncher(packet, {
-        startedAt: this.now()
+        startedAt: roleStartedAt
       });
       const launchEventPhaseRun = await appendRunEvent(input.projectRoot, phaseRun, {
         title: `phase-run ${phaseRun.phaseRunId} launched ${role}`,
@@ -393,6 +416,37 @@ export class PhaseRunner {
       const latestRunRef = preferredRunArtifact(record) ?? packet.output.resultPath;
       const latestSuccessfulRole = nextSuccessfulRole(phaseRun, result);
       let currentSliceId = phaseRun.currentSliceId;
+      const roleFinishedAt = record.finishedAt ?? this.now();
+      const outputEstimatedChars = estimateChars(result);
+      await appendPhaseRunRoleRuntime(
+        input.projectRoot,
+        phaseRun.phaseRunId,
+        {
+          phaseRunId: phaseRun.phaseRunId,
+          runId,
+          role,
+          provider: input.provider,
+          sliceId: currentSliceId,
+          startedAt: roleStartedAt,
+          finishedAt: roleFinishedAt,
+          durationMs: durationMs(roleStartedAt, roleFinishedAt),
+          contextRefCount: packet.contextRefs.length,
+          packetEstimatedChars: estimateChars(packet),
+          packetEstimatedTokens: estimateTokens(estimateChars(packet)),
+          outputSummaryEstimatedChars: result.summary.length,
+          outputEstimatedChars,
+          verificationCommandCount: result.verification.length,
+          outcome: result.outcome,
+          decision: result.decision ?? null,
+          repairTrigger:
+            result.decision === "review-blocked"
+              || result.decision === "verification-failed"
+              || result.outcome === "failed"
+              ? result.blocker ?? result.summary
+              : null
+        },
+        roleFinishedAt
+      );
 
       if (role === "planner" && result.outcome === "succeeded" && result.decision === "slice-ready") {
         const slice = await this.writePlannerSlice(input.projectRoot, phaseRun, runId, result);

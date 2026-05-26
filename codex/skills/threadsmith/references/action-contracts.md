@@ -15,8 +15,8 @@ Use this ladder before choosing an action:
    the prior mode / role / action and must execute or report a blocking gate.
 3. Project Charter Gate: execution-like work stops on failed charter status
    unless an explicit low-risk read-only bypass applies.
-4. Mode: `continuous` for keep-going/autopilot, `drive` for next-step work,
-   `sync` for read-only status, `recover` for repair.
+4. Mode: use the Execution Cadence Selector. Prefer state-based cadence over
+   wording-only cadence.
 5. Role chain: choose the next required role from current truth and role packet
    freshness, then decide whether it is an internal gate in an already-approved
    phase.
@@ -62,6 +62,8 @@ Use when:
 - current truth is fresh enough
 - the selected role has a clear next action
 - Project Charter Gate is `pass` or safely bypassed
+- the user asked for a bounded single role/action, or autopilot cannot safely run
+  the approved phase chain
 
 Typical routes:
 
@@ -102,6 +104,8 @@ Use when:
 
 - the user says to keep going until the current phase is done
 - the user explicitly complains that manual gate-by-gate prompting is too slow
+- the user approves a concrete Threadsmith recommendation that belongs to an
+  already-approved phase chain
 - current truth is fresh enough and the project has a clear current phase
 - the next step can be represented as one locked phase run
 - Project Charter Gate is `pass`
@@ -137,6 +141,10 @@ Stop condition:
 - user input is required
 
 ## Deck-facing Actions
+
+Deck-facing actions are a deferred UI surface while frontend maintenance is
+frozen. They remain documented as action names so state and CLI behavior can map
+to a future deck, but skill/protocol truth is the authority.
 
 ### `advance-phase`
 
@@ -251,16 +259,107 @@ Use `下一内部 gate` for these transitions if they need to be named. Reserve
 `下一 phase 预览` for closeout or a genuine new phase. This avoids presenting
 reviewer, verifier, or closeout as a fresh user decision.
 
+## Full Governance Speed Rule
+
+Full governance means role-complete, not approval-heavy.
+
+When a phase plan is approved, Threadsmith should run the approved phase as one
+continuous chain and preserve planner, executor, reviewer, verifier, and
+closeout responsibilities. The speed improvement comes from removing redundant
+operator stops, not from removing review or verification.
+
+Hot-path governance must prefer deterministic checks over repeated LLM-heavy
+judgment. Use stop reasons, verification levels, context budgets, and friction
+budgets before asking the operator or launching a broad re-plan. These friction
+budgets cap repeated restatements, repair loops, and verification breadth.
+
+## Deterministic Stop Reasons
+
+Use one named stop reason whenever full governance pauses:
+
+- `continue`: no real gate; proceed through the current approved role chain
+- `pause_for_operator_decision`: scope, non-goals, acceptance, or product
+  direction would change
+- `pause_for_blocker`: reviewer, verifier, repo, dependency, or test evidence
+  blocks progress
+- `pause_for_recovery`: committed truth, role packet, Context Packet, evidence,
+  or git state is stale or contradictory
+- `pause_for_release_action`: merge, publish, tag, public sync, release notes,
+  or external release action is required
+- `pause_for_destructive_action`: destructive git, file, data, credential, or
+  irreversible environment action is required
+- `closeout_boundary`: the approved phase is complete and the next phase needs
+  operator review
+
+Do not stop with vague language such as "next step?" when one of these reasons
+applies. If none applies, continue the internal role chain.
+
+## Context and Observation Budget Rule
+
+Full governance must reduce context drag before adding more process.
+
+Default context preference:
+
+1. current packet over full thread replay
+2. selected role packet over all-role context
+3. recent high-fidelity failing evidence over old verbose logs
+4. masked, trimmed, or summarized command output when exact output is not needed
+5. exact full output for failures, user-requested diagnostics, audit evidence,
+   and proof of acceptance
+
+This keeps the role focused on the current phase while preserving evidence that
+actually proves or disproves the done-when.
+
+## Staged Verification Rule
+
+Choose the smallest verification level that matches risk, then escalate only
+when the evidence requires it.
+
+- `narrow`: changed-file, contract, fixture, or focused evidence checks
+- `standard`: package tests plus relevant contract checks
+- `release`: full release, launcher, sync, changelog, package, and public
+  surface checks
+
+Use `narrow` for small contract/docs/test slices, `standard` for skill or
+workflow behavior, and `release` for release-facing or public-surface work.
+Escalate on failed verification, broad impact, release work, or contradictory
+evidence.
+
+## Sparse Course-Correction Rule
+
+Full governance should catch inefficient trajectories without restarting the
+whole plan after every role.
+
+Run a lightweight course-correction check at phase boundaries, after repeated
+repair, or when output begins to loop:
+
+- are we repeating a recommendation instead of executing it?
+- are we drifting from the approved phase?
+- did verification evidence prove the done-when?
+- are protocol labels replacing operator-facing explanation?
+- did the same blocker occur twice?
+
+If the check passes, continue. If it fails, use a named stop reason or route to
+recovery. Do not convert this check into a routine approval prompt.
+
 ## Output Level Rule
 
-Full output is required for:
+Boundary full output is required for:
 
-- `drive`
-- `continuous`
 - `recover`
 - bootstrap
 - closeout
+- accepted phases
+- phase-boundary reports
 - any response that writes or proposes durable truth changes
+
+Internal progress output is enough for routine role-chain handoffs inside an
+approved phase:
+
+- completed internal gate
+- next internal gate
+- current stop reason: `continue` or named pause reason
+- evidence/risk only when it changes the execution decision
 
 Compact sync output is enough for read-only status refresh:
 
@@ -279,21 +378,19 @@ do not write `.threadsmith/`, and label the source layer for factual claims.
 For closeout, accepted phases, or any response that introduces the next phase,
 Threadsmith must produce a phase narrative, not only a protocol status list.
 
-Use this structure:
+Use this exact field skeleton. Do not satisfy the rule with section headings
+and free-form paragraphs only:
 
-- `本 phase 的结果`: name the phase, result, 3-5 concrete deliverables, and one
-  sentence describing the capability or operator state that changed.
-- `这一步具体做了什么`: use `Before`, `Changed`, `After`, and `Not changed`.
+- `本 phase 的结果`: `phase 名称`, `result`, `交付物`, `结果一句话`, and
+  `架构影响`.
+- `这一步具体做了什么`: `Before`, `Changed`, `After`, and `Not changed`.
   This section must explain the functional change, not merely list files.
-- `这一步解决的问题`: name the user confusion, architecture/process gap, and
-  follow-up capability this phase unlocks.
-- `验证`: list commands, CI, PR, artifacts, or gate results with pass/fail/not-run
-  status.
-- `下一 phase 预览`: write a planner-style brief with `Phase`, `continuity`,
+- `这一步解决的问题`: `用户困惑`, `架构/流程缺口`, and `为下一步铺路`.
+- `验证`: `已运行`, `结果`, and `未运行与风险`.
+- `下一 phase 预览`: planner-style brief fields `Phase`, `continuity`,
   `Why now`, `Questions`, `Deliverables`, `Non-goals`, `Done when`, and
   `Stop condition`.
-- `你需要审核的点`: include only decisions that could change route, scope,
-  non-goals, or acceptance.
+- `你需要审核的点`: only route, scope, non-goal, or acceptance decisions.
 
 The narrative should be concrete enough that the operator can answer:
 
@@ -371,9 +468,9 @@ Examples:
 
 ## Architecture Comprehension Rule
 
-For significant work, the response must include a compact architecture impact
-line. This is not planner ownership and must not become a second task plan. It
-should name:
+For significant work, the response must include a compact `架构影响` line in
+`本 phase 的结果`. This is not planner ownership and must not become a second task
+plan. It should name:
 
 - the affected layer, such as committed truth, role packet, Context Packet,
   runtime contract, action contract, tests, docs, or product UI

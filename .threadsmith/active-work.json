@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将用户反馈收窄为 Threadsmith Role Chain Execution Cadence v1，并新增计划文档。",
+      "taskSummary": "已将 full governance speedup 从“少停顿”扩展为 role runtime speedup：目标是减少每个角色重复发现、上下文拖拽和过宽验证，而不是跳过安全角色。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已更新 SKILL.md、action contract 和 skill contract verifier，要求 drive 在已批准 phase 内连续推进 role chain。",
+      "taskSummary": "已实现 role runtime metrics、phase evidence bundle、role-scoped packet refs、planner mode routing、verification policy，并补充 packet-slimming regression fixtures。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已检查改动只影响 skill 推进节奏契约，不扩大到 runtime command、前端或自动调度。",
+      "taskSummary": "已确认这轮不改变前端、不同步全局 skill、不发布 release、不做自动多 agent 调度；改动集中在 repo 版 runtime/orchestrator/domain/fs-bridge/skill contract。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 skill contract 和 diff hygiene；project truth 与 skill sync 在全局同步后复验。",
+      "taskSummary": "已运行 domain、fs-bridge、runtime、orchestrator、skill contract、project truth 和 diff hygiene 验证，全部通过。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已记录 accepted closeout，准备提交与 PR。",
+      "taskSummary": "已写回 .threadsmith accepted truth，记录未同步全局 skill、未做自动调度和缺少真实耗时基准等剩余风险。",
       "requiresUserDecision": false
     }
   ],

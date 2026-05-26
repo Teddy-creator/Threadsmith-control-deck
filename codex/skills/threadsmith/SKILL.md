@@ -13,10 +13,9 @@ Threadsmith is not a generic coding prompt and it should not be invoked for ever
 
 Before normal bootstrap or phase execution, find the applicable `AGENTS.md`.
 Treat it as project-level constitution.
-If it is missing, placeholder-only, stale, or lacks project purpose, non-goals,
-architecture/risk guidance, verification expectations, or human confirmation
-gates for a risky repo, stop and route to `agents-md-builder`.
-Do not let AI invent these decisions silently.
+Evaluate it using the matrix in `references/runtime-contract.md`. Do not invent
+project purpose, non-goals, architecture boundaries, verification expectations,
+or human confirmation gates silently.
 
 ## Decision State Machine
 
@@ -35,10 +34,8 @@ Resolve every invocation in this order. Do not skip ahead.
    evaluate AGENTS.md / project constitution status. Missing, stale,
    placeholder, declined, or contradictory charters follow the matrix in
    `references/runtime-contract.md`.
-4. **Mode selection:** choose `continuous` for an explicit autopilot / keep-going
-   request, `drive` for advance / implement / verify / closeout, `sync` for
-   read-only status / refresh / "do not implement", and `recover` for repair.
-   If unclear, prefer `sync`.
+4. **Mode selection:** use the Execution Cadence Selector below. If unclear,
+   prefer `sync`.
 5. **Role selection / chain:** select the next required role from acceptance
    state and current phase, then decide whether it belongs to the
    already-approved phase chain: planner -> executor -> reviewer -> verifier ->
@@ -80,15 +77,100 @@ Stop mid-chain only when a real gate appears:
 internal role handoff, say which role/gate will run next, but do not present it
 as something the operator must approve.
 
+## Execution Cadence Selector
+
+Choose execution cadence by state, not only by wording:
+
+- `sync`: read-only status, refresh, explanation, or "do not implement".
+- `drive`: one bounded role/action, one explicit verification request, or a
+  phase-chain step that cannot safely use autopilot.
+- `continuous`: an approved phase can run through executor -> reviewer ->
+  verifier -> closeout without a real stop gate. This includes explicit
+  "keep going" requests and short approvals after Threadsmith recommended a
+  concrete phase-chain step.
+- `recover`: interruption, stale truth, failed verification, stuck run, bad
+  handoff, contradictory truth, or confusing state.
+
+When `continuous` is selected, prefer:
+
+```text
+npm run threadsmith:autopilot -- continue <project-root>
+```
+
+Use `drive` instead of `continuous` only when the user asked for a single role,
+the phase is not approved, autopilot is unavailable, or a stop reason applies.
+
+## Full Governance Speed Contract
+
+Full governance keeps all role gates, but it must not turn every role handoff
+into an operator stop. Once a phase plan is approved, optimize for one
+continuous, evidence-backed phase run.
+
+Hot-path governance should be rule-shaped before it is model-judgment-shaped:
+use deterministic stop reasons, verification levels, role-scoped context, and
+friction budgets before asking the operator or launching another broad review.
+
+Named stop reasons:
+
+- `continue`: no real gate; proceed through the current approved role chain
+- `pause_for_operator_decision`: scope, non-goals, acceptance, or product
+  direction would change
+- `pause_for_blocker`: reviewer, verifier, repo, or dependency evidence blocks
+  progress
+- `pause_for_recovery`: truth, role packet, Context Packet, evidence, or git
+  state is stale or contradictory
+- `pause_for_release_action`: merge, publish, tag, public sync, or external
+  release action is required
+- `pause_for_destructive_action`: destructive git, file, data, credential, or
+  irreversible environment action is required
+- `closeout_boundary`: the approved phase completed and the next phase needs
+  operator review
+
+Context and observation budget:
+
+- prefer current packet over full thread replay
+- prefer the selected role packet over all-role context
+- keep recent failing evidence high fidelity
+- mask, trim, or summarize old verbose command output when exact output is not
+  needed for audit or diagnosis
+- keep exact full output for failures, user-requested diagnostics, and evidence
+  that proves or disproves acceptance
+
+Verification levels:
+
+- `narrow`: changed-file, contract, or focused evidence checks
+- `standard`: package tests plus relevant contract checks
+- `release`: full release, launcher, sync, changelog, package, and public
+  surface checks
+
+Start with the smallest verification level that matches the risk, then escalate
+on failure, broad impact, release-facing work, or contradictory evidence.
+
+Sparse course-correction checks run at phase boundaries, after repeated repair,
+or when output starts to loop. Check whether Threadsmith is repeating a
+recommendation instead of executing, drifting from the approved phase, missing
+done-when evidence, overusing protocol labels, or hitting the same blocker
+twice. This is a lightweight trajectory check, not a full re-plan after every
+role.
+
 ## Output Matrix
 
-Use the full output only for `drive`, `continuous`, `recover`, bootstrap,
-closeout, or any response that changes durable truth. Use compact output for
-read-only `sync`. For ordinary conceptual questions about Threadsmith, answer
-directly without the full contract, but still cite the relevant source layer
-when making status claims.
+Use boundary full output for `recover`, bootstrap, closeout, accepted phases,
+phase-boundary reports, and any response that changes durable truth.
 
-Full output sections:
+Use internal progress output for routine role-chain handoffs inside an approved
+phase, such as executor -> reviewer, reviewer -> verifier, or verifier ->
+closeout.
+
+Use compact output for read-only `sync`. For ordinary conceptual questions about
+Threadsmith, answer directly without the full contract, but still cite the
+relevant source layer when making status claims.
+
+Full output must use the exact field skeleton in `Output Contract`. Do not
+satisfy full output by writing only these section headings with free-form
+paragraphs underneath.
+
+Full output sections, each with required child fields:
 
 1. `Threadsmith Decision`
 2. `本 phase 的结果`
@@ -97,6 +179,13 @@ Full output sections:
 5. `验证`
 6. `下一 phase 预览`
 7. `你需要审核的点`
+
+Internal progress output:
+
+- 已完成内部 gate
+- 下一内部 gate
+- 当前 stop reason: `continue` or named pause reason
+- 证据/风险: only what changed the execution decision
 
 Compact sync output:
 
@@ -164,19 +253,36 @@ Behavior:
 - route to hygiene, repair, resume, or handoff
 - do not continue from stale chat memory
 
-## Required Read Order
+## Mode-Specific Read Sets
 
-1. Applicable `AGENTS.md` files, nearest project-specific first, then parent/root if relevant
+Read only what the selected mode needs, unless a contradiction forces recovery.
+
+`sync`:
+
+1. Applicable `AGENTS.md` files, nearest project-specific first
 2. `.threadsmith/preferences.json`
-3. `.threadsmith/project-brief.json`
-4. `.threadsmith/current-phase.json`
-5. `.threadsmith/acceptance-state.json`
-6. `.threadsmith/project-status.json`
-7. `.threadsmith/active-work.json`
-8. `.threadsmith/project-supervision.json`
-9. `.threadsmith/context/current-packet.json` if present
-10. `.threadsmith/context/role-packets/<role>.json` for the selected role if present
-11. `.threadsmith/context/evidence-summary.json` and `.threadsmith/context/repo-map.json` if needed
+3. committed truth: project brief, current phase, acceptance state, project status, active work, supervision
+4. `.threadsmith/context/current-packet.json` if present
+
+`drive`:
+
+1. `sync` read set
+2. `.threadsmith/context/role-packets/<role>.json` for the selected role if present
+3. `.threadsmith/context/evidence-summary.json`
+4. recent git/repo evidence needed for that role
+
+`continuous`:
+
+1. `drive` read set
+2. current phase-run state if present
+3. autopilot continuation decision
+
+`recover`:
+
+1. full committed truth
+2. matching and main Context Packets
+3. all relevant role packets
+4. evidence summary, repo map, recent diff, phase runs, proposals, and writeback failures
 
 If a role packet exists and is consistent with the current phase, use it as the role's working context. If it is missing or stale, fall back to the main Context Packet and committed truth, then recommend regenerating role packets later.
 
@@ -205,6 +311,9 @@ If a role packet exists and is consistent with the current phase, use it as the 
 16. Do not stop merely because the next internal role is reviewer, verifier, or
     closeout. Stop for phase boundaries and real gates; otherwise continue the
     role chain.
+17. In full-governance work, apply the Full Governance Speed Contract: named
+    stop reasons, role-scoped context, staged verification, and sparse
+    course-correction before adding operator pauses or broad LLM review.
 
 ## Contracts
 
@@ -215,30 +324,35 @@ Load references only when needed:
 - Read `references/role-contracts.md` when selecting or enforcing a role.
 - Read `references/action-contracts.md` when executing an action, interpreting
   short approvals, choosing output level, or handling deck-facing actions.
+- Read `references/external-agent-entry.md` when handing work to another agent,
+  reading another agent's proposal, or explaining cross-agent state boundaries.
 
 ## Output Contract
 
-When using the full output, start with:
+When using the full output, render this exact skeleton. Keep answers concise,
+but do not omit required labels. If a field has no content, write `none` or
+`not run` with the reason.
 
 ### Threadsmith Decision
 - mode: `sync`, `drive`, `continuous`, or `recover`
 - accepted previous recommendation: yes / no
 - source layer: committed truth / role packet / Context Packet / repo evidence / chat memory
-- project state
-- current phase state
-- acceptance state
-- selected role and role packet status
+- project state:
+- current phase state:
+- acceptance state:
+- selected role and role packet status:
 - role-chain status: internal continuing / stopped at closeout / blocked
-- action taken now or blocking gate
-- last completed step
-- next best step
-- active gate or stop condition
+- action taken now or blocking gate:
+- last completed step:
+- next best step:
+- active gate or stop condition:
 
 ### 本 phase 的结果
-- phase 名称
+- phase 名称:
 - result: accepted / blocked / needs-recovery / read-only sync / in-progress
-- 交付物：列出 3-5 个真实产物，例如 PR、commit、docs、tests、truth、packet、command
-- 结果一句话：说明系统或用户现在多了什么能力，避免只说“已更新文件”
+- 交付物: 3-5 个真实产物，例如 PR、commit、docs、tests、truth、packet、command
+- 结果一句话: 说明系统或用户现在多了什么能力，避免只说“已更新文件”
+- 架构影响: affected layer + concrete object + why that layer matters
 
 ### 这一步具体做了什么
 - Before：原来缺什么、哪里让操作者困惑、系统处于什么限制
@@ -252,9 +366,9 @@ When using the full output, start with:
 - 为下一步铺路：这一步让哪个后续 phase 变得可判断或可执行
 
 ### 验证
-- 已运行的命令、CI、PR、artifact 或 gate result
-- 明确 pass / fail / not run
-- 如果未运行某项验证，说明原因和残余风险
+- 已运行:
+- 结果: pass / fail / not run
+- 未运行与风险:
 
 ### 下一 phase 预览
 - Phase：候选 phase 名称

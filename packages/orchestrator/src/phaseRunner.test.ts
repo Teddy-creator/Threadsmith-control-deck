@@ -11,6 +11,7 @@ import {
   readAgentRunRecord,
   readLatestPhaseRun,
   readPhasePause,
+  readPhaseRunRoleRuntime,
   readPhaseSlice,
   readRecentEvents,
   updateAgentRunStatus,
@@ -236,6 +237,7 @@ describe("PhaseRunner", () => {
     const latest = await readLatestPhaseRun(projectRoot);
     const state = await loadProjectState(projectRoot);
     const events = await readRecentEvents(projectRoot, 20);
+    const runtime = await readPhaseRunRoleRuntime(projectRoot, phaseRun.phaseRunId);
 
     expect(phaseRun.status).toBe("accepted");
     expect(latest?.phaseRunId).toBe(phaseRun.phaseRunId);
@@ -257,6 +259,25 @@ describe("PhaseRunner", () => {
 
     const primarySlice = await readPhaseSlice(projectRoot, phaseRun.phaseRunId, "primary-1");
     expect(primarySlice.kind).toBe("primary");
+    expect(runtime?.records.map((record) => record.role)).toEqual([
+      "planner",
+      "executor",
+      "reviewer",
+      "verifier",
+      "closeout"
+    ]);
+    expect(runtime?.records[0]).toEqual(
+      expect.objectContaining({
+        phaseRunId: phaseRun.phaseRunId,
+        role: "planner",
+        contextRefCount: expect.any(Number),
+        packetEstimatedChars: expect.any(Number),
+        outputSummaryEstimatedChars: expect.any(Number),
+        verificationCommandCount: 0,
+        decision: "slice-ready"
+      })
+    );
+    expect(runtime?.records[0].packetEstimatedTokens).toBeGreaterThan(0);
   }, phaseRunnerTestTimeoutMs);
 
   it("routes review failure into a repair slice before continuing", async () => {
@@ -281,6 +302,49 @@ describe("PhaseRunner", () => {
     expect(phaseRun.repairCount).toBe(1);
     expect(phaseRun.currentSliceId).toBe("repair-1");
     expect(repairSlice.kind).toBe("repair");
+  }, phaseRunnerTestTimeoutMs);
+
+  it("starts from reviewer when committed truth says implementation is ready for review", async () => {
+    const projectRoot = await createProjectRoot();
+    await writeStateFragment(projectRoot, STATE_FILES.acceptanceState, {
+      currentClaim: "Implementation is ready for review.",
+      doneWhenChecklist: [
+        {
+          id: "implementation-ready",
+          label: "Implementation is ready for review",
+          status: "pass"
+        }
+      ],
+      implementationStatus: "ready-for-review",
+      reviewStatus: "not-started",
+      verificationStatus: "not-started",
+      closeoutStatus: "not-started",
+      knownGaps: [],
+      finalState: "ready-for-review"
+    });
+    const launchedRoles: PhaseOwner[] = [];
+    const queuedLauncher = createQueuedRoleLauncher([
+      { role: "reviewer", result: { decision: "ready-for-verification", summary: "Review passed." } },
+      { role: "verifier", result: { decision: "accepted-with-closeout-pending", summary: "Verification passed." } },
+      { role: "closeout", result: { decision: "accepted", summary: "Closeout completed." } }
+    ]);
+    const runner = new PhaseRunner({
+      roleLauncher: async (packet, options) => {
+        launchedRoles.push(packet.role);
+        return queuedLauncher(packet, options);
+      }
+    });
+
+    const phaseRun = await runner.start({ projectRoot });
+    const runtime = await readPhaseRunRoleRuntime(projectRoot, phaseRun.phaseRunId);
+
+    expect(phaseRun.status).toBe("accepted");
+    expect(launchedRoles).toEqual(["reviewer", "verifier", "closeout"]);
+    expect(runtime?.records.map((record) => record.role)).toEqual([
+      "reviewer",
+      "verifier",
+      "closeout"
+    ]);
   }, phaseRunnerTestTimeoutMs);
 
   it("routes verifier failure into a repair slice before acceptance", async () => {

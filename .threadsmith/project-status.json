@@ -1,23 +1,24 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "threadsmith skill drive cadence / role chain execution",
+  "currentTrack": "threadsmith full governance runtime speedup",
   "overallState": "stable",
-  "currentFocus": "Threadsmith Role Chain Execution Cadence v1 已完成：drive 现在要求已批准 phase 内连续执行 executor -> reviewer -> verifier -> closeout，只在真实 gate 或 closeout 后停。",
-  "projectStatusSummary": "Threadsmith 的 skill contract 已把推进节奏从每个角色都要用户确认，收敛为 phase 内 role-chain 自动推进、phase 边界再停下给用户审核。",
+  "currentFocus": "Threadsmith Role Runtime Speedup v1 已 accepted：full governance 的提速现在覆盖运行度量、证据预计算、角色上下文瘦身、planner mode routing、分级验证和 packet 瘦身回归保护。",
+  "projectStatusSummary": "Threadsmith 现在把“推进太慢”的问题拆成两层：cadence 层减少无意义 role handoff 停顿，runtime 层减少每个角色重复读上下文、重复发现状态和过宽验证。当前 repo 版实现已通过完整本地验证，但全局 installed skill 尚未同步。",
   "latestAcceptedSlice": {
-    "title": "Threadsmith Role Chain Execution Cadence v1",
-    "recordedAt": "2026-05-26T23:45:00+08:00"
+    "title": "Threadsmith Role Runtime Speedup v1",
+    "recordedAt": "2026-05-27T03:27:41+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Use real Threadsmith drive outputs to validate whether role transitions stop asking for routine approvals",
+    "title": "Threadsmith Lane Routing v1: decouple Threadsmith invocation from governance lane",
     "recordedAt": null
   },
-  "currentMilestoneId": "project-state-store-cross-agent-bridge-v1",
+  "currentMilestoneId": "threadsmith-skill-runtime-hardening",
   "nextMilestoneId": null,
   "topRisks": [
-    "skill 契约变清楚不等于模型每次都完美遵守，需要用真实 drive 样例继续观察。",
-    "这轮没有实现新的 runtime autopilot engine，也没有做自动多 agent 调度。",
-    "如果 repo skill 与全局 installed skill 漂移，用户实际调用仍可能看不到新输出。"
+    "全局 installed skill 本轮未同步，因此实际 $threadsmith 调用仍可能不是 repo 版最新逻辑。",
+    "role runtime metrics 已记录结构，但还需要真实项目运行数据来证明速度收益幅度。",
+    "verification policy 是第一版规则策略，后续应根据真实误判或漏判案例继续细化。",
+    "自动多 agent 调度仍未实现；本轮只优化 full governance 链路本身。"
   ],
-  "updatedAt": "2026-05-26T23:45:00+08:00"
+  "updatedAt": "2026-05-27T03:27:41+08:00"
 }
