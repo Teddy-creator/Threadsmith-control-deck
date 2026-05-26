@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Threadsmith Phase Narrative Output v1 已 accepted：closeout 输出现在必须解释本 phase 的功能变化、解决的问题和下一 phase brief。",
+  "summary": "Threadsmith Operator Translation Layer v1 已 accepted：full output 现在必须把技术名词翻译成操作者能理解的能力变化与架构位置。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已将下一刀收窄为 Threadsmith Phase Narrative Output v1，并新增计划文档。",
+      "taskSummary": "已将下一刀收窄为 Threadsmith Operator Translation Layer v1，并新增计划文档。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/threadsmith-phase-narrative-output-v1.md",
-      "updatedAt": "2026-05-26T22:15:00+08:00"
+      "latestEvidenceLabel": "docs/plans/threadsmith-operator-translation-layer-v1.md",
+      "updatedAt": "2026-05-26T23:05:00+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已更新 SKILL.md 和 action contract：closeout 输出改为 phase narrative。",
+      "taskSummary": "已更新 SKILL.md 和 action contract：技术名词必须附带操作者语言翻译。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "codex/skills/threadsmith/SKILL.md",
-      "updatedAt": "2026-05-26T22:15:00+08:00"
+      "updatedAt": "2026-05-26T23:05:00+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查新输出结构没有越过既有 role / truth / verification 边界。",
+      "taskSummary": "已检查 translation rule 没有越过既有 role / truth / verification 边界。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "codex/skills/threadsmith/references/action-contracts.md",
-      "updatedAt": "2026-05-26T22:15:00+08:00"
+      "updatedAt": "2026-05-26T23:05:00+08:00"
     },
     {
       "id": "verifier-logical",
@@ -53,7 +53,7 @@
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "npm run verify:skill-sync",
-      "updatedAt": "2026-05-26T22:15:00+08:00"
+      "updatedAt": "2026-05-26T23:05:00+08:00"
     },
     {
       "id": "hygiene",
@@ -66,8 +66,8 @@
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/acceptance-state.json",
-      "updatedAt": "2026-05-26T22:15:00+08:00"
+      "updatedAt": "2026-05-26T23:05:00+08:00"
     }
   ],
-  "updatedAt": "2026-05-26T22:15:00+08:00"
+  "updatedAt": "2026-05-26T23:05:00+08:00"
 }

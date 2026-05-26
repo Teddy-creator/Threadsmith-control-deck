@@ -204,8 +204,8 @@ When using the full output, start with:
 
 ### 这一步具体做了什么
 - Before：原来缺什么、哪里让操作者困惑、系统处于什么限制
-- Changed：这次新增或修改了什么对象、流程、边界、测试或文档
-- After：现在用户或系统能做什么，和之前相比有什么明确变化
+- Changed：这次新增或修改了什么对象、流程、边界、测试或文档；如果出现代码对象、命令、文件名、状态枚举、provider、role 或 runtime 名词，必须紧跟一句操作者能听懂的人话解释
+- After：现在用户或系统能做什么，和之前相比有什么明确变化；先写能力变化，再写技术对象
 - Not changed：哪些边界没有变，尤其是 non-goals、权限、自动化范围、未发布事项
 
 ### 这一步解决的问题
@@ -223,10 +223,18 @@ When using the full output, start with:
 - continuity: new / continue / consolidate / gap-check / handoff / blocked
 - Why now：为什么现在做这一步，不做会卡在哪里
 - Questions：这一 phase 要回答哪些具体问题
-- Deliverables：会产出什么，不要只写“优化”或“继续推进”
+- Deliverables：会产出什么，不要只写“优化”或“继续推进”；每个交付物都要说明它对操作者或系统能力的意义
 - Non-goals：明确不会做什么
 - Done when：怎么判断完成
 - Stop condition：遇到什么情况必须停下或让用户决策
+
+### Operator Translation Rule
+- Every dense technical noun must be translated once in the same section.
+- Use this pattern when a term could be unclear: `技术名词：它在人话里意味着...；它位于...层；它让操作者现在能...`
+- Prefer capability-first phrasing: write "现在系统能稳定补跑任务窗口" before naming `runCatchUp` or `tickRuntime`.
+- Do not let filenames, enum values, command names, or internal function names be the main explanation.
+- If there is no user-visible capability yet, say so explicitly and name the layer that changed, such as "这只是底层 runner，还不是 CLI、按钮或前端入口。"
+- Keep `Threadsmith Decision` compact. Detailed explanation belongs in `本 phase 的结果`, `这一步具体做了什么`, and `下一 phase 预览`.
 
 If `accepted previous recommendation` is `yes`, this section must describe the
 step being executed now or the blocking gate. It must not repeat the same

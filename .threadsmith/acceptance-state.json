@@ -1,24 +1,24 @@
 {
-  "currentClaim": "Threadsmith Phase Narrative Output v1 已 accepted：full output 现在必须解释本 phase 的功能变化和问题解决，并以可审核 brief 预览下一 phase。",
+  "currentClaim": "Threadsmith Operator Translation Layer v1 已 accepted：full output 现在必须把文件名、函数名、命令、枚举和 runtime 名词翻译成操作者能理解的能力变化与架构位置。",
   "doneWhenChecklist": [
     {
       "id": "plan",
-      "label": "新增 Threadsmith Phase Narrative Output v1 计划文档",
+      "label": "新增 Threadsmith Operator Translation Layer v1 计划文档",
       "status": "pass"
     },
     {
       "id": "output-contract",
-      "label": "SKILL.md full output 使用新的 phase narrative 结构",
+      "label": "SKILL.md full output 要求技术名词伴随人话解释",
       "status": "pass"
     },
     {
-      "id": "narrative-rule",
-      "label": "action contract 要求 Before / Changed / After / Not changed 与下一 phase brief",
+      "id": "translation-rule",
+      "label": "action contract 要求 capability-first wording 和 operator translation",
       "status": "pass"
     },
     {
       "id": "contract-verifier",
-      "label": "skill contract verifier 覆盖新的输出结构",
+      "label": "skill contract verifier 覆盖 operator translation rule",
       "status": "pass"
     },
     {
@@ -32,8 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "这轮只改 Threadsmith 输出契约，不改 runtime command 或自动多 agent 调度。",
-    "新的输出质量仍依赖模型遵守 contract；后续可用真实使用样例继续校验可读性。"
+    "这轮只改 Threadsmith 输出契约，不改 runtime command、前端或自动多 agent 调度。",
+    "新的翻译层仍依赖模型遵守 contract；后续可用真实输出样例继续校验是否足够清楚。"
   ],
   "finalState": "accepted"
 }
