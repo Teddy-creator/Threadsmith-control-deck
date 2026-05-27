@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Phase History Closeout Integration v1 已完成：workflow closeout 现在会自动追加 Phase History entry，项目路径不再只能靠人工 truth writeback 记录。",
+  "currentClaim": "Phase History Backfill Mechanism v1 已完成：Threadsmith 现在有安全的旧历史回填机制，可以先 dry-run 预览，再显式 --write 写入非重复 phase entries。",
   "doneWhenChecklist": [
     {
-      "id": "closeout-history-builder",
-      "label": "fs-bridge 能从 accepted closeout state 构造 Phase History entry",
+      "id": "backfill-validation",
+      "label": "候选 Phase History entries 写入前会经过 schema 校验",
       "status": "pass"
     },
     {
-      "id": "closeout-history-append",
-      "label": "closeout-complete 成功写出 closeout artifact 后会自动 append .threadsmith/history/phases.jsonl",
+      "id": "backfill-dry-run",
+      "label": "默认 dry-run 只报告 accepted/skipped，不修改 phases.jsonl",
       "status": "pass"
     },
     {
-      "id": "closeout-history-source",
-      "label": "history entry source.ref 指向对应 closeout artifact，方便追溯证据",
+      "id": "backfill-write-mode",
+      "label": "显式 --write 时只追加非重复候选条目",
       "status": "pass"
     },
     {
-      "id": "workflow-regression-test",
-      "label": "workflow 测试覆盖 executor -> reviewer -> verifier -> closeout 后生成一条 Phase History",
+      "id": "duplicate-detection",
+      "label": "重复检测覆盖 duplicate id、duplicate source、duplicate completed phase",
       "status": "pass"
     },
     {
       "id": "truth-writeback",
-      "label": "本 phase 已写回 .threadsmith truth，并追加当前 integration phase 的 history entry",
+      "label": "本 phase 已写回 .threadsmith truth，并追加当前 backfill mechanism 的 history entry",
       "status": "pass"
     }
   ],
@@ -32,8 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮仍不展示前端 UI，用户暂时需要通过 history 文件或后续工具查看完整路径。",
-    "本轮没有自动回填旧 phase；旧历史仍需要后续单独迁移。",
+    "本轮只做回填机制，没有实际生成或写入旧 phase 的候选历史。",
+    "旧历史自动发现策略仍未实现；后续应先做 evidence-based candidate generation。",
+    "前端仍冻结，暂不展示 Phase History。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"

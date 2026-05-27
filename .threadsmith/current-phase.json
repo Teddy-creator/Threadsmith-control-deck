@@ -1,22 +1,21 @@
 {
-  "phaseName": "Phase History Closeout Integration v1",
-  "phaseGoal": "把 workflow closeout 与 Phase History 自动连接起来，让每个 accepted phase 在 closeout 成功后自动追加到项目路径历史。",
-  "deliverable": "closeout-complete 会基于 accepted state 写入 .threadsmith/history/phases.jsonl，并用回归测试证明 closeout artifact 与 history entry 已绑定。",
+  "phaseName": "Phase History Backfill Mechanism v1",
+  "phaseGoal": "为旧 phase 回填增加安全机制：先验证候选条目并 dry-run 预览，只有显式批准时才追加到项目路径历史。",
+  "deliverable": "新增 Phase History backfill API、默认 dry-run 的 CLI 入口、重复检测规则与回归测试；不实际大规模回填旧历史，不改前端。",
   "inScope": [
-    "从 closeout accepted state 构造 Phase History entry",
-    "在 closeout-complete 成功写出 closeout artifact 后自动 append Phase History",
-    "让 history entry source 指向对应 closeout artifact",
-    "补充 workflow 回归测试覆盖自动追加",
-    "写回 .threadsmith truth 并记录本 phase 的 history entry"
+    "校验候选 Phase History entries 的 schema",
+    "按 id、source ref、phaseName + completedAt 检测重复",
+    "默认 dry-run 预览 accepted/skipped，不写 history 文件",
+    "显式 --write 时只追加非重复条目",
+    "补充 fs-bridge 测试与计划/truth writeback"
   ],
   "outOfScope": [
+    "自动发现所有旧 phase",
+    "自动写入猜测出来的旧历史",
     "前端 timeline / 路径回放 UI",
-    "自动回填旧 phase",
-    "替换 phase run runtime records",
-    "自动多 agent 调度",
     "发布 release 或同步全局 skill"
   ],
-  "stopCondition": "closeout-complete 自动追加 Phase History 的代码、测试、计划文档和 truth writeback 均完成；后续是否做 UI 展示或历史回填另行规划。",
+  "stopCondition": "backfill API、CLI、重复检测测试和 truth writeback 均完成；旧历史是否实际回填另起一刀并先预览。",
   "verificationForThisPhase": [
     "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",

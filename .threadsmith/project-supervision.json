@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Phase History Closeout Integration v1 已 accepted：项目路径历史现在能由 closeout 自动写入，不再只是手动记录。",
+  "summary": "Phase History Backfill Mechanism v1 已 accepted：现在有安全补旧历史的机制，但还没有实际回填旧历史。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把下一步收束为 closeout 自动写 history，而不是扩大到前端时间线或历史回填。",
+      "taskSummary": "已把回填拆成机制优先，而不是直接把旧历史写进账本。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/threadsmith-phase-history-closeout-integration-v1.md",
-      "updatedAt": "2026-05-28T04:50:44+08:00"
+      "latestEvidenceLabel": "docs/plans/threadsmith-phase-history-backfill-mechanism-v1.md",
+      "updatedAt": "2026-05-28T05:00:33+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 closeout-complete 自动 append Phase History entry。",
+      "taskSummary": "已实现 dry-run/write backfill API 与 CLI 入口。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/workflow.ts",
-      "updatedAt": "2026-05-28T04:50:44+08:00"
+      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistory.ts",
+      "updatedAt": "2026-05-28T05:00:33+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已检查写入链路没有改变前端、发布或 multi-agent 调度边界。",
+      "taskSummary": "已确认回填机制不会默认写 committed truth，也不会自动猜旧 phase。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/workflow.test.ts",
-      "updatedAt": "2026-05-28T04:50:44+08:00"
+      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistory.test.ts",
+      "updatedAt": "2026-05-28T05:00:33+08:00"
     },
     {
       "id": "verifier-logical",
@@ -53,7 +53,7 @@
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": "npm run test --workspace @threadsmith/fs-bridge",
-      "updatedAt": "2026-05-28T04:50:44+08:00"
+      "updatedAt": "2026-05-28T05:00:33+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已把当前 accepted phase 写回 .threadsmith truth 与 Phase History。",
+      "taskSummary": "已把本 phase 的 accepted truth 写回，并记录到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T04:50:44+08:00"
+      "updatedAt": "2026-05-28T05:00:33+08:00"
     }
   ],
-  "updatedAt": "2026-05-28T04:50:44+08:00"
+  "updatedAt": "2026-05-28T05:00:33+08:00"
 }

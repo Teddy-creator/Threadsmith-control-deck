@@ -60,3 +60,82 @@ export async function readLatestPhaseHistoryEntry(projectRoot: string) {
     limit: 1
   }))[0] ?? null;
 }
+
+function sameSource(left: PhaseHistoryEntry, right: PhaseHistoryEntry) {
+  return (
+    left.source.ref !== null &&
+    left.source.kind === right.source.kind &&
+    left.source.ref === right.source.ref
+  );
+}
+
+function sameCompletedPhase(left: PhaseHistoryEntry, right: PhaseHistoryEntry) {
+  return (
+    left.completedAt !== null &&
+    left.phaseName === right.phaseName &&
+    left.completedAt === right.completedAt
+  );
+}
+
+function duplicateReason(
+  candidate: PhaseHistoryEntry,
+  existing: PhaseHistoryEntry[]
+) {
+  if (existing.some((entry) => entry.id === candidate.id)) {
+    return "duplicate-id" as const;
+  }
+
+  if (existing.some((entry) => sameSource(entry, candidate))) {
+    return "duplicate-source" as const;
+  }
+
+  if (existing.some((entry) => sameCompletedPhase(entry, candidate))) {
+    return "duplicate-completed-phase" as const;
+  }
+
+  return null;
+}
+
+export interface BackfillPhaseHistoryOptions {
+  write?: boolean;
+}
+
+export async function backfillPhaseHistory(
+  projectRoot: string,
+  candidates: PhaseHistoryEntry[],
+  options: BackfillPhaseHistoryOptions = {}
+) {
+  const existing = await readPhaseHistory(projectRoot);
+  const accepted: PhaseHistoryEntry[] = [];
+  const skipped: Array<{
+    entry: PhaseHistoryEntry;
+    reason: NonNullable<ReturnType<typeof duplicateReason>>;
+  }> = [];
+
+  for (const candidate of candidates) {
+    const parsed = phaseHistoryEntrySchema.parse(candidate);
+    const reason = duplicateReason(parsed, [...existing, ...accepted]);
+
+    if (reason) {
+      skipped.push({ entry: parsed, reason });
+      continue;
+    }
+
+    accepted.push(parsed);
+  }
+
+  if (options.write) {
+    for (const entry of accepted) {
+      await appendPhaseHistoryEntry(projectRoot, entry);
+    }
+  }
+
+  return {
+    mode: options.write ? ("write" as const) : ("dry-run" as const),
+    accepted,
+    skipped,
+    existingCount: existing.length,
+    acceptedCount: accepted.length,
+    skippedCount: skipped.length
+  };
+}

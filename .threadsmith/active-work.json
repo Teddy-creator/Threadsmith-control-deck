@@ -3,19 +3,19 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将上一刀的 Phase History 底座推进为 closeout 自动写入链路，不改变前端与发布范围。",
+      "taskSummary": "已将“先做回填机制”收束为安全 dry-run/write API 与 CLI，不直接猜旧历史。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已在 workflow closeout-complete 中追加 Phase History entry，并把 source 绑定到 closeout artifact。",
+      "taskSummary": "已实现 backfillPhaseHistory 与 threadsmith:phase-history:backfill CLI。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认 Phase History 与 closeout artifact 的职责分层清楚：history 是路径索引，closeout artifact 是验收证据。",
+      "taskSummary": "已确认默认 dry-run、防重复和显式 --write 边界，避免误写 committed truth。",
       "requiresUserDecision": false
     },
     {
@@ -27,7 +27,7 @@
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 accepted truth，并追加当前 integration phase 的 history entry。",
+      "taskSummary": "已写回 accepted truth，并追加当前 backfill mechanism 的 history entry。",
       "requiresUserDecision": false
     }
   ],

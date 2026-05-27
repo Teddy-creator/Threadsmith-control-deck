@@ -2,22 +2,22 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Phase History Closeout Integration v1 已 accepted：closeout 成功后会自动追加项目路径历史，后续 phase 不再只能靠人工补写 history entry。",
-  "projectStatusSummary": "Threadsmith 现在已经具备项目级路径追踪的自动写入链路：phase run 负责运行态记录，closeout artifact 负责验收证据，Phase History 负责 durable project path。下一步可以选择做历史回填、路径读取/展示，或继续打磨 skill 输出节奏。",
+  "currentFocus": "Phase History Backfill Mechanism v1 已 accepted：现在可以安全预览并显式写入旧 phase history candidates，但尚未实际回填旧历史。",
+  "projectStatusSummary": "Threadsmith 的项目路径追踪现在有三层：Phase History 存储、closeout 自动写入、backfill 安全机制。当前仍不做前端展示；下一步可以选择做 evidence-based candidate generation，先从 commits/plans/closeouts 生成可审核候选条目。",
   "latestAcceptedSlice": {
-    "title": "Phase History Closeout Integration v1",
-    "recordedAt": "2026-05-28T04:50:44+08:00"
+    "title": "Phase History Backfill Mechanism v1",
+    "recordedAt": "2026-05-28T05:00:33+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Phase History Read Surface / Backfill Planning v1",
+    "title": "Phase History Evidence-Based Candidate Generation v1",
     "recordedAt": null
   },
   "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
-    "前端暂未展示 Phase History，因此用户还不能在 UI 里直接浏览完整路径。",
-    "旧 phase 尚未自动回填，当前 history 主要保证从 Phase History v1 之后的记录契约。",
-    "history entry startedAt 暂为 null，后续若需要更精确耗时，需要从 phase run 或 phase start truth 补来源。"
+    "旧 phase 尚未实际回填，当前 history 仍只有 Phase History v1 之后的记录。",
+    "旧历史候选生成必须基于证据，不能从聊天记忆或模型猜测直接写入。",
+    "前端暂未展示 Phase History，因此用户还不能在 UI 里直接浏览完整路径。"
   ],
-  "updatedAt": "2026-05-28T04:50:44+08:00"
+  "updatedAt": "2026-05-28T05:00:33+08:00"
 }
