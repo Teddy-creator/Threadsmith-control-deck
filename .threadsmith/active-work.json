@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把写入前步骤限定为推荐 9 条候选 JSON + dry-run，不执行 --write。",
+      "taskSummary": "已把本轮限定为用户批准的 9 条 recommended candidates 正式写入，不扩大到全部候选。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已生成 recommended candidates JSON，并保存 dry-run artifact。",
+      "taskSummary": "已执行 --write，9 条历史 milestone phase 已进入 .threadsmith/history/phases.jsonl。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认 dry-run 只预览，不修改 .threadsmith/history/phases.jsonl。",
+      "taskSummary": "已确认写入范围只包含审核通过的 9 条推荐大节点。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已确认 dry-run 为 9 accepted / 0 skipped，project truth 与 diff hygiene 通过。",
+      "taskSummary": "已确认写后 dry-run 为 0 accepted / 9 skipped，避免重复写入。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 accepted truth，并追加当前 recommended dry-run 的 history entry。",
+      "taskSummary": "正在收尾为 accepted truth 与本 write phase 的 history entry。",
       "requiresUserDecision": false
     }
   ],

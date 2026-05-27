@@ -1,21 +1,22 @@
 {
-  "phaseName": "Phase History Recommended Backfill Dry Run v1",
-  "phaseGoal": "把审核报告推荐的 9 个大节点做成独立 candidates JSON，并运行 backfill dry-run，确认写入前预期结果。",
-  "deliverable": "新增 recommended-phase-history-candidates-v1.json 与 recommended-phase-history-backfill-dry-run-v1.json；dry-run 显示 9 accepted / 0 skipped，但不执行 --write。",
+  "phaseName": "Phase History Recommended Backfill Write v1",
+  "phaseGoal": "把已审核通过的 9 个历史大节点正式写入 .threadsmith/history/phases.jsonl，让 Threadsmith 的路径追踪能看到更完整的历史 phase。",
+  "deliverable": "9 条推荐 milestone-level 历史 phase 已写入 phases.jsonl，并保存 write artifact 与 after-write dry-run artifact；重复执行 dry-run 会显示 0 accepted / 9 skipped。",
   "inScope": [
-    "从候选审核报告提取推荐第一批 9 个 milestone-level candidates",
-    "生成 docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
-    "运行 threadsmith:phase-history:backfill dry-run",
-    "保存 dry-run 输出到 docs/reports/artifacts/recommended-phase-history-backfill-dry-run-v1.json",
-    "写回 .threadsmith truth 并记录 no-write boundary"
+    "执行已批准的 recommended candidates --write",
+    "保存 backfill write 输出到 docs/reports/artifacts/recommended-phase-history-backfill-write-v1.json",
+    "写入后重新 dry-run，确认 9 条都因 duplicate-id 被跳过",
+    "保存 after-write dry-run 输出到 docs/reports/artifacts/recommended-phase-history-backfill-after-write-dry-run-v1.json",
+    "写回 .threadsmith truth 并追加本 write phase 的 history entry"
   ],
   "outOfScope": [
-    "执行 --write 写入旧历史",
-    "扩大到全部 36 条候选",
+    "扩大回填到全部 36 条候选",
     "改前端或展示路径回放 UI",
-    "发布 release 或同步全局 skill"
+    "发布 release",
+    "同步全局 skill",
+    "修订旧候选的精确时间戳"
   ],
-  "stopCondition": "推荐 9 条候选 JSON 与 dry-run artifact 完成；真正写入旧 history 必须等用户确认。",
+  "stopCondition": "9 条推荐历史 phase 写入完成，写后 dry-run 证明不会重复写入，truth 与 verification 通过。",
   "verificationForThisPhase": [
     "npm run threadsmith:phase-history:backfill -- /Users/cloud/Code/threadsmith-control-deck docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
     "npm run verify:project-truth",

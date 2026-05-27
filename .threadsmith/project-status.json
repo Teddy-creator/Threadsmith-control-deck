@@ -2,22 +2,22 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Phase History Recommended Backfill Dry Run v1 已 accepted：推荐 9 条候选 dry-run 为 9 accepted / 0 skipped，但尚未写入旧 history。",
-  "projectStatusSummary": "Threadsmith 现在已经具备安全回填的完整预写链路：候选生成、候选审核、推荐 JSON、backfill dry-run。下一步唯一会改变历史账本的动作是用户批准后执行 --write。",
+  "currentFocus": "Phase History Recommended Backfill Write v1 已 accepted：推荐 9 条历史大节点已写入 phases.jsonl，写后 dry-run 证明重复写入会被跳过。",
+  "projectStatusSummary": "Threadsmith 现在已经有一份更完整的 committed phase history：自动记录的新 phase 加上 9 条审核过的历史 milestone。下一步如果继续，应做只读展示面，让操作者能快速看到之前做过哪些 phase。",
   "latestAcceptedSlice": {
-    "title": "Phase History Recommended Backfill Dry Run v1",
-    "recordedAt": "2026-05-28T05:28:26+08:00"
+    "title": "Phase History Recommended Backfill Write v1",
+    "recordedAt": "2026-05-28T05:31:50+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Phase History Recommended Backfill Write v1",
+    "title": "Phase History Read Surface / Summary Output v1",
     "recordedAt": null
   },
   "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
-    "执行 --write 会改变 .threadsmith/history/phases.jsonl，必须用户明确确认。",
-    "推荐 9 条是 milestone-level 回填，不包含所有细分 implementation slices。",
-    "部分时间戳来自文件 mtime，适合路径排序参考，不一定等于真实 closeout 时间。"
+    "历史回填只覆盖 9 条大节点，不代表所有旧 slice 都已完整记录。",
+    "部分回填时间戳来自 plan 文件 mtime，适合路径排序参考，不一定等于真实 closeout 时间。",
+    "前端仍冻结，所以短期内需要通过 CLI/skill-readable summary 查看历史。"
   ],
-  "updatedAt": "2026-05-28T05:28:26+08:00"
+  "updatedAt": "2026-05-28T05:31:50+08:00"
 }

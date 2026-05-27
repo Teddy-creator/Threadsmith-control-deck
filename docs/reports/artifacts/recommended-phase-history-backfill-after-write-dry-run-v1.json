@@ -1,0 +1,92 @@
+{
+  "mode": "dry-run",
+  "projectRoot": "/Users/cloud/Code/threadsmith-control-deck",
+  "inputPath": "/Users/cloud/Code/threadsmith-control-deck/docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
+  "existingCount": 15,
+  "acceptedCount": 0,
+  "skippedCount": 9,
+  "accepted": [],
+  "skipped": [
+    {
+      "id": "phase-history-candidate-docs-plans-cross-agent-state-bridge-v1-consolidation-gap-check",
+      "phaseName": "Cross-Agent State Bridge v1 Consolidation & Gap Check",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/cross-agent-state-bridge-v1-consolidation-gap-check.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-project-state-store-and-cross-agent-bridge-v1",
+      "phaseName": "Project State Store and Cross-Agent Bridge v1",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/project-state-store-and-cross-agent-bridge-v1.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-threadsmith-full-governance-speedup-v1",
+      "phaseName": "Threadsmith Full Governance Speedup v1",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/threadsmith-full-governance-speedup-v1.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-threadsmith-operator-translation-layer-v1",
+      "phaseName": "Threadsmith Operator Translation Layer v1",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/threadsmith-operator-translation-layer-v1.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-threadsmith-phase-narrative-output-v1",
+      "phaseName": "Threadsmith Phase Narrative Output v1",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/threadsmith-phase-narrative-output-v1.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-threadsmith-role-chain-execution-cadence-v1",
+      "phaseName": "Threadsmith Role Chain Execution Cadence v1",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/threadsmith-role-chain-execution-cadence-v1.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-v0-2-0-release-hardening",
+      "phaseName": "v0.2.0 Release Hardening",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/v0.2.0-release-hardening.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-v0-2-x-windows-launcher-parity",
+      "phaseName": "v0.2.x Windows Launcher Parity Implementation Plan",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/v0.2.x-windows-launcher-parity.md"
+      }
+    },
+    {
+      "id": "phase-history-candidate-docs-plans-v0-3-0-release-candidate-hardening",
+      "phaseName": "v0.3.0 Release-candidate Hardening",
+      "reason": "duplicate-id",
+      "source": {
+        "kind": "manual",
+        "ref": "docs/plans/v0.3.0-release-candidate-hardening.md"
+      }
+    }
+  ]
+}
