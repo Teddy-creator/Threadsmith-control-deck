@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把本轮限定为只读 summary surface，不碰前端、不继续回填旧历史。",
+      "taskSummary": "已把本轮限定为文档和 truth boundary 收口，不碰前端、不新增功能。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 summarizePhaseHistory 与 threadsmith:phase-history:summary 命令。",
+      "taskSummary": "已新增 operator guide，并更新 truth boundary 与 README。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认 summary 输出能说明历史路径，且 next hints 限制为最近 3 个避免噪音。",
+      "taskSummary": "已确认文档明确区分路径账本、audit trail、candidate artifact 与 committed truth。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已通过真实 summary 输出、fs-bridge 单测和 project truth 验证。",
+      "taskSummary": "已通过 summary 命令、project truth、关键引用检查和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "正在写回本 phase accepted truth，并准备追加 history entry。",
+      "taskSummary": "正在写回本 docs phase accepted truth，并准备追加 history entry。",
       "requiresUserDecision": false
     }
   ],

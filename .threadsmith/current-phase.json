@@ -1,26 +1,25 @@
 {
-  "phaseName": "Phase History Read Surface / Summary Output v1",
-  "phaseGoal": "在前端冻结的前提下，给 Phase History 增加一个只读摘要入口，让操作者不用手动打开 JSONL 也能看见之前做过哪些 phase。",
-  "deliverable": "新增 summarizePhaseHistory 读取摘要能力与 npm run threadsmith:phase-history:summary 命令，可输出总数、最新 phase、结果统计、最近 phase 列表和下一步提示。",
+  "phaseName": "Phase History Contract Docs / Operator Guidance v1",
+  "phaseGoal": "把 Phase History 的定位、边界和操作方式写清楚，避免操作者把它误解成完整聊天日志、完整审计日志或自动验收真相。",
+  "deliverable": "新增 Phase History Operator Guide，更新 truth boundary 与 README，明确 phases.jsonl 属于 committed project truth，并说明 summary、backfill、closeout 的正确用法和边界。",
   "inScope": [
-    "在 fs-bridge 中新增 phase history summary 读取函数",
-    "新增 summary 单元测试，覆盖 total/latest/recent/resultCounts/nextPhaseHints",
-    "新增 scripts/threadsmith-phase-history-summary.ts",
-    "在 package.json 暴露 threadsmith:phase-history:summary 命令",
-    "用当前 Threadsmith 项目的真实 history 验证输出"
+    "新增 docs/guides/phase-history-operator-guide.md",
+    "在 docs/architecture/threadsmith-truth-boundary.md 中把 .threadsmith/history/phases.jsonl 明确纳入 committed truth",
+    "在 README 核心概念中加入 Phase History 简介和 summary 命令",
+    "验证文档引用、summary 命令、project truth 和 diff hygiene"
   ],
   "outOfScope": [
     "改前端",
     "发布 release",
     "同步全局 skill",
-    "增加自动多 agent 调度",
+    "新增 backfill 或 summary 功能",
     "回填更多旧 phase"
   ],
-  "stopCondition": "summary 命令可稳定读取当前项目 history，相关测试与 project truth 验证通过。",
+  "stopCondition": "操作者能从文档里理解 Phase History 是项目路径账本、什么时候写入、怎么查看、哪些东西不能当作 authority。",
   "verificationForThisPhase": [
     "npm run threadsmith:phase-history:summary -- /Users/cloud/Code/threadsmith-control-deck --limit 5",
-    "npm run test --workspace @threadsmith/fs-bridge -- phaseHistory.test.ts",
     "npm run verify:project-truth",
+    "rg -n \"Phase History Operator Guide|phase-history-operator-guide|history/phases.jsonl|Phase History\" README.md docs/architecture/threadsmith-truth-boundary.md docs/guides/phase-history-operator-guide.md",
     "git diff --check"
   ],
   "activeOwners": [

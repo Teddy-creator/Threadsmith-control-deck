@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Phase History Read Surface / Summary Output v1 已 accepted：历史 phase 现在可以通过 summary 命令直接查看。",
+  "summary": "Phase History Contract Docs / Operator Guidance v1 已 accepted：路径账本的定位、边界和操作方式已写入文档。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已限定为只读摘要入口，不碰前端。",
+      "taskSummary": "已限定为文档与 truth boundary 收口，不碰前端。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": ".threadsmith/current-phase.json",
-      "updatedAt": "2026-05-28T05:44:30+08:00"
+      "latestEvidenceLabel": "docs/guides/phase-history-operator-guide.md",
+      "updatedAt": "2026-05-28T05:56:00+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 summarizePhaseHistory 与 summary CLI。",
+      "taskSummary": "已新增 operator guide，并更新 README / truth boundary。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "scripts/threadsmith-phase-history-summary.ts",
-      "updatedAt": "2026-05-28T05:44:30+08:00"
+      "latestEvidenceLabel": "README.md",
+      "updatedAt": "2026-05-28T05:56:00+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认输出范围克制：最近 phase 列表 + 最多 3 个 next hints。",
+      "taskSummary": "已确认 phases.jsonl 被明确标为 committed truth，不再混同为普通 audit trail。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:44:30+08:00"
+      "updatedAt": "2026-05-28T05:56:00+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已通过真实 summary 输出、单测和 truth 验证。",
+      "taskSummary": "已通过 summary 命令、project truth、关键引用检查和 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run threadsmith:phase-history:summary",
-      "updatedAt": "2026-05-28T05:44:30+08:00"
+      "latestEvidenceLabel": "rg Phase History Operator Guide",
+      "updatedAt": "2026-05-28T05:56:00+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已写回本 summary phase accepted truth，并准备追加当前 closeout 到 Phase History。",
+      "taskSummary": "已写回本 docs phase accepted truth，并准备追加当前 closeout 到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:44:30+08:00"
+      "updatedAt": "2026-05-28T05:56:00+08:00"
     }
   ],
-  "updatedAt": "2026-05-28T05:44:30+08:00"
+  "updatedAt": "2026-05-28T05:56:00+08:00"
 }
