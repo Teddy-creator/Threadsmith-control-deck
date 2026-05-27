@@ -1,31 +1,25 @@
 {
-  "phaseName": "Threadsmith Role Runtime Speedup v1",
-  "phaseGoal": "让 $threadsmith 的 full governance 保留 planner -> executor -> reviewer -> verifier -> closeout 的安全职责，同时降低每个角色自身的运行成本、上下文噪音和重复发现成本。",
-  "deliverable": "完成 role runtime metrics、phase evidence bundle、role-scoped packet slimming、planner mode routing、staged verification policy 与 packet-slimming regression fixtures，并完成 closeout 验证。",
+  "phaseName": "Threadsmith Phase History v1",
+  "phaseGoal": "为 Threadsmith 增加项目级路径追踪底座，让操作者后续能查看之前完成过哪些 phase、每个 phase 的产物、验证、风险和下一步。",
+  "deliverable": "新增 Phase History domain schema、fs-bridge append/read API、JSONL 存储路径与回归测试，先形成底层 committed truth 能力，不改前端。",
   "inScope": [
-    "为 phase run 记录 role runtime metrics",
-    "为 phase run 预生成 reusable evidence bundle",
-    "按角色收窄 role packet context refs",
-    "实现 planning-phase / planner-reset / planner-lite / direct-executor 的 planner mode routing",
-    "实现 verifier narrow / standard / release staged verification policy",
-    "补充 packet-slimming regression fixtures，防止关键上下文被误删",
-    "运行 domain / fs-bridge / runtime / orchestrator / skill contract / project truth / diff hygiene 验证"
+    "定义 Phase History entry schema",
+    "新增 .threadsmith/history/phases.jsonl 的 append-only 文件契约",
+    "新增 fs-bridge append/read/latest helpers",
+    "补充 domain 与 fs-bridge 测试",
+    "写回 .threadsmith truth 并追加本 phase 的 history entry"
   ],
   "outOfScope": [
-    "同步或安装全局 ~/.codex/skills/threadsmith/SKILL.md",
-    "前端 UI 改造",
+    "前端 timeline / 路径回放 UI",
+    "自动回填所有历史 phase",
+    "替换 phase run runtime records",
     "自动多 agent 调度",
-    "发布 release",
-    "移除 planner / reviewer / verifier / closeout 任一安全角色",
-    "用时间预算替代质量门禁"
+    "发布 release 或同步全局 skill"
   ],
-  "stopCondition": "Role runtime speedup v1 已完成实现、回归测试与 closeout 验证；全局 skill 保持未同步，后续是否同步由用户另行确认。",
+  "stopCondition": "Phase History v1 的底层 schema、文件路径、读写 API、测试与本轮 history writeback 均完成；后续是否接入 closeout 自动追加或前端展示另行规划。",
   "verificationForThisPhase": [
     "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",
-    "npm run test --workspace @threadsmith/runtime",
-    "npm run test --workspace @threadsmith/orchestrator",
-    "npm run verify:skill-contract",
     "npm run verify:project-truth",
     "git diff --check"
   ],

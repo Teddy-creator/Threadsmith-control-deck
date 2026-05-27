@@ -19,6 +19,7 @@ export * from "./providerRouting.ts";
 export * from "./workflowArtifacts.ts";
 export * from "./workflow.ts";
 export * from "./phaseRuns.ts";
+export * from "./phaseHistory.ts";
 export * from "./phaseReset.ts";
 export * from "./phaseResetDraftArtifacts.ts";
 export * from "./skillDiscovery.ts";

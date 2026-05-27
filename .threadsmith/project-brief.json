@@ -1,6 +1,6 @@
 {
   "projectGoal": "交付稳定、诚实、可公开使用的 Threadsmith v0.3.x：在 Context OS 与 Harness Skill Orchestrator 基础上，把 Codex-first workflow supervision、skill routing metadata、fallback mini protocols 和 release hygiene 打磨成真实可用闭环。",
-  "currentVersionScope": "threadsmith role runtime speedup：当前已把 full governance 的速度问题从“少停顿”推进到 role runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 与 packet-slimming regression fixtures；全局 installed skill 本轮仍不同步。",
+  "currentVersionScope": "threadsmith project path tracking：当前正在把 Threadsmith 从只知道 current phase / latest accepted slice，扩展为能追加记录已完成 phase 的项目级路径历史底座。",
   "nonGoals": [
     "立即发布新版本或继续 v0.3.2 release closeout",
     "维护、优化或重构前端 UI",
@@ -18,16 +18,16 @@
     "开发 Threadsmith 自身时，不允许污染正在使用的全局 installed $threadsmith skill",
     "每一刀保持 phase-bound，并用 evidence-backed verification 收尾"
   ],
-  "successFrame": "开发者能清楚区分 threadsmith-control-deck、全局 installed skill 与历史 Threadsmith 仓库；后续功能和修复都回到 canonical source 上执行。",
+  "successFrame": "开发者能从 committed truth 中看到项目之前完成过哪些 phase、每个 phase 的产物与验证，并能继续从这条路径上规划下一刀。",
   "priorityOrder": [
-    "先收口 Threadsmith role runtime speedup，再决定是否做 lane routing 或同步全局 installed skill",
+    "先建立 Phase History 底层 truth/API，再决定是否接入 closeout 自动追加或前端路径展示",
     "保持 skill/protocol/truth 线优先，前端维护默认冻结",
     "保持 canonical source 边界",
     "增加 drift 防护，避免 canonical source 与 installed skill 再次分叉"
   ],
   "openStrategicQuestions": [
     "Project Charter Gate 应该默认阻塞所有 normal execution，还是允许低风险 exploratory bypass？",
-    "全局 installed skill 的同步应由文档命令、校验脚本，还是未来的安装命令负责？",
+    "Phase History 是否应由 closeout 自动追加，还是先保留为显式写回 API？",
     "外部 agent v1 是否保持只读 + 写回建议，还是允许项目显式授予直接写权限？"
   ]
 }

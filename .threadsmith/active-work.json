@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将 full governance speedup 从“少停顿”扩展为 role runtime speedup：目标是减少每个角色重复发现、上下文拖拽和过宽验证，而不是跳过安全角色。",
+      "taskSummary": "已将用户提出的“能否看到之前做过哪些 phase”收束为 Phase History v1：先做底层 committed truth 路径追踪，不碰前端。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 role runtime metrics、phase evidence bundle、role-scoped packet refs、planner mode routing、verification policy，并补充 packet-slimming regression fixtures。",
+      "taskSummary": "已新增 Phase History schema、.threadsmith/history/phases.jsonl 路径、append/read/latest helpers 与测试。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认这轮不改变前端、不同步全局 skill、不发布 release、不做自动多 agent 调度；改动集中在 repo 版 runtime/orchestrator/domain/fs-bridge/skill contract。",
+      "taskSummary": "已确认 Phase History 与 phase run 分层清楚：前者记录项目路径，后者记录自动链路运行态；本轮没有改前端。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 domain、fs-bridge、runtime、orchestrator、skill contract、project truth 和 diff hygiene 验证，全部通过。",
+      "taskSummary": "已通过 domain、fs-bridge、project truth 与 diff hygiene 验证。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 .threadsmith accepted truth，记录未同步全局 skill、未做自动调度和缺少真实耗时基准等剩余风险。",
+      "taskSummary": "已写回 .threadsmith accepted truth，并追加当前 phase history entry。",
       "requiresUserDecision": false
     }
   ],

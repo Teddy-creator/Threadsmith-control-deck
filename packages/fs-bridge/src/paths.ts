@@ -72,6 +72,14 @@ export function getPhaseRunsDir(projectRoot: string) {
   return join(getThreadsmithDir(projectRoot), "phase-runs");
 }
 
+export function getHistoryDir(projectRoot: string) {
+  return join(getThreadsmithDir(projectRoot), "history");
+}
+
+export function getPhaseHistoryPath(projectRoot: string) {
+  return join(getHistoryDir(projectRoot), "phases.jsonl");
+}
+
 export function getContextDir(projectRoot: string) {
   return join(getThreadsmithDir(projectRoot), "context");
 }

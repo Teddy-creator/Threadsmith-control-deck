@@ -11,6 +11,7 @@ export * from "./workflow.ts";
 export * from "./agentRuns.ts";
 export * from "./commandBridge.ts";
 export * from "./phaseRuns.ts";
+export * from "./phaseHistory.ts";
 export * from "./contextPacket.ts";
 export * from "./repoMap.ts";
 export * from "./evidenceSummary.ts";

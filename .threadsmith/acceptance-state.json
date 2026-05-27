@@ -1,39 +1,29 @@
 {
-  "currentClaim": "Threadsmith Role Runtime Speedup v1 已完成：full governance 现在不仅减少无效停顿，也通过 role runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 和 packet-slimming regression fixtures 降低每个角色的运行负担，同时保留安全门禁。",
+  "currentClaim": "Threadsmith Phase History v1 已完成底层能力：项目现在有 append-only Phase History schema 与 fs-bridge 读写 API，可以把每个已完成 phase 记录成可回放的项目路径条目。",
   "doneWhenChecklist": [
     {
-      "id": "role-runtime-metrics",
-      "label": "phase run 会记录每个角色的 duration、packet size、context refs 与结果摘要指标",
+      "id": "phase-history-schema",
+      "label": "domain 包定义并验证 Phase History entry schema",
       "status": "pass"
     },
     {
-      "id": "evidence-bundle",
-      "label": "packet 构建会预生成 phase evidence bundle，避免每个角色重复做广泛状态发现",
+      "id": "phase-history-storage",
+      "label": "fs-bridge 定义 .threadsmith/history/phases.jsonl 的 append-only 存储路径",
       "status": "pass"
     },
     {
-      "id": "role-scoped-packets",
-      "label": "planner / executor / reviewer / verifier / closeout 会收到按角色裁剪的 context refs",
+      "id": "phase-history-api",
+      "label": "fs-bridge 提供 append、read、read latest helpers，并支持 newest-first / oldest-first",
       "status": "pass"
     },
     {
-      "id": "planner-mode-routing",
-      "label": "planner mode routing 已区分 planning-phase、planner-reset、planner-lite 与 direct-executor",
+      "id": "phase-history-tests",
+      "label": "domain 与 fs-bridge 测试覆盖 schema、缺失历史、追加、排序与 latest 读取",
       "status": "pass"
     },
     {
-      "id": "staged-verification",
-      "label": "verifier 已有 narrow / standard / release verification policy，并写入 packet 与 evidence bundle",
-      "status": "pass"
-    },
-    {
-      "id": "packet-slimming-regression",
-      "label": "已补充回归测试，防止验收标准、blocker、上游结果和 required checks 被 packet slimming 误删",
-      "status": "pass"
-    },
-    {
-      "id": "verification",
-      "label": "domain / fs-bridge / runtime / orchestrator / skill contract / project truth / diff hygiene 验证通过",
+      "id": "truth-writeback",
+      "label": "本 phase 已写回 .threadsmith truth，并追加当前 Phase History 条目",
       "status": "pass"
     }
   ],
@@ -42,10 +32,10 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮没有同步全局 installed skill；用户实际调用全局 $threadsmith 前仍需后续显式同步。",
-    "本轮没有实现自动多 agent 调度，也没有移除任何 full governance 安全角色。",
-    "本轮建立了 runtime metrics，但尚未积累真实项目的前后耗时基准。",
-    "verification policy 已从命令关键词升级为规则策略，但仍是第一版粗粒度规则，后续可继续按真实失败案例细化。"
+    "本轮只建立底层路径追踪能力，暂未接入前端 UI 展示。",
+    "本轮没有自动回填历史 phase；旧 phase 需要后续通过脚本或人工 closeout entry 迁移。",
+    "本轮还没有把 workflow closeout 自动接入 appendPhaseHistoryEntry。",
+    "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"
 }

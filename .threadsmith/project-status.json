@@ -1,24 +1,23 @@
 {
   "projectLabel": "Threadsmith",
-  "currentTrack": "threadsmith full governance runtime speedup",
+  "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Threadsmith Role Runtime Speedup v1 已 accepted：full governance 的提速现在覆盖运行度量、证据预计算、角色上下文瘦身、planner mode routing、分级验证和 packet 瘦身回归保护。",
-  "projectStatusSummary": "Threadsmith 现在把“推进太慢”的问题拆成两层：cadence 层减少无意义 role handoff 停顿，runtime 层减少每个角色重复读上下文、重复发现状态和过宽验证。当前 repo 版实现已通过完整本地验证，但全局 installed skill 尚未同步。",
+  "currentFocus": "Threadsmith Phase History v1 已 accepted：底层现在可以把已完成 phase 追加到 .threadsmith/history/phases.jsonl，后续可基于它做路径回放、前端时间线或 closeout 自动记录。",
+  "projectStatusSummary": "Threadsmith 现在不只保存当前 phase 和最新 accepted slice，也开始具备项目级路径追踪底座。phase run 仍负责记录自动链路运行态，Phase History 则负责记录 durable project path：做过什么、产出什么、如何验证、下一步是什么。",
   "latestAcceptedSlice": {
-    "title": "Threadsmith Role Runtime Speedup v1",
-    "recordedAt": "2026-05-27T03:27:41+08:00"
+    "title": "Threadsmith Phase History v1",
+    "recordedAt": "2026-05-28T04:37:40+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Threadsmith Lane Routing v1: decouple Threadsmith invocation from governance lane",
+    "title": "Phase History Closeout Integration v1",
     "recordedAt": null
   },
-  "currentMilestoneId": "threadsmith-skill-runtime-hardening",
+  "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
-    "全局 installed skill 本轮未同步，因此实际 $threadsmith 调用仍可能不是 repo 版最新逻辑。",
-    "role runtime metrics 已记录结构，但还需要真实项目运行数据来证明速度收益幅度。",
-    "verification policy 是第一版规则策略，后续应根据真实误判或漏判案例继续细化。",
-    "自动多 agent 调度仍未实现；本轮只优化 full governance 链路本身。"
+    "前端暂未展示 Phase History，因此用户还不能在 UI 里直接看到完整路径。",
+    "旧 phase 尚未自动回填，当前 history 只能保证从本轮之后的记录契约。",
+    "closeout 自动追加尚未接入，后续仍需把 workflow closeout 与 appendPhaseHistoryEntry 串起来。"
   ],
-  "updatedAt": "2026-05-27T03:27:41+08:00"
+  "updatedAt": "2026-05-28T04:37:40+08:00"
 }
