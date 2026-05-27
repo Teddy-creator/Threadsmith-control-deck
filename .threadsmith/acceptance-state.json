@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Phase History Candidate Review / Selective Backfill v1 已完成：36 条候选已分类，第一批建议只回填 9 个 milestone-level 大节点，本轮没有写入旧 history。",
+  "currentClaim": "Phase History Recommended Backfill Dry Run v1 已完成：推荐 9 个大节点已生成 JSON，并通过 dry-run 预览为 9 accepted / 0 skipped；本轮没有执行 --write。",
   "doneWhenChecklist": [
     {
-      "id": "candidate-review-report",
-      "label": "已生成候选审核报告 docs/reports/phase-history-candidate-review-v1.md",
+      "id": "recommended-json",
+      "label": "已生成仅包含推荐 9 个大节点的 candidates JSON",
       "status": "pass"
     },
     {
-      "id": "first-backfill-set",
-      "label": "已列出推荐第一批回填的 milestone-level candidates",
+      "id": "dry-run-artifact",
+      "label": "已保存 backfill dry-run 输出 artifact",
       "status": "pass"
     },
     {
-      "id": "skip-current-history",
-      "label": "已标出当前 Phase History 已覆盖的候选，避免重复写入",
-      "status": "pass"
-    },
-    {
-      "id": "needs-more-evidence",
-      "label": "已标出需要更多证据的候选，不建议写入",
+      "id": "dry-run-result",
+      "label": "dry-run 结果为 existing 5 / accepted 9 / skipped 0",
       "status": "pass"
     },
     {
       "id": "no-write-boundary",
-      "label": "本轮没有执行 --write，也没有把旧候选写入 phases.jsonl",
+      "label": "本轮没有执行 --write，没有把 9 条旧候选写入 phases.jsonl",
+      "status": "pass"
+    },
+    {
+      "id": "truth-writeback",
+      "label": "本 phase 已写回 .threadsmith truth，并追加当前 dry-run phase 的 history entry",
       "status": "pass"
     }
   ],
@@ -32,9 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮没有真正回填旧历史，只完成候选审核。",
-    "第一批推荐候选还没有生成单独 JSON 文件。",
-    "需要更多证据的候选仍需后续 commit/closeout/release mapping。",
+    "推荐 9 条候选尚未真正写入 history。",
+    "真正 --write 前需要用户明确批准。",
+    "候选 completedAt 目前来自 plan 文件 mtime，后续若要更精准可用 tag/commit 时间修订。",
     "前端仍冻结，暂不展示 Phase History。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],

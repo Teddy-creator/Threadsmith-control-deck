@@ -1,23 +1,23 @@
 {
-  "phaseName": "Phase History Candidate Review / Selective Backfill v1",
-  "phaseGoal": "审核旧 phase 候选清单，把候选分成可回填、跳过、延后细审和需要更多证据；本轮不写入 history。",
-  "deliverable": "新增 phase-history-candidate-review-v1 报告，给出第一批推荐回填的大节点与需要跳过/延后的候选。",
+  "phaseName": "Phase History Recommended Backfill Dry Run v1",
+  "phaseGoal": "把审核报告推荐的 9 个大节点做成独立 candidates JSON，并运行 backfill dry-run，确认写入前预期结果。",
+  "deliverable": "新增 recommended-phase-history-candidates-v1.json 与 recommended-phase-history-backfill-dry-run-v1.json；dry-run 显示 9 accepted / 0 skipped，但不执行 --write。",
   "inScope": [
-    "读取候选生成 dry-run 输出",
-    "对照 CHANGELOG、release checklist、tags、commits、architecture docs 等 repo evidence",
-    "分类推荐 first selective backfill set",
-    "标出已被当前 Phase History 覆盖的候选",
-    "标出需要更多证据的候选"
+    "从候选审核报告提取推荐第一批 9 个 milestone-level candidates",
+    "生成 docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
+    "运行 threadsmith:phase-history:backfill dry-run",
+    "保存 dry-run 输出到 docs/reports/artifacts/recommended-phase-history-backfill-dry-run-v1.json",
+    "写回 .threadsmith truth 并记录 no-write boundary"
   ],
   "outOfScope": [
     "执行 --write 写入旧历史",
-    "生成最终 recommended-candidates.json",
+    "扩大到全部 36 条候选",
     "改前端或展示路径回放 UI",
     "发布 release 或同步全局 skill"
   ],
-  "stopCondition": "候选审核报告完成，truth 写回；真正写入旧 history 必须等用户确认下一刀。",
+  "stopCondition": "推荐 9 条候选 JSON 与 dry-run artifact 完成；真正写入旧 history 必须等用户确认。",
   "verificationForThisPhase": [
-    "npm run threadsmith:phase-history:candidates -- /Users/cloud/Code/threadsmith-control-deck",
+    "npm run threadsmith:phase-history:backfill -- /Users/cloud/Code/threadsmith-control-deck docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
     "npm run verify:project-truth",
     "git diff --check"
   ],

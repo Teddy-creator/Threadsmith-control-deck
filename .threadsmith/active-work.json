@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把候选审核目标压成报告型 phase：分类 36 条候选，不写 history。",
+      "taskSummary": "已把写入前步骤限定为推荐 9 条候选 JSON + dry-run，不执行 --write。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已生成 phase-history-candidate-review-v1 报告，列出 first backfill set、skip、defer、needs evidence。",
+      "taskSummary": "已生成 recommended candidates JSON，并保存 dry-run artifact。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认报告没有把候选当成 accepted truth，也没有执行 --write。",
+      "taskSummary": "已确认 dry-run 只预览，不修改 .threadsmith/history/phases.jsonl。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已通过 candidate dry-run、project truth 与 diff hygiene 验证。",
+      "taskSummary": "已确认 dry-run 为 9 accepted / 0 skipped，project truth 与 diff hygiene 通过。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 accepted truth，并追加当前 candidate review 的 history entry。",
+      "taskSummary": "已写回 accepted truth，并追加当前 recommended dry-run 的 history entry。",
       "requiresUserDecision": false
     }
   ],
