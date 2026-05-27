@@ -1,24 +1,26 @@
 {
-  "phaseName": "Phase History Backfill Mechanism v1",
-  "phaseGoal": "为旧 phase 回填增加安全机制：先验证候选条目并 dry-run 预览，只有显式批准时才追加到项目路径历史。",
-  "deliverable": "新增 Phase History backfill API、默认 dry-run 的 CLI 入口、重复检测规则与回归测试；不实际大规模回填旧历史，不改前端。",
+  "phaseName": "Phase History Evidence-Based Candidate Generation v1",
+  "phaseGoal": "从 repo 证据生成可审核的旧 phase 候选条目，并通过现有 backfill dry-run 预览，不直接写入历史账本。",
+  "deliverable": "新增 plan-document candidate generator、CLI dry-run 摘要、候选 JSON 输出能力与回归测试；候选来源先限定为 docs/plans。",
   "inScope": [
-    "校验候选 Phase History entries 的 schema",
-    "按 id、source ref、phaseName + completedAt 检测重复",
-    "默认 dry-run 预览 accepted/skipped，不写 history 文件",
-    "显式 --write 时只追加非重复条目",
-    "补充 fs-bridge 测试与计划/truth writeback"
+    "扫描 docs/plans/*.md 作为第一批保守证据源",
+    "提取 phaseName、summary、deliverables、verification、evidenceRefs",
+    "生成 medium-confidence Phase History candidates",
+    "复用 backfillPhaseHistory dry-run 预览 accepted/skipped",
+    "提供 CLI 摘要输出与可选 candidate JSON 输出"
   ],
   "outOfScope": [
-    "自动发现所有旧 phase",
-    "自动写入猜测出来的旧历史",
+    "把候选 entries 写入 .threadsmith/history/phases.jsonl",
+    "从聊天记忆或模型猜测推断 accepted 历史",
+    "解析 commits、PR、release notes、closeout artifacts 等全部证据源",
     "前端 timeline / 路径回放 UI",
     "发布 release 或同步全局 skill"
   ],
-  "stopCondition": "backfill API、CLI、重复检测测试和 truth writeback 均完成；旧历史是否实际回填另起一刀并先预览。",
+  "stopCondition": "候选生成 API、CLI、测试、真实 repo dry-run 与 truth writeback 均完成；真正回填需要单独审核候选后再决定。",
   "verificationForThisPhase": [
     "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",
+    "npm run threadsmith:phase-history:candidates -- /Users/cloud/Code/threadsmith-control-deck",
     "npm run verify:project-truth",
     "git diff --check"
   ],

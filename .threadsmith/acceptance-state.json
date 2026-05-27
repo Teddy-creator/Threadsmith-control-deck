@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Phase History Backfill Mechanism v1 已完成：Threadsmith 现在有安全的旧历史回填机制，可以先 dry-run 预览，再显式 --write 写入非重复 phase entries。",
+  "currentClaim": "Phase History Evidence-Based Candidate Generation v1 已完成：Threadsmith 现在能从 docs/plans repo evidence 生成旧 phase 候选，并通过 dry-run 预览哪些可回填。",
   "doneWhenChecklist": [
     {
-      "id": "backfill-validation",
-      "label": "候选 Phase History entries 写入前会经过 schema 校验",
+      "id": "candidate-source-plans",
+      "label": "候选生成先限定为 docs/plans/*.md 证据源，不使用聊天记忆猜测",
       "status": "pass"
     },
     {
-      "id": "backfill-dry-run",
-      "label": "默认 dry-run 只报告 accepted/skipped，不修改 phases.jsonl",
+      "id": "candidate-fields",
+      "label": "候选 entry 包含 phaseName、summary、deliverables、verification、evidenceRefs 与 source",
       "status": "pass"
     },
     {
-      "id": "backfill-write-mode",
-      "label": "显式 --write 时只追加非重复候选条目",
+      "id": "candidate-dry-run-preview",
+      "label": "候选会经过 backfill dry-run，报告 accepted/skipped，不写 history",
       "status": "pass"
     },
     {
-      "id": "duplicate-detection",
-      "label": "重复检测覆盖 duplicate id、duplicate source、duplicate completed phase",
+      "id": "candidate-cli",
+      "label": "CLI 能打印 dry-run 摘要，并可选输出 candidates JSON 供人工审核",
       "status": "pass"
     },
     {
       "id": "truth-writeback",
-      "label": "本 phase 已写回 .threadsmith truth，并追加当前 backfill mechanism 的 history entry",
+      "label": "本 phase 已写回 .threadsmith truth，并追加当前 candidate generation 的 history entry",
       "status": "pass"
     }
   ],
@@ -32,8 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮只做回填机制，没有实际生成或写入旧 phase 的候选历史。",
-    "旧历史自动发现策略仍未实现；后续应先做 evidence-based candidate generation。",
+    "本轮没有把候选写入 phases.jsonl，旧历史仍未实际回填。",
+    "本轮候选来源仅覆盖 docs/plans，尚未综合 commits、PR、release notes、closeout artifacts。",
+    "候选 confidence 固定为 medium，后续可加入多证据交叉校验提升置信度。",
     "前端仍冻结，暂不展示 Phase History。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],

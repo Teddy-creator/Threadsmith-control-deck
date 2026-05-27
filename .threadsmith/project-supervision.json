@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Phase History Backfill Mechanism v1 已 accepted：现在有安全补旧历史的机制，但还没有实际回填旧历史。",
+  "summary": "Phase History Evidence-Based Candidate Generation v1 已 accepted：可生成旧 phase 候选并 dry-run，但不会自动写旧历史。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把回填拆成机制优先，而不是直接把旧历史写进账本。",
+      "taskSummary": "已把候选来源限制为 repo evidence 中的 docs/plans，避免从聊天记忆猜历史。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/threadsmith-phase-history-backfill-mechanism-v1.md",
-      "updatedAt": "2026-05-28T05:00:33+08:00"
+      "latestEvidenceLabel": "docs/plans/threadsmith-phase-history-candidate-generation-v1.md",
+      "updatedAt": "2026-05-28T05:14:13+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 dry-run/write backfill API 与 CLI 入口。",
+      "taskSummary": "已实现候选生成 API、CLI 和输出文件能力。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistory.ts",
-      "updatedAt": "2026-05-28T05:00:33+08:00"
+      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistoryCandidates.ts",
+      "updatedAt": "2026-05-28T05:14:13+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认回填机制不会默认写 committed truth，也不会自动猜旧 phase。",
+      "taskSummary": "已确认候选只是 reviewable candidates，不是 accepted truth。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistory.test.ts",
-      "updatedAt": "2026-05-28T05:00:33+08:00"
+      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistoryCandidates.test.ts",
+      "updatedAt": "2026-05-28T05:14:13+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已通过 package tests、project truth 与 diff hygiene 验证。",
+      "taskSummary": "已通过 package tests、真实 repo dry-run、project truth 与 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run test --workspace @threadsmith/fs-bridge",
-      "updatedAt": "2026-05-28T05:00:33+08:00"
+      "latestEvidenceLabel": "npm run threadsmith:phase-history:candidates",
+      "updatedAt": "2026-05-28T05:14:13+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已把本 phase 的 accepted truth 写回，并记录到 Phase History。",
+      "taskSummary": "已写回本 phase accepted truth，并记录到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:00:33+08:00"
+      "updatedAt": "2026-05-28T05:14:13+08:00"
     }
   ],
-  "updatedAt": "2026-05-28T05:00:33+08:00"
+  "updatedAt": "2026-05-28T05:14:13+08:00"
 }
