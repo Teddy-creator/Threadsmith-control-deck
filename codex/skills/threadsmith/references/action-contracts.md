@@ -378,6 +378,33 @@ do not write `.threadsmith/`, and label the source layer for factual claims.
 For closeout, accepted phases, or any response that introduces the next phase,
 Threadsmith must produce a phase narrative, not only a protocol status list.
 
+### Closeout Output Gate
+
+Before finalizing the response, check whether the action crossed a durable
+phase or slice boundary. If any two closeout signals are present, boundary full
+output is mandatory:
+
+- completed, accepted, closed out, or ready for next phase
+- commit, PR, merge, release, tag, truth writeback, packet update, or closeout
+  artifact created
+- verification passed or acceptance evidence listed
+- next phase, next slice, or next recommended direction introduced
+
+When the gate triggers, do not use a compact prose closeout like:
+
+```text
+已用 Threadsmith 推进并完成 ...
+这一步做的是 ...
+验证已通过 ...
+下一步建议 ...
+```
+
+That shape loses the operator orientation contract. The same content must be
+placed under `本 phase 的结果`, `这一步具体做了什么`, `这一步解决的问题`,
+`验证`, `下一 phase 预览`, and `你需要审核的点`.
+
+The Threadsmith closeout contract overrides ordinary concise final-answer style.
+
 Use this exact field skeleton. Do not satisfy the rule with section headings
 and free-form paragraphs only:
 

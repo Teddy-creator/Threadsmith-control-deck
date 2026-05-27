@@ -48,6 +48,10 @@ const checks = [
     label: "output matrix and orientation sections are required",
     patterns: [
       /## Output Matrix/,
+      /## Closeout Output Gate/,
+      /If any two of these signals are present/,
+      /commit, PR, merge, tag, release, durable truth writeback, packet update, or\s+closeout artifact/,
+      /Threadsmith output rules override the default concise Codex final style/,
       /exact field skeleton/,
       /Do not\s+satisfy full output by writing only these section headings with free-form\s+paragraphs/,
       /Full output sections/,
@@ -120,6 +124,11 @@ const checks = [
     label: "phase narrative rule is documented",
     patterns: [
       /## Phase Narrative Rule/,
+      /### Closeout Output Gate/,
+      /If any two closeout signals are present/,
+      /已用 Threadsmith 推进并完成/,
+      /That shape loses the operator orientation contract/,
+      /overrides ordinary concise final-answer style/,
       /exact field skeleton/,
       /free-form paragraphs only/,
       /phase 名称/,

@@ -158,6 +158,28 @@ role.
 Use boundary full output for `recover`, bootstrap, closeout, accepted phases,
 phase-boundary reports, and any response that changes durable truth.
 
+## Closeout Output Gate
+
+Before writing the final response, check whether the current action crossed a
+phase or slice boundary. If any two of these signals are present, the response
+is a closeout or phase-boundary report and must use boundary full output:
+
+- the work is described as completed, accepted, closed out, or ready for the
+  next phase
+- a commit, PR, merge, tag, release, durable truth writeback, packet update, or
+  closeout artifact was created
+- verification passed or acceptance evidence is listed
+- the response introduces the next phase, next slice, or next recommended
+  direction
+
+When this gate triggers, do not collapse the response into a prose summary such
+as "已用 Threadsmith 推进并完成...", "这一步做的是...", "验证已通过...",
+and "下一步建议...". Those sentences may appear inside the required full
+output fields, but they cannot replace the skeleton.
+
+Threadsmith output rules override the default concise Codex final style for
+closeout and phase-boundary reports.
+
 Use internal progress output for routine role-chain handoffs inside an approved
 phase, such as executor -> reviewer, reviewer -> verifier, or verifier ->
 closeout.
