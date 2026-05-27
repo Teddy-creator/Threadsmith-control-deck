@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Phase History Evidence-Based Candidate Generation v1 已 accepted：可生成旧 phase 候选并 dry-run，但不会自动写旧历史。",
+  "summary": "Phase History Candidate Review / Selective Backfill v1 已 accepted：候选已分类，但旧 history 尚未写入。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把候选来源限制为 repo evidence 中的 docs/plans，避免从聊天记忆猜历史。",
+      "taskSummary": "已把下一步约束为先审核候选，不直接写旧历史。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/threadsmith-phase-history-candidate-generation-v1.md",
-      "updatedAt": "2026-05-28T05:14:13+08:00"
+      "latestEvidenceLabel": "docs/reports/phase-history-candidate-review-v1.md",
+      "updatedAt": "2026-05-28T05:24:11+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现候选生成 API、CLI 和输出文件能力。",
+      "taskSummary": "已写出候选分类报告和推荐第一批回填大节点。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistoryCandidates.ts",
-      "updatedAt": "2026-05-28T05:14:13+08:00"
+      "latestEvidenceLabel": "docs/reports/phase-history-candidate-review-v1.md",
+      "updatedAt": "2026-05-28T05:24:11+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认候选只是 reviewable candidates，不是 accepted truth。",
+      "taskSummary": "已检查报告保留了 no-write 边界，避免污染 committed truth。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/fs-bridge/src/phaseHistoryCandidates.test.ts",
-      "updatedAt": "2026-05-28T05:14:13+08:00"
+      "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
+      "updatedAt": "2026-05-28T05:24:11+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已通过 package tests、真实 repo dry-run、project truth 与 diff hygiene。",
+      "taskSummary": "已确认候选 dry-run 可运行，project truth schema-valid，diff hygiene 通过。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run threadsmith:phase-history:candidates",
-      "updatedAt": "2026-05-28T05:14:13+08:00"
+      "latestEvidenceLabel": "npm run verify:project-truth",
+      "updatedAt": "2026-05-28T05:24:11+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已写回本 phase accepted truth，并记录到 Phase History。",
+      "taskSummary": "已把本 phase accepted truth 写回，并记录到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:14:13+08:00"
+      "updatedAt": "2026-05-28T05:24:11+08:00"
     }
   ],
-  "updatedAt": "2026-05-28T05:14:13+08:00"
+  "updatedAt": "2026-05-28T05:24:11+08:00"
 }

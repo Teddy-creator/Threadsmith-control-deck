@@ -2,22 +2,22 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Phase History Evidence-Based Candidate Generation v1 已 accepted：现在能从 docs/plans 生成旧 phase candidates 并 dry-run 预览，但尚未写入旧历史。",
-  "projectStatusSummary": "Threadsmith 的项目路径追踪现在具备存储、closeout 自动写入、backfill 安全机制、plan-document 候选生成。当前候选生成只基于 docs/plans，真实回填前仍需要人工审核和可选多证据交叉校验。",
+  "currentFocus": "Phase History Candidate Review / Selective Backfill v1 已 accepted：36 条候选已审核分类，建议先只回填 9 个大节点，但尚未写入旧 history。",
+  "projectStatusSummary": "Threadsmith 的项目路径追踪现在已经有生成候选与审核分类报告。下一步若继续，应生成仅包含推荐大节点的 candidates JSON，先 dry-run，再由用户决定是否 --write。",
   "latestAcceptedSlice": {
-    "title": "Phase History Evidence-Based Candidate Generation v1",
-    "recordedAt": "2026-05-28T05:14:13+08:00"
+    "title": "Phase History Candidate Review / Selective Backfill v1",
+    "recordedAt": "2026-05-28T05:24:11+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Phase History Candidate Review / Selective Backfill v1",
+    "title": "Phase History Recommended Backfill Dry Run v1",
     "recordedAt": null
   },
   "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
-    "docs/plans 只能证明计划存在，不一定单独证明 phase 已 accepted。",
-    "旧 phase 尚未实际回填，当前 history 仍只包含 Phase History v1 之后的正式记录。",
-    "真正写入前需要审核候选，避免把未完成或重复 phase 写入 committed truth。"
+    "真正写入旧 history 前仍需用户批准。",
+    "docs/plans 只能证明计划存在，第一批建议优先选择有 release/tag/commit 交叉证据的大节点。",
+    "过细的 implementation slices 如果全部写入，会让 project path 变成 commit log。"
   ],
-  "updatedAt": "2026-05-28T05:14:13+08:00"
+  "updatedAt": "2026-05-28T05:24:11+08:00"
 }

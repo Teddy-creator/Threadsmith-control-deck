@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把“自动找旧历史”压成第一版证据候选生成：只读 docs/plans，不写 history。",
+      "taskSummary": "已把候选审核目标压成报告型 phase：分类 36 条候选，不写 history。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 phaseHistoryCandidates API 与 threadsmith:phase-history:candidates CLI。",
+      "taskSummary": "已生成 phase-history-candidate-review-v1 报告，列出 first backfill set、skip、defer、needs evidence。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认候选生成不会直接写 committed truth，且明确标记 medium confidence。",
+      "taskSummary": "已确认报告没有把候选当成 accepted truth，也没有执行 --write。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已通过 domain、fs-bridge、真实 repo candidate dry-run、project truth 与 diff hygiene 验证。",
+      "taskSummary": "已通过 candidate dry-run、project truth 与 diff hygiene 验证。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 accepted truth，并追加当前 candidate generation 的 history entry。",
+      "taskSummary": "已写回 accepted truth，并追加当前 candidate review 的 history entry。",
       "requiresUserDecision": false
     }
   ],
