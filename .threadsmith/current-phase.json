@@ -1,25 +1,28 @@
 {
-  "phaseName": "Phase History Contract Docs / Operator Guidance v1",
-  "phaseGoal": "把 Phase History 的定位、边界和操作方式写清楚，避免操作者把它误解成完整聊天日志、完整审计日志或自动验收真相。",
-  "deliverable": "新增 Phase History Operator Guide，更新 truth boundary 与 README，明确 phases.jsonl 属于 committed project truth，并说明 summary、backfill、closeout 的正确用法和边界。",
+  "phaseName": "Phase History Branch Review / PR Preparation v1",
+  "phaseGoal": "停止扩功能，审查 threadsmith-phase-history-v1 分支的提交范围、验证证据和 PR 准备状态。",
+  "deliverable": "新增 branch review 报告，确认分支相对 main 的 9 个提交均属于 Phase History 范围，前端未改动，PR 级验证通过。",
   "inScope": [
-    "新增 docs/guides/phase-history-operator-guide.md",
-    "在 docs/architecture/threadsmith-truth-boundary.md 中把 .threadsmith/history/phases.jsonl 明确纳入 committed truth",
-    "在 README 核心概念中加入 Phase History 简介和 summary 命令",
-    "验证文档引用、summary 命令、project truth 和 diff hygiene"
+    "检查分支状态、提交范围和相对 main 的 diff",
+    "确认没有 apps/ 前端文件变更",
+    "运行 domain / fs-bridge 测试与 phase-history 命令验证",
+    "新增 docs/reports/phase-history-branch-review-v1.md",
+    "写回 .threadsmith truth 和 Phase History"
   ],
   "outOfScope": [
+    "继续扩展 Phase History 功能",
     "改前端",
+    "push 分支或创建 PR",
     "发布 release",
-    "同步全局 skill",
-    "新增 backfill 或 summary 功能",
-    "回填更多旧 phase"
+    "同步全局 skill"
   ],
-  "stopCondition": "操作者能从文档里理解 Phase History 是项目路径账本、什么时候写入、怎么查看、哪些东西不能当作 authority。",
+  "stopCondition": "branch review 报告完成，验证通过，工作区可提交，下一步可由用户决定是否 push/PR。",
   "verificationForThisPhase": [
     "npm run threadsmith:phase-history:summary -- /Users/cloud/Code/threadsmith-control-deck --limit 5",
+    "npm run threadsmith:phase-history:backfill -- /Users/cloud/Code/threadsmith-control-deck docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
+    "npm run test --workspace @threadsmith/domain",
+    "npm run test --workspace @threadsmith/fs-bridge",
     "npm run verify:project-truth",
-    "rg -n \"Phase History Operator Guide|phase-history-operator-guide|history/phases.jsonl|Phase History\" README.md docs/architecture/threadsmith-truth-boundary.md docs/guides/phase-history-operator-guide.md",
     "git diff --check"
   ],
   "activeOwners": [

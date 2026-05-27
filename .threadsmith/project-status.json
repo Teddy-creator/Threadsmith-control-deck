@@ -2,22 +2,22 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Phase History Contract Docs / Operator Guidance v1 已 accepted：Phase History 的定位、边界和操作方式已写清楚。",
-  "projectStatusSummary": "Threadsmith 的路径追踪现在有数据、读取入口和操作者文档：phases.jsonl 是 committed project truth；summary 是只读查看入口；backfill 必须先审核和 dry-run。",
+  "currentFocus": "Phase History Branch Review / PR Preparation v1 已 accepted：分支范围和 PR 级验证已完成，等待是否 push/PR 的用户决策。",
+  "projectStatusSummary": "Phase History 主线已经完成到 PR-ready：有 schema、closeout 写入、backfill、summary、文档和 branch review。前端仍冻结，未发布 release，未同步全局 skill。",
   "latestAcceptedSlice": {
-    "title": "Phase History Contract Docs / Operator Guidance v1",
-    "recordedAt": "2026-05-28T05:56:00+08:00"
+    "title": "Phase History Branch Review / PR Preparation v1",
+    "recordedAt": "2026-05-28T06:12:00+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Phase History Branch Review / PR Preparation v1",
+    "title": "Phase History PR / Merge Decision",
     "recordedAt": null
   },
   "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
+    "分支尚未 push/PR，需要用户明确批准。",
     "前端仍冻结，Phase History 目前通过 CLI/skill-readable summary 查看。",
-    "旧历史只回填了 9 条大节点，未覆盖全部细分 slice。",
-    "下一步需要整理本分支提交范围，准备 review/PR，而不是继续扩 scope。"
+    "旧历史只回填了 9 条 milestone-level phase。"
   ],
-  "updatedAt": "2026-05-28T05:56:00+08:00"
+  "updatedAt": "2026-05-28T06:12:00+08:00"
 }

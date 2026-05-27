@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把本轮限定为文档和 truth boundary 收口，不碰前端、不新增功能。",
+      "taskSummary": "已把本轮限定为分支 review 和 PR 准备，不继续扩功能。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 operator guide，并更新 truth boundary 与 README。",
+      "taskSummary": "已生成 branch review 报告并整理 PR 推荐标题/摘要。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认文档明确区分路径账本、audit trail、candidate artifact 与 committed truth。",
+      "taskSummary": "已确认分支只包含 Phase History 范围，未改前端。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已通过 summary 命令、project truth、关键引用检查和 diff hygiene。",
+      "taskSummary": "已通过 domain/fs-bridge 测试、summary/backfill 命令、project truth 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "正在写回本 docs phase accepted truth，并准备追加 history entry。",
+      "taskSummary": "正在写回本 branch review phase accepted truth，并准备追加 history entry。",
       "requiresUserDecision": false
     }
   ],

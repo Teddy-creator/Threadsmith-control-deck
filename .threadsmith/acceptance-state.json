@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Phase History Contract Docs / Operator Guidance v1 已完成：Phase History 的定位、边界和操作方式已写入文档，phases.jsonl 已在 truth boundary 中明确为 committed project truth。",
+  "currentClaim": "Phase History Branch Review / PR Preparation v1 已完成：threadsmith-phase-history-v1 分支已完成提交范围审查和 PR 级验证，准备进入 push/PR 决策。",
   "doneWhenChecklist": [
     {
-      "id": "operator-guide",
-      "label": "已新增 Phase History Operator Guide",
-      "status": "pass"
-    },
-    {
-      "id": "truth-boundary",
-      "label": "truth boundary 已把 .threadsmith/history/phases.jsonl 纳入 committed truth",
-      "status": "pass"
-    },
-    {
-      "id": "readme-entry",
-      "label": "README 已加入 Phase History 核心概念和 summary 命令",
-      "status": "pass"
-    },
-    {
-      "id": "link-keyword-check",
-      "label": "已用 rg 检查 README / truth boundary / operator guide 的关键引用",
+      "id": "branch-scope",
+      "label": "已确认分支从 main 的 48d210b 分出，共 9 个 Phase History 相关提交",
       "status": "pass"
     },
     {
       "id": "frontend-frozen",
-      "label": "本轮没有修改前端",
+      "label": "已确认没有 apps/ 前端文件变更",
+      "status": "pass"
+    },
+    {
+      "id": "branch-review-report",
+      "label": "已新增 phase-history-branch-review-v1.md 报告",
+      "status": "pass"
+    },
+    {
+      "id": "pr-verification",
+      "label": "domain / fs-bridge 测试、summary、backfill dry-run、project truth 和 diff hygiene 均通过",
+      "status": "pass"
+    },
+    {
+      "id": "no-push-boundary",
+      "label": "本轮没有 push、创建 PR、发布 release 或同步全局 skill",
       "status": "pass"
     }
   ],
@@ -32,8 +32,9 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "Phase History 仍是 CLI/skill-readable 路径，不在前端展示。",
-    "它是项目路径账本，不是完整事件数据库；旧细粒度 slice 没有全部回填。",
+    "分支尚未 push，也尚未创建 PR。",
+    "前端仍冻结，Phase History 不在页面展示。",
+    "旧历史只回填 9 条 milestone-level phase。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"
