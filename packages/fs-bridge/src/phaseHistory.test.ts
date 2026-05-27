@@ -6,7 +6,8 @@ import {
   appendPhaseHistoryEntry,
   backfillPhaseHistory,
   readLatestPhaseHistoryEntry,
-  readPhaseHistory
+  readPhaseHistory,
+  summarizePhaseHistory
 } from "./phaseHistory.ts";
 
 const createdRoots: string[] = [];
@@ -130,5 +131,30 @@ describe("phaseHistory", () => {
       "phase-history-1",
       "phase-history-2"
     ]);
+  });
+
+  it("summarizes phase history for operator-facing read surfaces", async () => {
+    const projectRoot = await createProjectRoot();
+    await appendPhaseHistoryEntry(projectRoot, makeEntry(1));
+    await appendPhaseHistoryEntry(projectRoot, {
+      ...makeEntry(2),
+      result: "blocked",
+      nextPhase: "Recovery Phase"
+    });
+    await appendPhaseHistoryEntry(projectRoot, makeEntry(3));
+
+    const summary = await summarizePhaseHistory(projectRoot, { limit: 2 });
+
+    expect(summary.totalCount).toBe(3);
+    expect(summary.latest?.phaseName).toBe("Phase 3");
+    expect(summary.recent.map((entry) => entry.phaseName)).toEqual([
+      "Phase 3",
+      "Phase 2"
+    ]);
+    expect(summary.resultCounts).toEqual({
+      accepted: 2,
+      blocked: 1
+    });
+    expect(summary.nextPhaseHints).toEqual(["Recovery Phase"]);
   });
 });

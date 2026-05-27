@@ -2,22 +2,22 @@
   "projectLabel": "Threadsmith",
   "currentTrack": "project path tracking / phase history",
   "overallState": "stable",
-  "currentFocus": "Phase History Recommended Backfill Write v1 已 accepted：推荐 9 条历史大节点已写入 phases.jsonl，写后 dry-run 证明重复写入会被跳过。",
-  "projectStatusSummary": "Threadsmith 现在已经有一份更完整的 committed phase history：自动记录的新 phase 加上 9 条审核过的历史 milestone。下一步如果继续，应做只读展示面，让操作者能快速看到之前做过哪些 phase。",
+  "currentFocus": "Phase History Read Surface / Summary Output v1 已 accepted：现在可以用 summary 命令直接查看历史 phase 摘要。",
+  "projectStatusSummary": "Threadsmith 的路径追踪现在完成了三层：新 closeout 自动进 history、审核过的历史 milestone 已回填、操作者可用 CLI/skill-readable summary 查看之前做过哪些 phase。",
   "latestAcceptedSlice": {
-    "title": "Phase History Recommended Backfill Write v1",
-    "recordedAt": "2026-05-28T05:31:50+08:00"
+    "title": "Phase History Read Surface / Summary Output v1",
+    "recordedAt": "2026-05-28T05:44:30+08:00"
   },
   "nextPlannedSlice": {
-    "title": "Phase History Read Surface / Summary Output v1",
+    "title": "Phase History Contract Docs / Operator Guidance v1",
     "recordedAt": null
   },
   "currentMilestoneId": "threadsmith-project-path-tracking",
   "nextMilestoneId": null,
   "topRisks": [
-    "历史回填只覆盖 9 条大节点，不代表所有旧 slice 都已完整记录。",
-    "部分回填时间戳来自 plan 文件 mtime，适合路径排序参考，不一定等于真实 closeout 时间。",
-    "前端仍冻结，所以短期内需要通过 CLI/skill-readable summary 查看历史。"
+    "summary 目前是 CLI/skill-readable 输出，前端仍冻结。",
+    "旧历史只回填了 9 条大节点，未覆盖全部细分 slice。",
+    "下一步需要补文档说明 history/summary/backfill 的边界，避免操作者误以为它是完整审计日志。"
   ],
-  "updatedAt": "2026-05-28T05:31:50+08:00"
+  "updatedAt": "2026-05-28T05:44:30+08:00"
 }

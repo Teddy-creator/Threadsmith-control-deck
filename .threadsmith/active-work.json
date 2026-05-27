@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已把本轮限定为用户批准的 9 条 recommended candidates 正式写入，不扩大到全部候选。",
+      "taskSummary": "已把本轮限定为只读 summary surface，不碰前端、不继续回填旧历史。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已执行 --write，9 条历史 milestone phase 已进入 .threadsmith/history/phases.jsonl。",
+      "taskSummary": "已实现 summarizePhaseHistory 与 threadsmith:phase-history:summary 命令。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认写入范围只包含审核通过的 9 条推荐大节点。",
+      "taskSummary": "已确认 summary 输出能说明历史路径，且 next hints 限制为最近 3 个避免噪音。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已确认写后 dry-run 为 0 accepted / 9 skipped，避免重复写入。",
+      "taskSummary": "已通过真实 summary 输出、fs-bridge 单测和 project truth 验证。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "正在收尾为 accepted truth 与本 write phase 的 history entry。",
+      "taskSummary": "正在写回本 phase accepted truth，并准备追加 history entry。",
       "requiresUserDecision": false
     }
   ],

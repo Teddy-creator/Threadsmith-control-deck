@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Phase History Recommended Backfill Write v1 已完成：用户批准的 9 个历史大节点已正式写入 .threadsmith/history/phases.jsonl；写后 dry-run 证明这些候选不会被重复写入。",
+  "currentClaim": "Phase History Read Surface / Summary Output v1 已完成：Threadsmith 现在有只读 summary 命令，可以直接查看历史 phase 摘要，而不需要手动读 .threadsmith/history/phases.jsonl。",
   "doneWhenChecklist": [
     {
-      "id": "write-approved-candidates",
-      "label": "已把推荐 9 个 milestone-level candidates 写入 phases.jsonl",
+      "id": "summary-function",
+      "label": "fs-bridge 已提供 summarizePhaseHistory 读取摘要能力",
       "status": "pass"
     },
     {
-      "id": "write-artifact",
-      "label": "已保存 backfill write 输出 artifact",
+      "id": "summary-cli",
+      "label": "已新增 threadsmith:phase-history:summary 命令",
       "status": "pass"
     },
     {
-      "id": "after-write-dry-run",
-      "label": "写后 dry-run 结果为 existing 15 / accepted 0 / skipped 9",
+      "id": "real-history-output",
+      "label": "命令已用当前项目真实 history 输出最近 5 个 phase",
       "status": "pass"
     },
     {
-      "id": "duplicate-protection",
-      "label": "9 条候选全部因为 duplicate-id 被跳过，证明重复写入防护有效",
+      "id": "unit-test",
+      "label": "phaseHistory.test.ts 已覆盖 summary 行为",
       "status": "pass"
     },
     {
-      "id": "truth-writeback",
-      "label": "本 phase 已写回 .threadsmith truth，并追加当前 write phase 的 history entry",
+      "id": "frontend-frozen",
+      "label": "本轮没有修改前端",
       "status": "pass"
     }
   ],
@@ -32,9 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮只回填 9 条经过审核的大节点，不回填全部 36 条候选。",
-    "部分 backfilled completedAt 来自 plan 文件 mtime，适合路径排序参考，不一定等于真实 closeout 时间。",
-    "前端仍冻结，暂不展示 Phase History。",
+    "summary 目前是 CLI/skill-readable 输出，不是前端页面。",
+    "输出依赖已经写入的 history；旧 phase 未回填的细节不会凭空出现。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"

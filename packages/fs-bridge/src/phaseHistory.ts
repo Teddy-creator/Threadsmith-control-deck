@@ -61,6 +61,36 @@ export async function readLatestPhaseHistoryEntry(projectRoot: string) {
   }))[0] ?? null;
 }
 
+export interface PhaseHistorySummaryOptions {
+  limit?: number;
+}
+
+export async function summarizePhaseHistory(
+  projectRoot: string,
+  options: PhaseHistorySummaryOptions = {}
+) {
+  const limit = options.limit ?? 8;
+  const newestFirst = await readPhaseHistory(projectRoot, {
+    order: "newest-first"
+  });
+  const recent = newestFirst.slice(0, limit);
+  const resultCounts = newestFirst.reduce<Record<string, number>>((counts, entry) => {
+    counts[entry.result] = (counts[entry.result] ?? 0) + 1;
+    return counts;
+  }, {});
+  const nextPhaseHints = recent
+    .map((entry) => entry.nextPhase)
+    .filter((nextPhase): nextPhase is string => nextPhase !== null);
+
+  return {
+    totalCount: newestFirst.length,
+    latest: newestFirst[0] ?? null,
+    recent,
+    resultCounts,
+    nextPhaseHints: [...new Set(nextPhaseHints)].slice(0, 3)
+  };
+}
+
 function sameSource(left: PhaseHistoryEntry, right: PhaseHistoryEntry) {
   return (
     left.source.ref !== null &&

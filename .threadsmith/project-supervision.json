@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Phase History Recommended Backfill Write v1 已 accepted：9 条推荐历史大节点已写入 history，并通过写后 dry-run 验证不会重复写入。",
+  "summary": "Phase History Read Surface / Summary Output v1 已 accepted：历史 phase 现在可以通过 summary 命令直接查看。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已保持范围为用户批准的 9 条 milestone-level 历史节点。",
+      "taskSummary": "已限定为只读摘要入口，不碰前端。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
-      "updatedAt": "2026-05-28T05:31:50+08:00"
+      "latestEvidenceLabel": ".threadsmith/current-phase.json",
+      "updatedAt": "2026-05-28T05:44:30+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已执行 --write，把 9 条历史 phase 写入 phases.jsonl。",
+      "taskSummary": "已实现 summarizePhaseHistory 与 summary CLI。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/reports/artifacts/recommended-phase-history-backfill-write-v1.json",
-      "updatedAt": "2026-05-28T05:31:50+08:00"
+      "latestEvidenceLabel": "scripts/threadsmith-phase-history-summary.ts",
+      "updatedAt": "2026-05-28T05:44:30+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认没有扩大到全部 36 条候选，前端仍冻结。",
+      "taskSummary": "已确认输出范围克制：最近 phase 列表 + 最多 3 个 next hints。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:31:50+08:00"
+      "updatedAt": "2026-05-28T05:44:30+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认写后 dry-run 为 0 accepted / 9 skipped，重复写入防护有效。",
+      "taskSummary": "已通过真实 summary 输出、单测和 truth 验证。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/reports/artifacts/recommended-phase-history-backfill-after-write-dry-run-v1.json",
-      "updatedAt": "2026-05-28T05:31:50+08:00"
+      "latestEvidenceLabel": "npm run threadsmith:phase-history:summary",
+      "updatedAt": "2026-05-28T05:44:30+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已写回本 write phase accepted truth，并准备追加当前 closeout 到 Phase History。",
+      "taskSummary": "已写回本 summary phase accepted truth，并准备追加当前 closeout 到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
       "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
-      "updatedAt": "2026-05-28T05:31:50+08:00"
+      "updatedAt": "2026-05-28T05:44:30+08:00"
     }
   ],
-  "updatedAt": "2026-05-28T05:31:50+08:00"
+  "updatedAt": "2026-05-28T05:44:30+08:00"
 }

@@ -1,24 +1,25 @@
 {
-  "phaseName": "Phase History Recommended Backfill Write v1",
-  "phaseGoal": "把已审核通过的 9 个历史大节点正式写入 .threadsmith/history/phases.jsonl，让 Threadsmith 的路径追踪能看到更完整的历史 phase。",
-  "deliverable": "9 条推荐 milestone-level 历史 phase 已写入 phases.jsonl，并保存 write artifact 与 after-write dry-run artifact；重复执行 dry-run 会显示 0 accepted / 9 skipped。",
+  "phaseName": "Phase History Read Surface / Summary Output v1",
+  "phaseGoal": "在前端冻结的前提下，给 Phase History 增加一个只读摘要入口，让操作者不用手动打开 JSONL 也能看见之前做过哪些 phase。",
+  "deliverable": "新增 summarizePhaseHistory 读取摘要能力与 npm run threadsmith:phase-history:summary 命令，可输出总数、最新 phase、结果统计、最近 phase 列表和下一步提示。",
   "inScope": [
-    "执行已批准的 recommended candidates --write",
-    "保存 backfill write 输出到 docs/reports/artifacts/recommended-phase-history-backfill-write-v1.json",
-    "写入后重新 dry-run，确认 9 条都因 duplicate-id 被跳过",
-    "保存 after-write dry-run 输出到 docs/reports/artifacts/recommended-phase-history-backfill-after-write-dry-run-v1.json",
-    "写回 .threadsmith truth 并追加本 write phase 的 history entry"
+    "在 fs-bridge 中新增 phase history summary 读取函数",
+    "新增 summary 单元测试，覆盖 total/latest/recent/resultCounts/nextPhaseHints",
+    "新增 scripts/threadsmith-phase-history-summary.ts",
+    "在 package.json 暴露 threadsmith:phase-history:summary 命令",
+    "用当前 Threadsmith 项目的真实 history 验证输出"
   ],
   "outOfScope": [
-    "扩大回填到全部 36 条候选",
-    "改前端或展示路径回放 UI",
+    "改前端",
     "发布 release",
     "同步全局 skill",
-    "修订旧候选的精确时间戳"
+    "增加自动多 agent 调度",
+    "回填更多旧 phase"
   ],
-  "stopCondition": "9 条推荐历史 phase 写入完成，写后 dry-run 证明不会重复写入，truth 与 verification 通过。",
+  "stopCondition": "summary 命令可稳定读取当前项目 history，相关测试与 project truth 验证通过。",
   "verificationForThisPhase": [
-    "npm run threadsmith:phase-history:backfill -- /Users/cloud/Code/threadsmith-control-deck docs/reports/artifacts/recommended-phase-history-candidates-v1.json",
+    "npm run threadsmith:phase-history:summary -- /Users/cloud/Code/threadsmith-control-deck --limit 5",
+    "npm run test --workspace @threadsmith/fs-bridge -- phaseHistory.test.ts",
     "npm run verify:project-truth",
     "git diff --check"
   ],
