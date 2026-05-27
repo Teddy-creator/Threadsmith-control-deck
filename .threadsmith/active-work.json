@@ -3,19 +3,19 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将用户提出的“能否看到之前做过哪些 phase”收束为 Phase History v1：先做底层 committed truth 路径追踪，不碰前端。",
+      "taskSummary": "已将上一刀的 Phase History 底座推进为 closeout 自动写入链路，不改变前端与发布范围。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已新增 Phase History schema、.threadsmith/history/phases.jsonl 路径、append/read/latest helpers 与测试。",
+      "taskSummary": "已在 workflow closeout-complete 中追加 Phase History entry，并把 source 绑定到 closeout artifact。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认 Phase History 与 phase run 分层清楚：前者记录项目路径，后者记录自动链路运行态；本轮没有改前端。",
+      "taskSummary": "已确认 Phase History 与 closeout artifact 的职责分层清楚：history 是路径索引，closeout artifact 是验收证据。",
       "requiresUserDecision": false
     },
     {
@@ -27,7 +27,7 @@
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 .threadsmith accepted truth，并追加当前 phase history entry。",
+      "taskSummary": "已写回 accepted truth，并追加当前 integration phase 的 history entry。",
       "requiresUserDecision": false
     }
   ],

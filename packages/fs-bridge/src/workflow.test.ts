@@ -14,6 +14,7 @@ import {
   writeRepoMap,
   writeStateFragment
 } from "./fileStore.ts";
+import { readPhaseHistory } from "./phaseHistory.ts";
 import { CONTEXT_FILES, STATE_FILES, THREADSMITH_DIR } from "./paths.ts";
 import { readLatestWorkflowArtifact } from "./workflowArtifacts.ts";
 import {
@@ -116,6 +117,7 @@ describe("workflow", () => {
       "closeout"
     );
     const latestPacket = await readLatestContinuationPacket(projectRoot);
+    const phaseHistory = await readPhaseHistory(projectRoot);
 
     expect(state.acceptanceState.finalState).toBe("accepted");
     expect(state.acceptanceState.closeoutStatus).toBe("done");
@@ -145,6 +147,10 @@ describe("workflow", () => {
     );
     expect(latestPacket?.kind).toBe("handoff");
     expect(latestPacket?.detail).toContain("已为 phase");
+    expect(phaseHistory).toHaveLength(1);
+    expect(phaseHistory[0]?.phaseName).toBe("Build workflow loop");
+    expect(phaseHistory[0]?.source.ref).toBe(latestCloseoutArtifact?.relativePath);
+    expect(phaseHistory[0]?.verification).toEqual(["Run tests"]);
     await expect(readCurrentAgentHandoff(projectRoot)).resolves.toContain(
       "This handoff is a readable projection derived from committed Threadsmith truth. It is not the authority."
     );

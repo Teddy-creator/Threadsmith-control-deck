@@ -1,29 +1,29 @@
 {
-  "currentClaim": "Threadsmith Phase History v1 已完成底层能力：项目现在有 append-only Phase History schema 与 fs-bridge 读写 API，可以把每个已完成 phase 记录成可回放的项目路径条目。",
+  "currentClaim": "Phase History Closeout Integration v1 已完成：workflow closeout 现在会自动追加 Phase History entry，项目路径不再只能靠人工 truth writeback 记录。",
   "doneWhenChecklist": [
     {
-      "id": "phase-history-schema",
-      "label": "domain 包定义并验证 Phase History entry schema",
+      "id": "closeout-history-builder",
+      "label": "fs-bridge 能从 accepted closeout state 构造 Phase History entry",
       "status": "pass"
     },
     {
-      "id": "phase-history-storage",
-      "label": "fs-bridge 定义 .threadsmith/history/phases.jsonl 的 append-only 存储路径",
+      "id": "closeout-history-append",
+      "label": "closeout-complete 成功写出 closeout artifact 后会自动 append .threadsmith/history/phases.jsonl",
       "status": "pass"
     },
     {
-      "id": "phase-history-api",
-      "label": "fs-bridge 提供 append、read、read latest helpers，并支持 newest-first / oldest-first",
+      "id": "closeout-history-source",
+      "label": "history entry source.ref 指向对应 closeout artifact，方便追溯证据",
       "status": "pass"
     },
     {
-      "id": "phase-history-tests",
-      "label": "domain 与 fs-bridge 测试覆盖 schema、缺失历史、追加、排序与 latest 读取",
+      "id": "workflow-regression-test",
+      "label": "workflow 测试覆盖 executor -> reviewer -> verifier -> closeout 后生成一条 Phase History",
       "status": "pass"
     },
     {
       "id": "truth-writeback",
-      "label": "本 phase 已写回 .threadsmith truth，并追加当前 Phase History 条目",
+      "label": "本 phase 已写回 .threadsmith truth，并追加当前 integration phase 的 history entry",
       "status": "pass"
     }
   ],
@@ -32,9 +32,8 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮只建立底层路径追踪能力，暂未接入前端 UI 展示。",
-    "本轮没有自动回填历史 phase；旧 phase 需要后续通过脚本或人工 closeout entry 迁移。",
-    "本轮还没有把 workflow closeout 自动接入 appendPhaseHistoryEntry。",
+    "本轮仍不展示前端 UI，用户暂时需要通过 history 文件或后续工具查看完整路径。",
+    "本轮没有自动回填旧 phase；旧历史仍需要后续单独迁移。",
     "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"

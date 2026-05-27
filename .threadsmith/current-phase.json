@@ -1,22 +1,22 @@
 {
-  "phaseName": "Threadsmith Phase History v1",
-  "phaseGoal": "为 Threadsmith 增加项目级路径追踪底座，让操作者后续能查看之前完成过哪些 phase、每个 phase 的产物、验证、风险和下一步。",
-  "deliverable": "新增 Phase History domain schema、fs-bridge append/read API、JSONL 存储路径与回归测试，先形成底层 committed truth 能力，不改前端。",
+  "phaseName": "Phase History Closeout Integration v1",
+  "phaseGoal": "把 workflow closeout 与 Phase History 自动连接起来，让每个 accepted phase 在 closeout 成功后自动追加到项目路径历史。",
+  "deliverable": "closeout-complete 会基于 accepted state 写入 .threadsmith/history/phases.jsonl，并用回归测试证明 closeout artifact 与 history entry 已绑定。",
   "inScope": [
-    "定义 Phase History entry schema",
-    "新增 .threadsmith/history/phases.jsonl 的 append-only 文件契约",
-    "新增 fs-bridge append/read/latest helpers",
-    "补充 domain 与 fs-bridge 测试",
-    "写回 .threadsmith truth 并追加本 phase 的 history entry"
+    "从 closeout accepted state 构造 Phase History entry",
+    "在 closeout-complete 成功写出 closeout artifact 后自动 append Phase History",
+    "让 history entry source 指向对应 closeout artifact",
+    "补充 workflow 回归测试覆盖自动追加",
+    "写回 .threadsmith truth 并记录本 phase 的 history entry"
   ],
   "outOfScope": [
     "前端 timeline / 路径回放 UI",
-    "自动回填所有历史 phase",
+    "自动回填旧 phase",
     "替换 phase run runtime records",
     "自动多 agent 调度",
     "发布 release 或同步全局 skill"
   ],
-  "stopCondition": "Phase History v1 的底层 schema、文件路径、读写 API、测试与本轮 history writeback 均完成；后续是否接入 closeout 自动追加或前端展示另行规划。",
+  "stopCondition": "closeout-complete 自动追加 Phase History 的代码、测试、计划文档和 truth writeback 均完成；后续是否做 UI 展示或历史回填另行规划。",
   "verificationForThisPhase": [
     "npm run test --workspace @threadsmith/domain",
     "npm run test --workspace @threadsmith/fs-bridge",
