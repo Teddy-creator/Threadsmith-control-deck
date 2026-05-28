@@ -62,6 +62,10 @@ function planIdFromPath(relativePath: string) {
   return `phase-history-candidate-${slugify(relativePath.replace(/\.md$/i, ""))}`;
 }
 
+function toRepoPath(value: string) {
+  return value.replace(/\\/g, "/");
+}
+
 export interface PhaseHistoryCandidate {
   entry: PhaseHistoryEntry;
   confidence: "medium";
@@ -85,7 +89,7 @@ export async function generatePhaseHistoryBackfillCandidates(
 
   for (const fileName of fileNames.sort()) {
     const absolutePath = join(plansDir, fileName);
-    const relativePath = relative(projectRoot, absolutePath);
+    const relativePath = toRepoPath(relative(projectRoot, absolutePath));
     const [markdown, fileStat] = await Promise.all([
       readFile(absolutePath, "utf8"),
       stat(absolutePath)

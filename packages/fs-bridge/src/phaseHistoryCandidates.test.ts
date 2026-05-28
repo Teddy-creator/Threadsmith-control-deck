@@ -67,6 +67,9 @@ Make the project easier to understand.
     expect(report.candidates[0]?.entry.source.ref).toBe(
       "docs/plans/sample-phase.md"
     );
+    expect(report.candidates[0]?.entry.id).toBe(
+      "phase-history-candidate-docs-plans-sample-phase"
+    );
   });
 
   it("uses existing phase history to report skipped candidates", async () => {
