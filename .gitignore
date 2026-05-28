@@ -15,5 +15,7 @@ test-results/
 .threadsmith/closeouts/
 .threadsmith/bridges/
 .threadsmith/phase-reset-drafts/
+.threadsmith/proposals/
+.threadsmith/proposal-reviews/
 .superpowers/
 docs/superpowers/
