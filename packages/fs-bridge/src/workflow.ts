@@ -7,7 +7,6 @@ import {
   type ProjectState,
   type WorkflowTransitionId
 } from "@threadsmith/domain";
-import { buildContextPacket } from "@threadsmith/runtime";
 import {
   readAgentRunPacket,
   readAgentRunRecord,
@@ -23,12 +22,10 @@ import {
 } from "./events.ts";
 import {
   loadProjectState,
-  readEvidenceSummary,
-  readRepoMap,
-  writeCurrentContextPacket,
   writeStateFragment
 } from "./fileStore.ts";
-import { CONTEXT_FILES, STATE_FILES, THREADSMITH_DIR } from "./paths.ts";
+import { STATE_FILES } from "./paths.ts";
+import { syncCurrentContextPacket } from "./workflowContextSync.ts";
 import { appendCloseoutPhaseHistory } from "./workflowPhaseHistory.ts";
 import {
   automationFailureGap,
@@ -148,19 +145,6 @@ function offsetIsoTimestamp(timestamp: string, offsetMs = 1) {
   return new Date(new Date(timestamp).getTime() + offsetMs).toISOString();
 }
 
-async function readOptionalContextArtifact<T>(
-  readArtifact: () => Promise<T>
-): Promise<T | undefined> {
-  try {
-    return await readArtifact();
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return undefined;
-    }
-    throw error;
-  }
-}
-
 export async function applyDeckActionState(
   projectRoot: string,
   actionId: DeckAction["actionId"],
@@ -277,39 +261,18 @@ export async function applyDeckActionState(
 
   if (actionId === "sync-context") {
     const createdAt = await resolveMonotonicEventTimestamp(projectRoot);
-    const repoMap = await readOptionalContextArtifact(() => readRepoMap(projectRoot));
-    const evidenceSummary = await readOptionalContextArtifact(() =>
-      readEvidenceSummary(projectRoot)
-    );
-    const packet = await writeCurrentContextPacket(
+    const { packetId, packetPath } = await syncCurrentContextPacket({
       projectRoot,
-      buildContextPacket(state, {
-        generatedAt: createdAt,
-        repoMap,
-        evidenceSummary,
-        recentDiff: repoMap
-          ? {
-              status: repoMap.git.status,
-              changedFiles: repoMap.git.changedFiles,
-              command: repoMap.git.command,
-              summary:
-                repoMap.git.status === "dirty"
-                  ? `Repo map reported ${repoMap.git.changedFiles.length} changed file(s).`
-                  : repoMap.git.status === "clean"
-                    ? "Repo map reports a clean working tree."
-                    : "Repo map could not determine git status."
-            }
-          : undefined
-      })
-    );
-    const packetPath = `${THREADSMITH_DIR}/context/${CONTEXT_FILES.currentPacket}`;
+      state,
+      createdAt
+    });
 
     await appendEvent(projectRoot, {
       id: crypto.randomUUID(),
       createdAt,
       kind: "deck-action",
       title: "Context Packet 已刷新",
-      detail: `已从 committed Threadsmith truth 重新生成 current-packet.json（${packet.packetId}）。 Packet：${packetPath}`,
+      detail: `已从 committed Threadsmith truth 重新生成 current-packet.json（${packetId}）。 Packet：${packetPath}`,
       role: "hygiene",
       actionId,
       artifactPath: packetPath
