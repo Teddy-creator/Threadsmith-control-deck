@@ -3,7 +3,6 @@ import {
   type ActiveWork,
   type ActiveWorkItem,
   type ContinuationBehavior,
-  type ExecutionResult,
   type PhaseOwner,
   type ProjectState,
   type WorkflowTransitionId
@@ -31,6 +30,15 @@ import {
 } from "./fileStore.ts";
 import { CONTEXT_FILES, STATE_FILES, THREADSMITH_DIR } from "./paths.ts";
 import { appendCloseoutPhaseHistory } from "./workflowPhaseHistory.ts";
+import {
+  automationFailureGap,
+  executorFailureTaskSummary,
+  failedRunEventDetail,
+  failedRunEventTitle,
+  isArtifactOnlyRun,
+  providerLabel,
+  runArtifactPath
+} from "./workflowRunResultFormat.ts";
 import {
   writeCloseoutArtifact,
   writeVerificationEvidenceArtifact
@@ -136,71 +144,8 @@ function nextExecutorTask(state: ProjectState) {
   return "实现当前这刀 narrow slice";
 }
 
-function providerLabel(provider: ExecutionResult["provider"]) {
-  switch (provider) {
-    case "codex":
-      return "Codex";
-    case "claude":
-      return "Claude";
-    default:
-      return provider;
-  }
-}
-
-function automationFailureGap(result: ExecutionResult) {
-  return result.blocker?.trim() || result.summary.trim();
-}
-
-function isReportingFailureAfterSuccessfulTask(result: ExecutionResult) {
-  return (
-    result.outcome === "failed" &&
-    result.taskOutcome === "succeeded" &&
-    result.failureStage === "result-reporting"
-  );
-}
-
-function executorFailureTaskSummary(result: ExecutionResult) {
-  if (isReportingFailureAfterSuccessfulTask(result)) {
-    return "任务主体已完成，但结果上报失败，等待修复 bridge / CLI 回流";
-  }
-
-  return "自动执行失败，等待修复后重试";
-}
-
-function failedRunEventTitle(result: ExecutionResult) {
-  if (isReportingFailureAfterSuccessfulTask(result)) {
-    return `${providerLabel(result.provider)} 的 ${result.role} 在结果上报阶段失败`;
-  }
-
-  return `${providerLabel(result.provider)} 的 ${result.role} 执行失败`;
-}
-
-function failedRunEventDetail(
-  result: ExecutionResult,
-  artifactPath?: string
-) {
-  if (isReportingFailureAfterSuccessfulTask(result)) {
-    return `任务主体已完成，但结果上报失败：${automationFailureGap(result)}${artifactPath ? ` Artifact：${artifactPath}` : ""}`;
-  }
-
-  return `失败原因：${automationFailureGap(result)}${artifactPath ? ` Artifact：${artifactPath}` : ""}`;
-}
-
-function runArtifactPath(
-  summaryPath: string | null,
-  resultPath: string | null
-) {
-  return summaryPath ?? resultPath ?? undefined;
-}
-
 function offsetIsoTimestamp(timestamp: string, offsetMs = 1) {
   return new Date(new Date(timestamp).getTime() + offsetMs).toISOString();
-}
-
-function isArtifactOnlyRun(
-  packet: Awaited<ReturnType<typeof readAgentRunPacket>>
-) {
-  return packet.workflowEffect === "artifact-only";
 }
 
 async function readOptionalContextArtifact<T>(
