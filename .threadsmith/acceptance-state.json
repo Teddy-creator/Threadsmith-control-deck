@@ -1,39 +1,29 @@
 {
-  "currentClaim": "Threadsmith Role Runtime Speedup v1 已完成：full governance 现在不仅减少无效停顿，也通过 role runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 和 packet-slimming regression fixtures 降低每个角色的运行负担，同时保留安全门禁。",
+  "currentClaim": "Phase History Branch Review / PR Preparation v1 已完成：threadsmith-phase-history-v1 分支已完成提交范围审查和 PR 级验证，准备进入 push/PR 决策。",
   "doneWhenChecklist": [
     {
-      "id": "role-runtime-metrics",
-      "label": "phase run 会记录每个角色的 duration、packet size、context refs 与结果摘要指标",
+      "id": "branch-scope",
+      "label": "已确认分支从 main 的 48d210b 分出，共 9 个 Phase History 相关提交",
       "status": "pass"
     },
     {
-      "id": "evidence-bundle",
-      "label": "packet 构建会预生成 phase evidence bundle，避免每个角色重复做广泛状态发现",
+      "id": "frontend-frozen",
+      "label": "已确认没有 apps/ 前端文件变更",
       "status": "pass"
     },
     {
-      "id": "role-scoped-packets",
-      "label": "planner / executor / reviewer / verifier / closeout 会收到按角色裁剪的 context refs",
+      "id": "branch-review-report",
+      "label": "已新增 phase-history-branch-review-v1.md 报告",
       "status": "pass"
     },
     {
-      "id": "planner-mode-routing",
-      "label": "planner mode routing 已区分 planning-phase、planner-reset、planner-lite 与 direct-executor",
+      "id": "pr-verification",
+      "label": "domain / fs-bridge 测试、summary、backfill dry-run、project truth 和 diff hygiene 均通过",
       "status": "pass"
     },
     {
-      "id": "staged-verification",
-      "label": "verifier 已有 narrow / standard / release verification policy，并写入 packet 与 evidence bundle",
-      "status": "pass"
-    },
-    {
-      "id": "packet-slimming-regression",
-      "label": "已补充回归测试，防止验收标准、blocker、上游结果和 required checks 被 packet slimming 误删",
-      "status": "pass"
-    },
-    {
-      "id": "verification",
-      "label": "domain / fs-bridge / runtime / orchestrator / skill contract / project truth / diff hygiene 验证通过",
+      "id": "no-push-boundary",
+      "label": "本轮没有 push、创建 PR、发布 release 或同步全局 skill",
       "status": "pass"
     }
   ],
@@ -42,10 +32,10 @@
   "verificationStatus": "passed",
   "closeoutStatus": "done",
   "knownGaps": [
-    "本轮没有同步全局 installed skill；用户实际调用全局 $threadsmith 前仍需后续显式同步。",
-    "本轮没有实现自动多 agent 调度，也没有移除任何 full governance 安全角色。",
-    "本轮建立了 runtime metrics，但尚未积累真实项目的前后耗时基准。",
-    "verification policy 已从命令关键词升级为规则策略，但仍是第一版粗粒度规则，后续可继续按真实失败案例细化。"
+    "分支尚未 push，也尚未创建 PR。",
+    "前端仍冻结，Phase History 不在页面展示。",
+    "旧历史只回填 9 条 milestone-level phase。",
+    "本轮没有发布 release，也没有同步全局 skill。"
   ],
   "finalState": "accepted"
 }

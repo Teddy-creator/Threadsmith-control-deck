@@ -3,31 +3,31 @@
     {
       "role": "planner",
       "status": "done",
-      "taskSummary": "已将 full governance speedup 从“少停顿”扩展为 role runtime speedup：目标是减少每个角色重复发现、上下文拖拽和过宽验证，而不是跳过安全角色。",
+      "taskSummary": "已把本轮限定为分支 review 和 PR 准备，不继续扩功能。",
       "requiresUserDecision": false
     },
     {
       "role": "executor",
       "status": "done",
-      "taskSummary": "已实现 role runtime metrics、phase evidence bundle、role-scoped packet refs、planner mode routing、verification policy，并补充 packet-slimming regression fixtures。",
+      "taskSummary": "已生成 branch review 报告并整理 PR 推荐标题/摘要。",
       "requiresUserDecision": false
     },
     {
       "role": "reviewer",
       "status": "done",
-      "taskSummary": "已确认这轮不改变前端、不同步全局 skill、不发布 release、不做自动多 agent 调度；改动集中在 repo 版 runtime/orchestrator/domain/fs-bridge/skill contract。",
+      "taskSummary": "已确认分支只包含 Phase History 范围，未改前端。",
       "requiresUserDecision": false
     },
     {
       "role": "verifier",
       "status": "done",
-      "taskSummary": "已运行 domain、fs-bridge、runtime、orchestrator、skill contract、project truth 和 diff hygiene 验证，全部通过。",
+      "taskSummary": "已通过 domain/fs-bridge 测试、summary/backfill 命令、project truth 和 diff hygiene。",
       "requiresUserDecision": false
     },
     {
       "role": "closeout",
       "status": "done",
-      "taskSummary": "已写回 .threadsmith accepted truth，记录未同步全局 skill、未做自动调度和缺少真实耗时基准等剩余风险。",
+      "taskSummary": "正在写回本 branch review phase accepted truth，并准备追加 history entry。",
       "requiresUserDecision": false
     }
   ],

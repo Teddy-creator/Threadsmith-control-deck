@@ -38,6 +38,7 @@ import { buildEvidenceSummary, buildRepoMap } from "@threadsmith/runtime";
 import {
   STATE_FILES,
   CONTEXT_FILES,
+  getHistoryDir,
   getPhaseRunsDir,
   getContextDir,
   getContextFilePath,
@@ -97,6 +98,7 @@ export async function ensureStateDir(projectRoot: string) {
   await mkdir(getThreadsmithDir(projectRoot), { recursive: true });
   await mkdir(getRunsDir(projectRoot), { recursive: true });
   await mkdir(getPhaseRunsDir(projectRoot), { recursive: true });
+  await mkdir(getHistoryDir(projectRoot), { recursive: true });
   await mkdir(getContextDir(projectRoot), { recursive: true });
 }
 

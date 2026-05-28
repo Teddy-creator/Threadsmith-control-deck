@@ -1,7 +1,7 @@
 {
   "mode": "multi-thread",
   "modeLabel": "多角色协作",
-  "summary": "Threadsmith Role Runtime Speedup v1 已 accepted：当前 repo 版 full governance 已通过 runtime metrics、evidence bundle、role-scoped packets、planner mode routing、staged verification policy 和 packet-slimming regression fixtures 降低角色运行成本。",
+  "summary": "Phase History Branch Review / PR Preparation v1 已 accepted：分支范围和 PR 级验证已完成。",
   "lines": [
     {
       "id": "conductor-main",
@@ -10,11 +10,11 @@
       "provider": "codex",
       "presence": "live",
       "status": "done",
-      "taskSummary": "已把用户关心的“每个角色本身太慢”转成 role runtime speedup，而不是只处理 stop cadence。",
+      "taskSummary": "已限定为分支 review / PR 准备，不继续扩功能。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "docs/plans/threadsmith-role-runtime-speedup-v1.md",
-      "updatedAt": "2026-05-27T03:27:41+08:00"
+      "latestEvidenceLabel": "git diff --stat main...HEAD",
+      "updatedAt": "2026-05-28T06:12:00+08:00"
     },
     {
       "id": "executor-logical",
@@ -23,11 +23,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已实现 role runtime metrics、phase evidence bundle、role-specific packet context、planner routing 和 verifier policy。",
+      "taskSummary": "已新增 phase-history-branch-review-v1.md。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/orchestrator/src/phaseRunner.ts",
-      "updatedAt": "2026-05-27T03:27:41+08:00"
+      "latestEvidenceLabel": "docs/reports/phase-history-branch-review-v1.md",
+      "updatedAt": "2026-05-28T06:12:00+08:00"
     },
     {
       "id": "reviewer-logical",
@@ -36,11 +36,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已确认 packet slimming 不应删除验收标准、blocker、上游结果和 required checks，并用回归测试锁住这些关键事实。",
+      "taskSummary": "已确认 9 个提交均属于 Phase History 范围，且没有 apps/ 前端变更。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "packages/orchestrator/src/rolePackets.test.ts",
-      "updatedAt": "2026-05-27T03:27:41+08:00"
+      "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
+      "updatedAt": "2026-05-28T06:12:00+08:00"
     },
     {
       "id": "verifier-logical",
@@ -49,11 +49,11 @@
       "provider": "codex",
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已通过 domain、fs-bridge、runtime、orchestrator、skill contract、project truth 和 diff hygiene 验证。",
+      "taskSummary": "已通过 domain/fs-bridge 测试、summary/backfill 命令、project truth 与 diff hygiene。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": "npm run test --workspace @threadsmith/orchestrator",
-      "updatedAt": "2026-05-27T03:27:41+08:00"
+      "latestEvidenceLabel": "npm run test --workspace @threadsmith/fs-bridge",
+      "updatedAt": "2026-05-28T06:12:00+08:00"
     },
     {
       "id": "hygiene",
@@ -62,12 +62,12 @@
       "provider": null,
       "presence": "logical",
       "status": "done",
-      "taskSummary": "已写回 accepted truth；下一步可整理提交范围，或先决定是否同步全局 installed skill。",
+      "taskSummary": "已写回本 branch review accepted truth，并准备追加当前 closeout 到 Phase History。",
       "requiresUserDecision": false,
       "blockerSummary": null,
-      "latestEvidenceLabel": ".threadsmith/acceptance-state.json",
-      "updatedAt": "2026-05-27T03:27:41+08:00"
+      "latestEvidenceLabel": ".threadsmith/history/phases.jsonl",
+      "updatedAt": "2026-05-28T06:12:00+08:00"
     }
   ],
-  "updatedAt": "2026-05-27T03:27:41+08:00"
+  "updatedAt": "2026-05-28T06:12:00+08:00"
 }

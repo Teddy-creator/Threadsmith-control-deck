@@ -8,7 +8,7 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import {
   initializeProjectState,
   writeStateFragment
@@ -146,6 +146,15 @@ async function waitForSingleRun(runsDir: string) {
   };
 }
 
+async function refreshDeckState(page: Page) {
+  const refreshButton = page.getByRole("button", { name: "刷新状态" });
+
+  await expect(refreshButton).toBeVisible();
+  await expect(refreshButton).toBeEnabled({ timeout: RUN_COMPLETION_TIMEOUT_MS });
+  await refreshButton.click();
+  await expect(refreshButton).toBeEnabled({ timeout: RUN_COMPLETION_TIMEOUT_MS });
+}
+
 test("the deck can launch an executor run and ingest the result back into Threadsmith truth", async ({
   page
 }) => {
@@ -214,6 +223,8 @@ test("the deck can launch an executor run and ingest the result back into Thread
         }
       })
       .toBeGreaterThan(0);
+
+    await refreshDeckState(page);
 
     await expect(page.getByText("回流：执行结果已写回 truth")).toBeVisible();
     await expect(page.getByRole("heading", { name: "评审进行中" })).toBeVisible();
@@ -287,6 +298,8 @@ test("the deck can ingest a failed executor run back into repair guidance", asyn
         return contents.includes("\"title\":\"Codex 的 executor 执行失败\"");
       })
       .toBe(true);
+
+    await refreshDeckState(page);
 
     await expect(page.getByRole("heading", { name: "修复自动执行失败" })).toBeVisible();
     await expect(page.getByText("回流：失败原因已回流为 blocker")).toBeVisible();
