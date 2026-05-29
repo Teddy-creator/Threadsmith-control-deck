@@ -1,9 +1,11 @@
 import { execFile } from "node:child_process";
+import { relative } from "node:path";
 import { promisify } from "node:util";
 import type {
   ContextReference,
   PhaseRunEvidenceBundle,
-  PhaseRunRecord
+  PhaseRunRecord,
+  ProjectState
 } from "@threadsmith/domain";
 import {
   loadProjectState,
@@ -32,8 +34,29 @@ async function readGitSummary(projectRoot: string) {
   const command = "git status --short";
 
   try {
-    const { stdout } = await execFileAsync("git", ["-C", projectRoot, "status", "--short"]);
-    const changedFiles = parseChangedFiles(stdout);
+    const { stdout: topLevelStdout } = await execFileAsync("git", [
+      "-C",
+      projectRoot,
+      "rev-parse",
+      "--show-toplevel"
+    ]);
+    const gitTopLevel = topLevelStdout.trim();
+    const projectPrefix = relative(gitTopLevel, projectRoot).replace(/\\/g, "/");
+    const { stdout } = await execFileAsync("git", [
+      "-C",
+      gitTopLevel,
+      "status",
+      "--short"
+    ]);
+    const changedFiles = parseChangedFiles(stdout)
+      .filter((filePath) =>
+        projectPrefix === "" ||
+        filePath.startsWith(`${projectPrefix}/`)
+      )
+      .map((filePath) =>
+        projectPrefix === "" ? filePath : filePath.slice(projectPrefix.length + 1)
+      )
+      .filter(Boolean);
 
     return {
       status: changedFiles.length > 0 ? "dirty" as const : "clean" as const,
@@ -74,9 +97,15 @@ function staleTruthWarnings(phaseRun: PhaseRunRecord, activeOwners: string[]) {
   return warnings;
 }
 
+export interface PhaseEvidenceBundleContext {
+  state: ProjectState;
+  latestRuns: Awaited<ReturnType<typeof readLatestAgentRuns>>;
+}
+
 export async function buildAndWritePhaseEvidenceBundle(
   projectRoot: string,
-  generatedAt = new Date().toISOString()
+  generatedAt = new Date().toISOString(),
+  context?: PhaseEvidenceBundleContext
 ): Promise<{ bundle: PhaseRunEvidenceBundle; ref: ContextReference } | null> {
   const phaseRun = await readLatestPhaseRun(projectRoot);
 
@@ -84,9 +113,11 @@ export async function buildAndWritePhaseEvidenceBundle(
     return null;
   }
 
-  const state = await loadProjectState(projectRoot);
-  const latestRuns = await readLatestAgentRuns(projectRoot, 4);
-  const git = await readGitSummary(projectRoot);
+  const [state, latestRuns, git] = await Promise.all([
+    context?.state ?? loadProjectState(projectRoot),
+    context?.latestRuns ?? readLatestAgentRuns(projectRoot, 4),
+    readGitSummary(projectRoot)
+  ]);
   const verification = decideVerificationPolicy({
     phase: state.currentPhase,
     acceptance: state.acceptanceState,
