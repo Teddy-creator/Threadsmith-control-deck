@@ -1,6 +1,8 @@
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   STATE_FILES,
@@ -24,10 +26,12 @@ import {
 } from "./rolePackets.ts";
 
 const createdRoots: string[] = [];
+const execFileAsync = promisify(execFile);
 
 async function createProjectRoot() {
   const projectRoot = await mkdtemp(join(tmpdir(), "threadsmith-role-packets-"));
   createdRoots.push(projectRoot);
+  await execFileAsync("git", ["init"], { cwd: projectRoot });
   await initializeProjectState(projectRoot);
   return projectRoot;
 }
@@ -365,6 +369,24 @@ describe("rolePackets", () => {
     expect(evidenceBundle?.verification.escalationSignals).toContain(
       "failed-or-blocked-acceptance"
     );
+  });
+
+  it("filters phase evidence git status to the nested project root", async () => {
+    const parentRoot = await mkdtemp(join(tmpdir(), "threadsmith-parent-repo-"));
+    createdRoots.push(parentRoot);
+    await execFileAsync("git", ["init"], { cwd: parentRoot });
+    await writeFile(join(parentRoot, "parent-only.txt"), "parent change\n", "utf8");
+    const projectRoot = join(parentRoot, "nested-project");
+    await mkdir(projectRoot, { recursive: true });
+    await initializeProjectState(projectRoot);
+    await seedLatestPhaseRun(projectRoot);
+
+    await buildPlannerPacket(projectRoot, "planner-run");
+    const evidenceBundle = await readPhaseRunEvidenceBundle(projectRoot, "phase-run-1");
+
+    expect(evidenceBundle?.git.status).toBe("clean");
+    expect(evidenceBundle?.git.changedFiles).toEqual([]);
+    expect(evidenceBundle?.verification.recommendedLevel).toBe("standard");
   });
 
   it("builds reviewer, verifier, and closeout packets with explicit gate decisions", async () => {

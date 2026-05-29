@@ -66,6 +66,10 @@ function durationMs(startedAt: string, finishedAt: string) {
   return Math.max(0, finished - started);
 }
 
+function elapsedMs(startedAt: number) {
+  return Math.max(0, Math.round(performance.now() - startedAt));
+}
+
 function nextSuccessfulRole(
   current: PhaseRunRecord,
   result: ExecutionResult
@@ -380,17 +384,21 @@ export class PhaseRunner {
     while (phaseRun.status === "running") {
       const role = phaseRun.currentRole ?? "planner";
       const runId = crypto.randomUUID();
+      const packetBuildStartedAt = performance.now();
       const packet = await buildPacketForRole({
         projectRoot: input.projectRoot,
         role,
         provider: input.provider,
         runId
       });
+      const packetBuildDurationMs = elapsedMs(packetBuildStartedAt);
       await createAgentRun(input.projectRoot, packet, this.now());
       const roleStartedAt = this.now();
+      const launchStartedAt = performance.now();
       const launch = await this.roleLauncher(packet, {
         startedAt: roleStartedAt
       });
+      const launchWaitDurationMs = elapsedMs(launchStartedAt);
       const launchEventPhaseRun = await appendRunEvent(input.projectRoot, phaseRun, {
         title: `phase-run ${phaseRun.phaseRunId} launched ${role}`,
         detail: `当前角色已启动，runId=${runId}`,
@@ -405,14 +413,18 @@ export class PhaseRunner {
       });
 
       await launch.completion;
+      const resultApplyStartedAt = performance.now();
       if (!launch.resultAppliedByLauncher) {
         await applyAgentRunResult(input.projectRoot, runId);
       }
+      const resultApplyDurationMs = elapsedMs(resultApplyStartedAt);
 
+      const resultReadStartedAt = performance.now();
       const [result, record] = await Promise.all([
         readAgentRunResult(input.projectRoot, runId),
         readAgentRunRecord(input.projectRoot, runId)
       ]);
+      const resultReadDurationMs = elapsedMs(resultReadStartedAt);
       const latestRunRef = preferredRunArtifact(record) ?? packet.output.resultPath;
       const latestSuccessfulRole = nextSuccessfulRole(phaseRun, result);
       let currentSliceId = phaseRun.currentSliceId;
@@ -430,6 +442,15 @@ export class PhaseRunner {
           startedAt: roleStartedAt,
           finishedAt: roleFinishedAt,
           durationMs: durationMs(roleStartedAt, roleFinishedAt),
+          packetBuildDurationMs,
+          launchWaitDurationMs,
+          resultApplyDurationMs,
+          resultReadDurationMs,
+          observedBridgeOverheadMs:
+            packetBuildDurationMs
+            + launchWaitDurationMs
+            + resultApplyDurationMs
+            + resultReadDurationMs,
           contextRefCount: packet.contextRefs.length,
           packetEstimatedChars: estimateChars(packet),
           packetEstimatedTokens: estimateTokens(estimateChars(packet)),

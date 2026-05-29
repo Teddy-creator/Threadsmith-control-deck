@@ -3,8 +3,6 @@ import {
   type ExecutionPacket,
   type PhaseOwner,
   type ProviderId,
-  type SkillCapability,
-  type SkillOrchestratorConfig,
   type VerificationPolicyDecision,
   executionPacketSchema
 } from "@threadsmith/domain";
@@ -12,18 +10,17 @@ import {
   buildMiniProtocolInstruction,
   resolveSkillRoute
 } from "@threadsmith/runtime";
-import {
-  loadProjectState,
-  readLatestAgentRuns,
-  readRecentEvents
-} from "@threadsmith/fs-bridge";
 import type { RoleExecutionRequest } from "./providerTypes.ts";
-import { buildAndWritePhaseEvidenceBundle } from "./phaseEvidence.ts";
-import { decidePlannerMode, type PlannerMode } from "./plannerMode.ts";
 import { decideVerificationPolicy } from "./verificationPolicy.ts";
 import {
+  builtInOnlyOrchestratorConfig,
+  protocolCapabilityForRole
+} from "./roleOrchestratorDefaults.ts";
+import { buildRolePacketContext } from "./rolePacketBuildContext.ts";
+import { buildRolePacketSpec } from "./rolePacketSpecs.ts";
+import { rolePromptContractFor } from "./rolePromptContracts.ts";
+import {
   currentContextPacketRef,
-  latestPhaseRunRefs,
   roleContextPacketRef,
   roleContextRefs
 } from "./rolePacketContextRefs.ts";
@@ -33,48 +30,6 @@ function defaultOutput(runId: string) {
     resultPath: `.threadsmith/runs/${runId}/result.json`,
     summaryPath: `.threadsmith/runs/${runId}/result.md`
   };
-}
-
-function builtInOnlyOrchestratorConfig(): SkillOrchestratorConfig {
-  return {
-    version: 1,
-    builtInProtocols: [
-      "brief",
-      "plan",
-      "debug",
-      "review",
-      "verify",
-      "closeout",
-      "handoff",
-      "recover",
-      "research"
-    ],
-    adapters: [],
-    routePreferences: [],
-    defaultFallback: "plan",
-    selfHosting: {
-      activeController: "installed-skill",
-      repositorySkillPath: "codex/skills/threadsmith/SKILL.md",
-      installedSkillPath: "~/.codex/skills/threadsmith/SKILL.md",
-      allowGlobalSkillMutation: false
-    }
-  };
-}
-
-function protocolCapabilityForRole(role: PhaseOwner): SkillCapability {
-  switch (role) {
-    case "planner":
-    case "executor":
-      return "plan";
-    case "reviewer":
-      return "review";
-    case "verifier":
-      return "verify";
-    case "closeout":
-      return "closeout";
-    case "hygiene":
-      return "recover";
-  }
 }
 
 function packetContextLines(contextRefs: ContextReference[]) {
@@ -137,98 +92,6 @@ function packetVerificationPolicyLines(policy: ExecutionPacket["verificationPoli
   ];
 }
 
-function plannerSliceKindForMode(mode: PlannerMode) {
-  return mode === "planner-reset" ? "repair" : "primary";
-}
-
-function plannerDoneWhen(mode: PlannerMode) {
-  const sliceKind = plannerSliceKindForMode(mode);
-
-  if (mode === "planning-phase") {
-    return [
-      "产出当前 planning phase 要求的计划、边界或 brief",
-      "明确下一步是否可以进入 executor，还是需要 operator 审核",
-      "如果当前真相不足以安全继续，则改为给出 pause recommendation"
-    ];
-  }
-
-  if (mode === "planner-lite") {
-    return [
-      "只收窄下一条最小 slice，不重新规划整个项目",
-      "明确 slice 的 scope、done when 与 verification",
-      "如果当前真相不足以安全继续，则改为给出 pause recommendation"
-    ];
-  }
-
-  return [
-    `产出一条不超出当前 phase 的 ${sliceKind} slice 建议`,
-    "明确 slice 的 scope、done when 与 verification",
-    "如果当前真相不足以安全继续，则改为给出 pause recommendation"
-  ];
-}
-
-function roleRules(role: PhaseOwner) {
-  switch (role) {
-    case "planner":
-      return {
-        contract: [
-          "只允许在当前锁定 phase 内收窄下一条最小 slice。",
-          "不要改写 locked phase contract，不要直接修改代码。",
-          "如果无法安全继续，使用 pauseRecommendation 而不是硬推。"
-        ],
-        decisions: ["slice-ready", "pause-recommended"]
-      };
-    case "executor":
-      return {
-        contract: [
-          "只推进当前 slice，不要扩大范围。",
-          "先阅读 committed truth 和必要文件，再开始修改。",
-          "完成后如实填写 changedFiles、verification、evidenceRefs。"
-        ],
-        decisions: ["ready-for-review"]
-      };
-    case "reviewer":
-      return {
-        contract: [
-          "只判断当前输出能否进入 verification，不要自己补代码。",
-          "遇到阻塞时明确指出 blocker 与关键发现。",
-          "不要把不确定性包装成通过。"
-        ],
-        decisions: ["ready-for-verification", "review-blocked"]
-      };
-    case "verifier":
-      return {
-        contract: [
-          "只根据证据做 verification 结论，不要把缺失证据当成通过。",
-          "需要时运行或复核 verification 命令，并如实回填结果。",
-          "不要直接给最终 accepted。"
-        ],
-        decisions: [
-          "verification-failed",
-          "accepted-with-closeout-pending"
-        ]
-      };
-    case "closeout":
-      return {
-        contract: [
-          "只在 verification 已通过的前提下执行 closeout。",
-          "清理临时痕迹、记录 residual risks、补齐必要文档。",
-          "不要掩盖尚未解决的问题。"
-        ],
-        decisions: ["accepted"]
-      };
-    case "hygiene":
-      return {
-        contract: [
-          "重新锚定 committed truth，区分 verified facts 与 assumptions。",
-          "只提出下一步最小动作，不要重开整个任务。",
-          "不要伪造验证结论。"
-        ],
-        decisions: []
-      };
-  }
-}
-
 function renderRoleHeader(packet: ExecutionPacket) {
   return [
     `你正在执行一条 Threadsmith ${packet.role} packet。`,
@@ -242,7 +105,7 @@ function renderRoleHeader(packet: ExecutionPacket) {
 }
 
 export function renderRolePrompt(packet: ExecutionPacket) {
-  const rules = roleRules(packet.role);
+  const rules = rolePromptContractFor(packet.role);
   const decisionLines =
     rules.decisions.length > 0
       ? rules.decisions.map((item) => `- ${item}`)
@@ -291,23 +154,6 @@ export function renderRolePrompt(packet: ExecutionPacket) {
   ].join("\n");
 }
 
-function buildPlannerObjective(
-  phaseGoal: string,
-  mode: PlannerMode,
-  reason: string
-) {
-  switch (mode) {
-    case "planning-phase":
-      return `Planner mode: planning-phase。当前 phase 的交付物就是计划/边界/brief；请完成该 planning deliverable，而不是直接写实现。原因：${reason} 当前 phase goal：${phaseGoal}`;
-    case "planner-reset":
-      return `Planner mode: planner-reset。为当前锁定 phase 收束下一条 repair slice，并基于失败或阻塞信号缩小范围。原因：${reason} 当前 phase goal：${phaseGoal}`;
-    case "planner-lite":
-      return `Planner mode: planner-lite。只为当前锁定 phase 收窄下一条最小 slice，不重新规划整个项目。原因：${reason} 当前 phase goal：${phaseGoal}`;
-    case "direct-executor":
-      return `Planner mode: direct-executor。当前 truth 已指向后续执行角色；只有在被显式调用为 planner 时才重新校准。原因：${reason} 当前 phase goal：${phaseGoal}`;
-  }
-}
-
 function buildRolePacket(input: {
   projectRoot: string;
   runId: string;
@@ -353,11 +199,13 @@ function buildRolePacket(input: {
 export async function buildPacketForRole(
   input: RoleExecutionRequest
 ): Promise<ExecutionPacket> {
-  const state = await loadProjectState(input.projectRoot);
-  const recentEvents = await readRecentEvents(input.projectRoot, 4);
-  const latestRuns = await readLatestAgentRuns(input.projectRoot, 4);
-  const phaseRefs = await latestPhaseRunRefs(input.projectRoot);
-  const evidenceBundle = await buildAndWritePhaseEvidenceBundle(input.projectRoot);
+  const {
+    state,
+    recentEvents,
+    latestRuns,
+    phaseRefs,
+    evidenceBundle
+  } = await buildRolePacketContext(input.projectRoot);
   const evidenceRefs = evidenceBundle ? [evidenceBundle.ref] : [];
   const verificationPolicy =
     evidenceBundle?.bundle.verification ??
@@ -374,119 +222,23 @@ export async function buildPacketForRole(
     evidenceRefs,
     latestRuns
   });
+  const spec = buildRolePacketSpec({
+    role: input.role,
+    state
+  });
 
-  switch (input.role) {
-    case "planner": {
-      const mode = decidePlannerMode(state);
-
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "planner",
-        objective: buildPlannerObjective(
-          state.currentPhase.phaseGoal,
-          mode.mode,
-          mode.reason
-        ),
-        scope:
-          state.currentPhase.inScope.length > 0
-            ? state.currentPhase.inScope
-            : [state.currentPhase.deliverable],
-        doneWhen: plannerDoneWhen(mode.mode),
-        verification: [],
-        contextRefs
-      });
-    }
-    case "executor":
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "executor",
-        objective: state.currentPhase.phaseGoal,
-        scope:
-          state.currentPhase.inScope.length > 0
-            ? state.currentPhase.inScope
-            : [state.currentPhase.deliverable],
-        doneWhen:
-          state.acceptanceState.doneWhenChecklist.length > 0
-            ? state.acceptanceState.doneWhenChecklist.map((item) => item.label)
-            : [state.currentPhase.stopCondition],
-        verification: state.currentPhase.verificationForThisPhase,
-        contextRefs
-      });
-    case "reviewer":
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "reviewer",
-        objective: "复核当前 slice 输出是否符合 Project Brief、当前 phase 与当前 claim。",
-        scope: [
-          "检查当前输出是否仍在 locked phase 范围内",
-          "判断当前结果是否可以进入 verification"
-        ],
-        doneWhen: [
-          "只给出 ready-for-verification 或 review-blocked",
-          "如果阻塞，明确 blocker 与关键发现"
-        ],
-        verification: [],
-        contextRefs
-      });
-    case "verifier":
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "verifier",
-        objective: "独立检查当前 claim 是否已被证据支持，并给出 verification 结论。",
-        scope: [
-          "复核当前 claim 与 done when",
-          "检查已有证据是否足够支撑通过"
-        ],
-        doneWhen: [
-          "只给出 verification-failed 或 accepted-with-closeout-pending",
-          "如果失败，明确证据缺口或失败命令"
-        ],
-        verification: state.currentPhase.verificationForThisPhase,
-        verificationPolicy,
-        contextRefs
-      });
-    case "closeout":
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "closeout",
-        objective: "对当前已通过 verification 的结果做收尾，准备 accepted 状态。",
-        scope: [
-          "清理临时调试痕迹",
-          "记录 residual risks 与必要文档更新"
-        ],
-        doneWhen: [
-          "说明完成了哪些 closeout 动作",
-          "只在可以安全收尾时给出 accepted"
-        ],
-        verification: [],
-        contextRefs
-      });
-    case "hygiene":
-      return buildRolePacket({
-        projectRoot: input.projectRoot,
-        runId: input.runId,
-        provider: input.provider,
-        role: "hygiene",
-        objective: "清理会话惯性，重新锚定 committed truth，并给出下一步最小动作。",
-        scope: [
-          "区分 verified facts、assumptions、stale inferences",
-          "给出当前最小可继续动作"
-        ],
-        doneWhen: ["产出一份可信的 session hygiene 结果"],
-        verification: [],
-        contextRefs
-      });
-  }
+  return buildRolePacket({
+    projectRoot: input.projectRoot,
+    runId: input.runId,
+    provider: input.provider,
+    role: spec.role,
+    objective: spec.objective,
+    scope: spec.scope,
+    doneWhen: spec.doneWhen,
+    verification: spec.verification,
+    verificationPolicy: spec.role === "verifier" ? verificationPolicy : undefined,
+    contextRefs
+  });
 }
 
 export async function buildPlannerPacket(
