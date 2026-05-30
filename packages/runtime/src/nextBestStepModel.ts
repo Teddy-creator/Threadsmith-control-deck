@@ -7,8 +7,14 @@ export type RuntimeActionId =
   | "review-proposal"
   | "create-handoff";
 
+export type NextStepKind =
+  | "work-session-continue"
+  | "gap-check"
+  | "value-heartbeat";
+
 export interface ActionRecommendation {
   actionId: RuntimeActionId;
+  nextStepKind?: NextStepKind;
   label: string;
   reason: string;
   expectedRoles: string[];
@@ -25,10 +31,12 @@ export function recommendation(
   label: string,
   reason: string,
   expectedRoles: string[],
-  stopCondition: string
+  stopCondition: string,
+  nextStepKind?: NextStepKind
 ): ActionRecommendation {
   return {
     actionId,
+    nextStepKind,
     label,
     reason,
     expectedRoles,

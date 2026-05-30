@@ -34,8 +34,13 @@ const SECTION_ADVICE: Record<string, string> = {
   relevantFiles: "Prioritize changed files and entry points; avoid dumping whole repo maps.",
   recentDiff: "Summarize diff intent instead of copying file-by-file commentary.",
   evidence: "Keep command summaries and artifact refs; do not copy raw stdout or stderr.",
-  sourceRefs: "Reference durable files rather than repeating their contents."
+  sourceRefs: "Reference durable files rather than repeating their contents.",
+  recentDecisions: "Keep only the recent 3-5 accepted slices or decisions; move older history to phase history or reports.",
+  phaseHistory: "Do not keep full phase history in the current packet; keep refs and the latest relevant boundary.",
+  history: "Current packets are for current operating facts, not full history replay."
 };
+
+const HISTORY_SECTIONS = new Set(["recentDecisions", "phaseHistory", "history"]);
 
 function estimateChars(value: unknown) {
   return JSON.stringify(value).length;
@@ -79,6 +84,10 @@ function sectionAdvice(
   items: number,
   limits: Required<BuildContextBudgetOptions>
 ) {
+  if (HISTORY_SECTIONS.has(section) && items > 5) {
+    return SECTION_ADVICE[section];
+  }
+
   if (level === "compact" && items < limits.sectionItemWatch) {
     return null;
   }
@@ -143,6 +152,12 @@ function buildWarnings(
   for (const section of sections) {
     if (section.level === "over-budget" || section.level === "heavy") {
       warnings.push(`${section.section} is ${section.level} (${section.estimatedChars} estimated chars).`);
+    }
+
+    if (HISTORY_SECTIONS.has(section.section) && section.itemCount > 5) {
+      warnings.push(
+        `${section.section} has ${section.itemCount} items; current packets should keep only recent 3-5 accepted slices or decisions.`
+      );
     }
   }
 

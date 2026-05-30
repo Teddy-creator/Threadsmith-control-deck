@@ -13,9 +13,21 @@ import type { ContextRecoverySignal } from "./contextRecovery.ts";
 
 export type {
   ActionRecommendation,
+  NextStepKind,
   NextBestStepDecision,
   RuntimeActionId
 } from "./nextBestStepModel.ts";
+
+export type CloseoutTier = "lite" | "standard" | "audit";
+
+export interface AdaptiveWorkSessionSignals {
+  previousGapCheckSelectedImplementationPath?: boolean;
+  closeoutTiersSinceValueHeartbeat?: CloseoutTier[];
+  requiresAuditStop?: boolean;
+  auditStopReason?: string;
+  introducesConsumerSurface?: boolean;
+  changesProductSemantics?: boolean;
+}
 
 function appendIfMissing(base: string, fragment: string) {
   return base.includes(fragment) ? base : `${base} ${fragment}`.trim();
@@ -50,6 +62,51 @@ function findPendingUserDecision(state: ProjectState) {
   return state.activeWork.items.find((item) => item.requiresUserDecision);
 }
 
+function isAuditStopRequired(signals: AdaptiveWorkSessionSignals) {
+  return Boolean(
+    signals.requiresAuditStop ||
+      signals.introducesConsumerSurface ||
+      signals.changesProductSemantics
+  );
+}
+
+function auditStopReason(signals: AdaptiveWorkSessionSignals) {
+  if (signals.auditStopReason?.trim()) {
+    return signals.auditStopReason.trim();
+  }
+
+  if (signals.introducesConsumerSurface) {
+    return "下一步会暴露新的 consumer surface，不能悄悄并入 work session。";
+  }
+
+  if (signals.changesProductSemantics) {
+    return "下一步会改变 product semantics，必须先停在 phase 边界确认。";
+  }
+
+  return "下一步触发 audit stop gate，必须先确认边界。";
+}
+
+function hasThreeConsecutiveGovernanceHeavyCloseouts(
+  closeoutTiers: CloseoutTier[] = []
+) {
+  const lastThree = closeoutTiers.slice(-3);
+
+  return (
+    lastThree.length === 3 &&
+    lastThree.every((tier) => tier === "standard" || tier === "audit")
+  );
+}
+
+function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknown) {
+  return (
+    !pendingUserDecision &&
+    state.currentPhase.blockedBy.length === 0 &&
+    !state.activeWork.blockerSummary &&
+    state.acceptanceState.verificationStatus !== "failed" &&
+    state.acceptanceState.reviewStatus !== "review-blocked"
+  );
+}
+
 function isBootstrapDecisionStage(
   state: ProjectState,
   latestRun: AgentRunRecord | null,
@@ -80,7 +137,8 @@ export function selectNextBestStep(
   latestRun: AgentRunRecord | null = null,
   latestPhaseRun: PhaseRunSummary = createMissingPhaseRunSummary(),
   latestPhasePause: PhasePauseSummary = createMissingPhasePauseSummary(),
-  contextRecovery: ContextRecoverySignal | null = null
+  contextRecovery: ContextRecoverySignal | null = null,
+  adaptiveSignals: AdaptiveWorkSessionSignals = {}
 ): NextBestStepDecision {
   if (latestPhaseRun.status === "paused") {
     const pauseReason = latestPhasePause.summary
@@ -370,6 +428,35 @@ export function selectNextBestStep(
     };
   }
 
+  if (pendingUserDecision) {
+    return {
+      primary: recommendation(
+        "open-current-phase",
+        "先做 gap check",
+        `当前存在需要判断的开放决策：${pendingUserDecision.taskSummary}。先确认它是否改变范围、验收或产品语义，再决定能否进入 work session。`,
+        [pendingUserDecision.role],
+        "开放决策已被确认、排除或转成明确的实现路径。",
+        "gap-check"
+      ),
+      alternatives: [
+        recommendation(
+          "run-hygiene",
+          "决策前重新锚定 truth",
+          "如果这个开放问题来自旧上下文或矛盾 packet，先运行 hygiene 会更稳。",
+          ["hygiene"],
+          "开放问题、committed truth 与下一步边界已经重新对齐。"
+        ),
+        recommendation(
+          "create-handoff",
+          "为当前判断创建 handoff",
+          "如果需要切到另一个线程判断这个问题，先把当前边界打包。",
+          ["hygiene"],
+          "已经存在一个可继续的判断边界。"
+        )
+      ]
+    };
+  }
+
   const runningRole = state.activeWork.items.find(
     (item) => item.status === "running" && item.role !== "planner"
   );
@@ -426,6 +513,34 @@ export function selectNextBestStep(
           "如果当前线程太吵，或者你想留一个干净的恢复路径，这会很有用。",
           ["hygiene"],
           "已经存在一个最新 continuation packet。"
+        )
+      ]
+    };
+  }
+
+  if (isAuditStopRequired(adaptiveSignals)) {
+    return {
+      primary: recommendation(
+        "open-current-phase",
+        "先确认 audit 边界",
+        `${auditStopReason(adaptiveSignals)} 这类动作不能降级成轻量 work session，需要先确认 phase contract、验收和 stop condition。`,
+        ["planner"],
+        "audit 边界已经确认，或者该动作被拆成安全的后续 phase。"
+      ),
+      alternatives: [
+        recommendation(
+          "run-hygiene",
+          "audit 前重新锚定 truth",
+          "如果 audit stop 是由 stale truth 或 packet 冲突触发，先运行 hygiene。",
+          ["hygiene"],
+          "audit 触发原因与 committed truth 已重新一致。"
+        ),
+        recommendation(
+          "create-handoff",
+          "创建 audit handoff",
+          "如果这一步要交给另一个线程或 agent，先保存清晰边界。",
+          ["hygiene"],
+          "已经存在一个带 audit 边界的 continuation packet。"
         )
       ]
     };
@@ -518,13 +633,54 @@ export function selectNextBestStep(
     };
   }
 
+  if (
+    hasThreeConsecutiveGovernanceHeavyCloseouts(
+      adaptiveSignals.closeoutTiersSinceValueHeartbeat
+    )
+  ) {
+    return {
+      primary: recommendation(
+        "open-current-phase",
+        "做一次价值 heartbeat",
+        "最近已经连续完成三次 governance-heavy closeout。现在适合轻量确认：项目是否更可用、更可靠或更接近目标，以及下一步继续深挖工程是否仍然最高价值。",
+        ["planner"],
+        "操作者已接受、跳过或完成这次 value heartbeat，下一步方向重新对齐。",
+        "value-heartbeat"
+      ),
+      alternatives: [
+        recommendation(
+          "advance-phase",
+          "继续当前 work session",
+          "如果操作者已经明确接受当前实现路径，heartbeat 不能打断已接受工作，可以继续推进。",
+          ["planner", "executor", "reviewer"],
+          "当前 work session 到达自然停点。",
+          "work-session-continue"
+        ),
+        recommendation(
+          "create-handoff",
+          "保存价值回看边界",
+          "如果需要把价值判断交给另一个线程，先打包当前事实。",
+          ["hygiene"],
+          "已经存在一个用于价值回看的 continuation packet。"
+        )
+      ]
+    };
+  }
+
   return {
     primary: recommendation(
       "advance-phase",
-      "推进当前 phase",
-      "这是当前活跃项目里价值最高、且没有被阻塞的下一步。",
+      canContinueWorkSession(state, pendingUserDecision)
+        ? "继续当前 work session"
+        : "推进当前 phase",
+      adaptiveSignals.previousGapCheckSelectedImplementationPath
+        ? "上一轮 gap check 已经选出实现路径，且当前没有失败验证、范围变化或 audit stop；下一步应该进入实现，而不是再做一次 gap check。"
+        : "这是当前活跃项目里价值最高、且没有被阻塞的下一步。",
       ["planner", "executor", "reviewer"],
-      "当前 slice 到达待评审或待验证状态。"
+      "当前 slice 到达待评审或待验证状态。",
+      canContinueWorkSession(state, pendingUserDecision)
+        ? "work-session-continue"
+        : undefined
     ),
     alternatives: [
       recommendation(

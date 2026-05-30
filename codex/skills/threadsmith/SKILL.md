@@ -77,6 +77,53 @@ Stop mid-chain only when a real gate appears:
 internal role handoff, say which role/gate will run next, but do not present it
 as something the operator must approve.
 
+## Adaptive Work Session Mode
+
+A work session is a bounded group of related actions inside the current phase.
+It is larger than a single role gate and smaller than a new phase. It does not
+replace the phase contract, and it must not silently expand scope.
+
+Use a work session when all are true:
+
+- the operator has accepted the current direction
+- the next 2-4 actions affect the same subsystem and accepted goal
+- no unapproved user-visible capability, consumer surface, product semantics
+  change, provider default, credential, release, or destructive action appears
+- verification can stay `narrow` or `standard`
+- durable truth can be written at the work-session boundary without losing
+  auditability
+
+Do not use a work session when the next action changes product semantics,
+exposes a new consumer surface, changes provider / credential / release /
+destructive behavior, contradicts committed truth, or follows a failed
+verification whose repair path is uncertain.
+
+Examples:
+
+- related work session: extract a module, add focused tests, update the direct
+  existing consumer, and close out once
+- single-role drive: the user asks specifically for reviewer only, verifier
+  only, or "do not implement"
+- stop-gate fallback: adding a CLI command, API endpoint, UI route, provider
+  default, public sync, tag, publish, migration, delete, or reset must pause for
+  operator review
+
+### Work-Session Truth Writeback
+
+At work-session start, do not create a new phase only to name the session. Record
+the work-session target in active work or the current packet only if it changes
+execution behavior or prevents repeated recommendations.
+
+During the session, keep internal notes as run evidence, command output, or
+local reasoning unless a real stop gate appears. Write durable truth immediately
+only for blockers, failed verification, scope changes, or user decisions.
+
+At work-session closeout, update acceptance state when done-when evidence
+changed, active work when role / blocker / next action changed, evidence summary
+or current packet when the next operator turn needs the fact, and role packets
+when role-relevant truth changed. Do not preserve every internal sub-step as
+active truth when the final result already captures it.
+
 ## Execution Cadence Selector
 
 Choose execution cadence by state, not only by wording:
@@ -153,10 +200,48 @@ done-when evidence, overusing protocol labels, or hitting the same blocker
 twice. This is a lightweight trajectory check, not a full re-plan after every
 role.
 
+## Gap Check Budget
+
+Gap checks prevent wrong work; they must not become action prelude loops. A work
+session gets one gap check by default.
+
+After a gap check selects an implementation path, the next normal action should
+be implementation, not another gap check, unless verification failed, scope or
+product direction changed, release / destructive / public risk appeared,
+provider routing changed, or committed truth contradicts repo evidence.
+
+## Product / User-Value Heartbeat
+
+After three consecutive governance-heavy accepted sessions without a heartbeat,
+recommend a lightweight value check at the next phase boundary or work-session
+closeout. Governance-heavy means `standard` or `audit` closeout; `lite` does not
+increment the counter.
+
+The heartbeat asks whether the project became more usable, understandable,
+reliable, playable, or closer to its stated goal; whether the next local
+engineering step is still highest value; and whether the operator should choose
+between engineering depth, product surface, architecture map, or UX / creative
+validation.
+
+The heartbeat is advisory. It must not rewrite acceptance, force a direction
+change, or interrupt an accepted implementation path unless a real stop gate
+appears.
+
 ## Output Matrix
 
-Use boundary full output for `recover`, bootstrap, closeout, accepted phases,
-phase-boundary reports, and any response that changes durable truth.
+Use the smallest closeout tier that still preserves orientation and safety:
+
+- `lite`: small or low-risk work. Required fields: changed, verification, truth
+  (`updated`, `unchanged`, or `skipped with reason`), next, and optional risk.
+- `standard`: normal bounded implementation. Required fields: result, changed
+  capability, verification, truth, remaining risk, and next phase.
+- `audit`: release, PR / merge, public docs, destructive operations,
+  architecture boundaries, provider routing, security, or cross-agent state. Use
+  the full Threadsmith Output Contract skeleton.
+
+Use boundary full output for `recover`, bootstrap, audit closeout, accepted
+phases, phase-boundary reports, and any response that changes durable truth in a
+way that affects route, scope, acceptance, release, or cross-agent state.
 
 ## Closeout Output Gate
 

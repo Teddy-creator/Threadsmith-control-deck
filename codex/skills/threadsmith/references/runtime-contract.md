@@ -232,6 +232,29 @@ Role write boundaries:
 Unknown external agents must produce writeback proposals instead of direct
 committed-truth writes.
 
+Work-session writeback shape:
+
+- start: do not create a new phase only to name a work session; record the
+  target in active work or the current packet only when it changes execution
+  behavior or prevents repeated recommendations
+- during: keep internal notes as run evidence, command output, or local
+  reasoning unless a blocker, failed verification, scope change, or user
+  decision appears
+- closeout: update acceptance when done-when evidence changed, active work when
+  role / blocker / next action changed, evidence summary or current packet when
+  the next operator turn needs the fact, and role packets when role-relevant
+  truth changed
+
+Concrete writeback files for v1:
+
+- active work target: `.threadsmith/active-work.json`
+- accepted result or done-when evidence: `.threadsmith/acceptance-state.json`
+- next operator fact: `.threadsmith/context/current-packet.json` or
+  `.threadsmith/context/evidence-summary.json`
+- role-specific changed truth: `.threadsmith/context/role-packets/<role>.json`
+- historical accepted boundary: phase history / closeout report, not active
+  packet accumulation
+
 Writeback proposals live at `.threadsmith/proposals/<proposal-id>.json`.
 Proposal reviews live at `.threadsmith/proposal-reviews/<proposal-id>.json`.
 They are runtime artifacts, not committed truth. A proposal may describe
@@ -257,3 +280,46 @@ Do not silently continue with stale truth after a failed write.
 The control deck is a view over this state.
 
 Deck actions should map back to explicit Threadsmith actions, not free-form magic.
+
+## Governance Intensity Preference
+
+Governance intensity is a preference over ordinary Threadsmith behavior, not a
+permission to bypass safety gates.
+
+Allowed values:
+
+- `light`
+- `standard`
+- `audit-heavy`
+
+Default: `standard`.
+
+Use the existing `.threadsmith/preferences.json` surface. Do not introduce a new
+governance-only state file for v1.
+
+Priority:
+
+1. non-negotiable safety gates from the skill contract or AGENTS.md
+2. explicit user instruction for the current invocation or work session
+3. `.threadsmith/preferences.json` durable project default
+4. non-conflicting soft defaults from AGENTS.md
+5. fallback `standard`
+
+Invariant: audit stop gates cannot be downgraded by governance intensity.
+
+## Context Packet Current-State Budget
+
+The current Context Packet should be current-state oriented, not an ever-growing
+history dump.
+
+Keep:
+
+- current goal
+- recent 3-5 accepted slices or decisions
+- current open risks and blockers
+- next best step or current work-session target
+- latest failed verification or high-signal evidence
+
+Move older history to archived evidence, phase history, reports, or handoff
+packets. Compact only at work-session closeout or when the context budget is
+exceeded, not in the middle of an accepted implementation path.

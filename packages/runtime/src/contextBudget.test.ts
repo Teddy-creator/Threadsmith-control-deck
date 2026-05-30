@@ -115,4 +115,40 @@ describe("buildContextBudgetLedger", () => {
       "Lost-in-the-middle risk: acceptance is heavy in the middle of the packet; route only the role-specific subset."
     );
   });
+
+  it("keeps current packets oriented around recent decisions instead of full history", () => {
+    const ledger = buildContextBudgetLedger({
+      project: { label: "Threadsmith" },
+      recentDecisions: Array.from({ length: 7 }, (_, index) => ({
+        title: `Accepted slice ${index}`,
+        summary: "Historical accepted work."
+      })),
+      nextStep: { label: "Continue current work session" }
+    });
+
+    expect(ledger.warnings).toContain(
+      "recentDecisions has 7 items; current packets should keep only recent 3-5 accepted slices or decisions."
+    );
+    expect(ledger.compressionAdvice).toEqual(
+      expect.arrayContaining([expect.stringContaining("recentDecisions:")])
+    );
+  });
+
+  it("preserves latest failed verification as high-signal current evidence", () => {
+    const ledger = buildContextBudgetLedger({
+      evidence: {
+        latestFailedVerification: {
+          command: "npm run test --workspace @threadsmith/runtime",
+          result: "failed",
+          summary: "nextBestStep test failed on audit boundary expectation."
+        }
+      },
+      nextStep: { label: "Repair failed verification" }
+    });
+
+    expect(ledger.budgetLevel).toBe("compact");
+    expect(ledger.warnings).toEqual([]);
+    expect(ledger.sections.find((section) => section.section === "evidence"))
+      ?.toMatchObject({ level: "compact", itemCount: 1 });
+  });
 });

@@ -440,7 +440,7 @@ describe("deriveSupervisorState", () => {
       "当前 phase：Build workflow loop"
     );
     expect(supervisorState.commandBridge.recommendedRoute?.suggestedPrompt).toContain(
-      "当前建议动作：推进当前 phase"
+      "当前建议动作：继续当前 work session"
     );
     expect(supervisorState.commandBridge.recommendedRoute?.suggestedPrompt).toContain(
       "当前指挥入口：Claude CLI"
