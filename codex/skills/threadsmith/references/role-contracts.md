@@ -86,6 +86,8 @@ Forbidden writes:
 Completion artifact:
 
 - implementation summary, changed files, and verification commands that should be run next
+- if the action is `light-repair`, state why it does not claim durable phase
+  acceptance and which focused verification is enough
 
 ## Reviewer
 
@@ -145,6 +147,10 @@ Forbidden writes:
 Completion artifact:
 
 - verification result with exact commands and evidence refs
+- verification type: unit, contract, smoke, e2e, behavior sample, or structural
+  mock evidence
+- if mock-first evidence is used, say that it proves structure and boundaries,
+  not live-provider quality
 
 ## Closeout
 
@@ -176,6 +182,8 @@ Forbidden writes:
 Completion artifact:
 
 - closeout summary, cleanup result, residual risks, and next planned slice
+- capability translation: what changed for the project or operator, not only
+  which file or state object changed
 
 ## Hygiene
 

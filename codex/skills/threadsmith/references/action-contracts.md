@@ -324,6 +324,72 @@ the next local engineering step is still highest value. It must not rewrite
 acceptance, force a direction change, or interrupt an accepted implementation
 path unless a real stop gate appears.
 
+Governance-heavy means `full-governance` or a closeout that updates committed
+truth across acceptance, phase, provider, release, or cross-agent state.
+Internal-only means the work changed internal structure, tests, docs, or state
+machinery without creating a user-visible or operator-visible capability.
+
+## Human-Centered Operating Mode Rule
+
+Use one operating mode per Threadsmith action:
+
+- `light-repair`: one-surface fixes, copy edits, focused test expectation
+  updates backed by accepted behavior, or local cleanup that does not claim
+  durable phase acceptance
+- `normal-implementation`: ordinary bounded implementation, related multi-file
+  work sessions, focused refactors, and behavior covered by existing acceptance
+- `full-governance`: architecture boundaries, release / PR / merge,
+  cross-agent state, provider routing, destructive actions, credentials, new or
+  changed public behavior with unclear semantics / compatibility risk / release
+  impact / product safety risk, stale truth, or contradictory evidence
+
+Default ambiguity rule:
+
+- uncertain `light-repair` vs `normal-implementation`: use
+  `normal-implementation`
+- uncertain `normal-implementation` vs `full-governance`: use
+  `full-governance` only when a real stop gate exists; otherwise stay in
+  `normal-implementation` and name the residual risk
+- unsafe legacy mode / tier: fall back to `full-governance` and explain the
+  missing signal
+
+## Truth Writeback Tier Rule
+
+Use one writeback tier per action:
+
+- `evidence-only`: no committed truth state changes; evidence may live in the
+  final response, command output, local run artifact, or explicitly configured
+  runtime evidence artifact
+- `current-context`: update current packet, active work, or evidence summary
+  only because the next operator turn needs that fact
+- `committed-truth`: update phase, acceptance, status, supervision, role
+  packets, handoff, proposal review, or phase history because durable project
+  state changed
+
+Short approvals do not create committed truth by themselves. They execute the
+accepted step unless they also change scope, product direction, architecture,
+acceptance, or durable route.
+
+## Output Budget Rule
+
+Budget output by operating mode:
+
+- `light-repair`: 3-5 concise lines with changed, verification, material risk,
+  and next if any
+- `normal-implementation`: short closeout with capability, verification,
+  writeback tier, and next concrete action
+- `full-governance`: full audit skeleton only when a real audit boundary exists
+
+Every next step must include plain action, affected layer, why now, expected
+deliverable, verification level, and stop reason only when one exists. Do not
+answer "what is next?" with only a phase name.
+
+## Capability Translation Rule
+
+Every next step or closeout must translate the technical object into the project
+capability it enables. If the capability is not user-visible yet, say so and
+name the internal layer that changed.
+
 ## Full Governance Speed Rule
 
 Full governance means role-complete, not approval-heavy.

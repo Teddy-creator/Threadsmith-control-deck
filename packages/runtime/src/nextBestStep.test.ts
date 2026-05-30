@@ -540,7 +540,54 @@ describe("selectNextBestStep", () => {
 
     expect(result.primary.actionId).toBe("advance-phase");
     expect(result.primary.nextStepKind).toBe("work-session-continue");
+    expect(result.primary.operatingMode).toBe("normal-implementation");
+    expect(result.primary.writebackTier).toBe("current-context");
+    expect(result.primary.verificationLevel).toBe("standard");
     expect(result.primary.reason).toContain("上一轮 gap check 已经选出实现路径");
+  });
+
+  it("labels light repairs as evidence-only narrow work", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        lightRepair: true,
+        lightRepairReason: "只修正文案 typo，不声明 durable phase acceptance。"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.label).toBe("执行轻量修复");
+    expect(result.primary.operatingMode).toBe("light-repair");
+    expect(result.primary.writebackTier).toBe("evidence-only");
+    expect(result.primary.verificationLevel).toBe("narrow");
+    expect(result.primary.outputBudget).toBe("lite");
+    expect(result.primary.capabilityTranslation).toContain("小修复");
+  });
+
+  it("falls back to full governance when unsafe legacy metadata is missing", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        legacyMetadataMissing: true,
+        legacyMetadataSafe: false
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.operatingMode).toBe("full-governance");
+    expect(result.primary.writebackTier).toBe("committed-truth");
+    expect(result.primary.outputBudget).toBe("audit");
+    expect(result.primary.reason).toContain("缺少 operating mode / writeback tier");
   });
 
   it("does not let gap-check budget override failed verification repair", () => {
@@ -582,6 +629,8 @@ describe("selectNextBestStep", () => {
 
     expect(result.primary.actionId).toBe("open-current-phase");
     expect(result.primary.label).toBe("先确认 audit 边界");
+    expect(result.primary.operatingMode).toBe("full-governance");
+    expect(result.primary.writebackTier).toBe("committed-truth");
     expect(result.primary.reason).toContain("consumer surface");
   });
 
@@ -600,6 +649,7 @@ describe("selectNextBestStep", () => {
 
     expect(result.primary.actionId).toBe("open-current-phase");
     expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.operatingMode).toBe("normal-implementation");
     expect(result.primary.label).toBe("做一次价值 heartbeat");
   });
 });

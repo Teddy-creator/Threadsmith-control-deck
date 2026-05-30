@@ -27,9 +27,21 @@ export const governanceIntensitySourceSchema = z.enum([
   "fallback"
 ]);
 
+export const DEFAULT_VALUE_HEARTBEAT_QUESTIONS = [
+  "Did the project become more usable, understandable, reliable, or closer to its stated goal?",
+  "Is the next engineering step still the highest-value direction?",
+  "Should the project return to product surface, user experience, architecture map, or behavior validation?"
+] as const;
+
+export const valueHeartbeatPreferenceSchema = z.object({
+  questions: z.array(z.string().min(1)).min(1),
+  source: z.enum(["project-default", "fallback"])
+});
+
 export const storedPreferencesSchema = z.object({
   continuationBehavior: continuationBehaviorSchema.optional(),
   governanceIntensity: governanceIntensitySchema.optional(),
+  valueHeartbeatQuestions: z.array(z.string().min(1)).min(1).optional(),
   projectCharterGate: z.object({
     declinedSetup: z.boolean().default(false),
     declineReason: z.string().min(1).nullable().default(null),
@@ -52,6 +64,7 @@ export const preferencesSchema = z.object({
   globalDefault: continuationBehaviorSchema.nullable(),
   governanceIntensityDefault: governanceIntensitySchema.nullable().optional(),
   agentsMdGovernanceDefault: governanceIntensitySchema.nullable().optional(),
+  valueHeartbeat: valueHeartbeatPreferenceSchema.optional(),
   resolved: resolvedContinuationPreferenceSchema,
   resolvedGovernance: resolvedGovernanceIntensityPreferenceSchema.optional()
 });
@@ -64,6 +77,9 @@ export type ContinuationBehaviorSource = z.infer<
 >;
 export type GovernanceIntensitySource = z.infer<
   typeof governanceIntensitySourceSchema
+>;
+export type ValueHeartbeatPreference = z.infer<
+  typeof valueHeartbeatPreferenceSchema
 >;
 export type StoredPreferences = z.infer<typeof storedPreferencesSchema>;
 export type Preferences = z.infer<typeof preferencesSchema>;
@@ -118,18 +134,36 @@ export function resolveGovernanceIntensity(
   });
 }
 
+export function createValueHeartbeatPreference(
+  projectQuestions?: string[] | null
+): ValueHeartbeatPreference {
+  const questions =
+    projectQuestions && projectQuestions.length > 0
+      ? projectQuestions
+      : [...DEFAULT_VALUE_HEARTBEAT_QUESTIONS];
+
+  return valueHeartbeatPreferenceSchema.parse({
+    questions,
+    source: projectQuestions && projectQuestions.length > 0
+      ? "project-default"
+      : "fallback"
+  });
+}
+
 export function createPreferences(
   projectDefault?: ContinuationBehavior | null,
   globalDefault?: ContinuationBehavior | null,
   fallback: ContinuationBehavior = "ask-every-time",
   governanceIntensityDefault?: GovernanceIntensity | null,
-  agentsMdGovernanceDefault?: GovernanceIntensity | null
+  agentsMdGovernanceDefault?: GovernanceIntensity | null,
+  valueHeartbeatQuestions?: string[] | null
 ): Preferences {
   return preferencesSchema.parse({
     projectDefault: projectDefault ?? null,
     globalDefault: globalDefault ?? null,
     governanceIntensityDefault: governanceIntensityDefault ?? null,
     agentsMdGovernanceDefault: agentsMdGovernanceDefault ?? null,
+    valueHeartbeat: createValueHeartbeatPreference(valueHeartbeatQuestions),
     resolved: resolveContinuationBehavior(projectDefault, globalDefault, fallback),
     resolvedGovernance: resolveGovernanceIntensity(
       governanceIntensityDefault,

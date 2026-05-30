@@ -1,0 +1,15 @@
+{
+  "id": "full-governance-audit",
+  "description": "A new consumer surface must stay full-governance.",
+  "signals": {
+    "introducesConsumerSurface": true
+  },
+  "expected": {
+    "actionId": "open-current-phase",
+    "operatingMode": "full-governance",
+    "writebackTier": "committed-truth",
+    "verificationLevel": "release",
+    "outputBudget": "audit"
+  },
+  "capabilityMustContain": "高风险动作"
+}

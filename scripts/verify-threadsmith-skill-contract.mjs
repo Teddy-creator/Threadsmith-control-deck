@@ -59,6 +59,22 @@ const checks = [
   },
   {
     file: "SKILL.md",
+    label: "human-centered governance modes are documented",
+    patterns: [
+      /## Human-Centered Governance Modes/,
+      /`light-repair`/,
+      /`normal-implementation`/,
+      /`full-governance`/,
+      /Selection rules/,
+      /missing legacy mode \/ tier fields/,
+      /### Truth Writeback Tiers/,
+      /`evidence-only`/,
+      /`current-context`/,
+      /`committed-truth`/
+    ]
+  },
+  {
+    file: "SKILL.md",
     label: "gap budget and value heartbeat are documented",
     patterns: [
       /## Gap Check Budget/,
@@ -67,6 +83,18 @@ const checks = [
       /## Product \/ User-Value Heartbeat/,
       /three consecutive governance-heavy accepted sessions/,
       /The heartbeat is advisory/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "human-centered output budgets are documented",
+    patterns: [
+      /Output budgets/,
+      /3-5 concise lines/,
+      /short closeout with capability/,
+      /full audit skeleton only when a real audit boundary exists/,
+      /Avoid foregrounding dense protocol terms/,
+      /capability translation/
     ]
   },
   {
@@ -255,6 +283,22 @@ const checks = [
     ]
   },
   {
+    file: "references/action-contracts.md",
+    label: "human-centered action rules are documented",
+    patterns: [
+      /## Human-Centered Operating Mode Rule/,
+      /`light-repair`/,
+      /`normal-implementation`/,
+      /`full-governance`/,
+      /## Truth Writeback Tier Rule/,
+      /`evidence-only`/,
+      /`current-context`/,
+      /`committed-truth`/,
+      /## Output Budget Rule/,
+      /## Capability Translation Rule/
+    ]
+  },
+  {
     file: "references/role-contracts.md",
     label: "role transition table is documented",
     patterns: [
@@ -265,6 +309,16 @@ const checks = [
       /accepted-with-closeout-pending/,
       /Final state is accepted/,
       /Internal transitions inside an approved phase are not operator approval points/
+    ]
+  },
+  {
+    file: "references/role-contracts.md",
+    label: "human-centered role completion details are documented",
+    patterns: [
+      /does not claim durable phase\s+acceptance/,
+      /verification type: unit, contract, smoke, e2e, behavior sample, or structural\s+mock evidence/,
+      /mock-first evidence/,
+      /capability translation/
     ]
   },
   {
@@ -426,6 +480,18 @@ const checks = [
       /audit stop gates cannot be downgraded/,
       /## Context Packet Current-State Budget/,
       /recent 3-5 accepted slices/
+    ]
+  },
+  {
+    file: "references/runtime-contract.md",
+    label: "human-centered runtime metadata is documented",
+    patterns: [
+      /## Human-Centered Runtime Metadata/,
+      /operating mode: `light-repair`, `normal-implementation`, or\s+`full-governance`/,
+      /writeback tier: `evidence-only`, `current-context`, or `committed-truth`/,
+      /Missing legacy metadata/,
+      /full-governance` \+ `committed-truth`/,
+      /Evidence-only actions must not mutate project state files/
     ]
   },
   {

@@ -307,6 +307,25 @@ Priority:
 
 Invariant: audit stop gates cannot be downgraded by governance intensity.
 
+## Human-Centered Runtime Metadata
+
+Runtime recommendations may carry human-centered governance metadata when it is
+deterministic from state:
+
+- operating mode: `light-repair`, `normal-implementation`, or
+  `full-governance`
+- writeback tier: `evidence-only`, `current-context`, or `committed-truth`
+- verification level: `narrow`, `standard`, or `release`
+
+Missing legacy metadata is safe only when the action has no hard stop, no stale
+truth, no release / destructive / provider / cross-agent state risk, and no
+claim of durable phase acceptance. When unsafe, fall back to
+`full-governance` + `committed-truth` and explain the missing signal.
+
+Evidence-only actions must not mutate project state files. They may leave
+evidence in the final response, command output, local run artifact, or an
+explicitly configured runtime evidence artifact.
+
 ## Context Packet Current-State Budget
 
 The current Context Packet should be current-state oriented, not an ever-growing
