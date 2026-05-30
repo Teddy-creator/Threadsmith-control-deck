@@ -501,6 +501,30 @@ describe("selectNextBestStep", () => {
     expect(result.primary.label).toBe("先做 gap check");
   });
 
+  it("ignores stale pending decisions from roles outside the current phase owners", () => {
+    const result = selectNextBestStep({
+      ...baseState,
+      currentPhase: {
+        ...baseState.currentPhase,
+        activeOwners: ["executor"]
+      },
+      activeWork: {
+        items: [
+          {
+            role: "planner",
+            status: "waiting",
+            taskSummary: "旧的启动决策，不属于当前 executor-only phase",
+            requiresUserDecision: true
+          }
+        ],
+        blockerSummary: null
+      }
+    });
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.nextStepKind).toBe("work-session-continue");
+  });
+
   it("continues implementation instead of chaining another gap check after a path was selected", () => {
     const result = selectNextBestStep(
       baseState,

@@ -59,7 +59,11 @@ function isReportingFailureAfterSuccessfulTask(latestRun: AgentRunRecord | null)
 }
 
 function findPendingUserDecision(state: ProjectState) {
-  return state.activeWork.items.find((item) => item.requiresUserDecision);
+  return state.activeWork.items.find(
+    (item) =>
+      item.requiresUserDecision &&
+      state.currentPhase.activeOwners.includes(item.role)
+  );
 }
 
 function isAuditStopRequired(signals: AdaptiveWorkSessionSignals) {
