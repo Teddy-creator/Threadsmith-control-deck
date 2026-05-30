@@ -10,7 +10,9 @@
     "operatingMode": "light-repair",
     "writebackTier": "evidence-only",
     "verificationLevel": "narrow",
-    "outputBudget": "lite"
+    "outputBudget": "lite",
+    "surfaceAudience": "internal",
+    "workVisibility": "internal"
   },
   "capabilityMustContain": "小修复"
 }

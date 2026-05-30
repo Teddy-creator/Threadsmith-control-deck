@@ -171,19 +171,35 @@ Allowed writes:
 - `.threadsmith/project-status.json`
 - `.threadsmith/active-work.json`
 - `.threadsmith/project-supervision.json`
-- docs or changelog updates if required by the slice
+- docs or changelog updates only when required by the slice and durable enough
+  for future recovery, audit, public docs, architecture decisions, or explicit
+  operator request
+
+Writeback tier guard:
+
+- `evidence-only`: do not mutate committed state. Use final response, command
+  output, test output, or ignored/temp artifact.
+- `current-context`: update only next-turn context/evidence such as current
+  packet, evidence summary, or active work when the next action needs it.
+- `committed-truth`: update acceptance/status/supervision/phase history only
+  when durable project state changed.
 
 Forbidden writes:
 
 - new implementation scope
 - hiding residual risk
 - accepting without verification evidence
+- creating closeout reports by default for light repairs or ordinary work
+  sessions
+- rewriting role packets when they only restate current packet facts
 
 Completion artifact:
 
 - closeout summary, cleanup result, residual risks, and next planned slice
 - capability translation: what changed for the project or operator, not only
   which file or state object changed
+- if a durable report is created, state why it is durable; otherwise final
+  response plus evidence summary / verification output is enough
 
 ## Hygiene
 

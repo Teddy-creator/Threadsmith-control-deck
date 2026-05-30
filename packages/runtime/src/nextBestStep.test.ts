@@ -634,6 +634,86 @@ describe("selectNextBestStep", () => {
     expect(result.primary.reason).toContain("consumer surface");
   });
 
+  it("lets developer-only helper surfaces continue inside the approved scope", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        surfaceAudience: "developer"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.operatingMode).toBe("normal-implementation");
+    expect(result.primary.writebackTier).toBe("current-context");
+    expect(result.primary.surfaceAudience).toBe("developer");
+    expect(result.primary.workVisibility).toBe("developer_visible");
+  });
+
+  it("lets local operator surfaces continue when they do not change workflow semantics", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        surfaceAudience: "operator"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.operatingMode).toBe("normal-implementation");
+    expect(result.primary.surfaceAudience).toBe("operator");
+    expect(result.primary.workVisibility).toBe("operator_visible");
+  });
+
+  it("stops when an operator surface changes long-term workflow semantics", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        surfaceAudience: "operator",
+        createsLongLivedOperatorOrPublicEntry: true
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.operatingMode).toBe("full-governance");
+    expect(result.primary.surfaceAudience).toBe("operator");
+    expect(result.primary.workVisibility).toBe("operator_visible");
+    expect(result.primary.reason).toContain("operator surface");
+  });
+
+  it("stops for user-public surfaces even without an older consumer-surface flag", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        surfaceAudience: "user_public"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.operatingMode).toBe("full-governance");
+    expect(result.primary.surfaceAudience).toBe("user_public");
+    expect(result.primary.workVisibility).toBe("user_visible");
+    expect(result.primary.reason).toContain("user/public surface");
+  });
+
   it("recommends a value heartbeat after three consecutive governance-heavy closeouts", () => {
     const result = selectNextBestStep(
       baseState,

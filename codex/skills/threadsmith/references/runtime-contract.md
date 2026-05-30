@@ -316,6 +316,22 @@ deterministic from state:
   `full-governance`
 - writeback tier: `evidence-only`, `current-context`, or `committed-truth`
 - verification level: `narrow`, `standard`, or `release`
+- surface audience: `internal`, `developer`, `operator`, or `user_public`
+- work visibility: `internal`, `developer_visible`, `operator_visible`, or
+  `user_visible`
+
+For heartbeat-compatible closeout evidence, record these fields when available:
+
+- `governanceMode`: `light-repair`, `normal-implementation`, or
+  `full-governance`
+- `surfaceAudience`: `internal`, `developer`, `operator`, or `user_public`
+- `workVisibility`: `internal`, `developer_visible`, `operator_visible`, or
+  `user_visible`
+- `valueHeartbeatShown`: `true`, `false`, or `skipped`
+
+Prefer phase history as the long-term counter source. If phase history does not
+exist, use evidence summary. Final responses are operator display, not durable
+counter storage.
 
 Missing legacy metadata is safe only when the action has no hard stop, no stale
 truth, no release / destructive / provider / cross-agent state risk, and no
@@ -324,7 +340,39 @@ claim of durable phase acceptance. When unsafe, fall back to
 
 Evidence-only actions must not mutate project state files. They may leave
 evidence in the final response, command output, local run artifact, or an
-explicitly configured runtime evidence artifact.
+explicitly configured runtime evidence artifact. Prefer ignored/temp paths for
+local artifacts; if ignored status is unknown, surface an `untracked artifact
+risk` instead of treating the artifact as clean.
+
+Writeback file allowlist:
+
+- `evidence-only`: default to 0 `.threadsmith` state-file writes.
+- `current-context`: may update only next-turn context/evidence such as
+  `.threadsmith/context/current-packet.json`,
+  `.threadsmith/context/evidence-summary.json`, or `.threadsmith/active-work.json`.
+- `committed-truth`: may update durable state such as current phase,
+  acceptance, project status, project brief/roadmap/supervision, role packets,
+  handoff/routing files, or phase history when those surfaces actually changed.
+
+Do not create optional context files solely to satisfy a tier, and do not rewrite
+role packets when they only restate current packet facts.
+
+Operator comfort metadata:
+
+- `operatorExplanationStyle`: `concise`, `balanced`, `teaching`, or `detailed`
+- source priority: project preferences, AGENTS.md, project brief/supervision,
+  then Threadsmith default `balanced`
+- explanation style changes explanation depth only; it must not change safety
+  gates, verification level, or writeback tier
+
+Timestamp rule:
+
+- durable truth timestamps use new-write-only UTC ISO 8601 with milliseconds
+  (`YYYY-MM-DDTHH:mm:ss.SSSZ`)
+- legacy timestamps remain valid unless their owning file is touched for another
+  approved reason
+- do not bulk-rewrite historical `.threadsmith` files only to normalize
+  timestamps
 
 ## Context Packet Current-State Budget
 

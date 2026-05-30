@@ -27,6 +27,20 @@ export const governanceIntensitySourceSchema = z.enum([
   "fallback"
 ]);
 
+export const operatorExplanationStyleSchema = z.enum([
+  "concise",
+  "balanced",
+  "teaching",
+  "detailed"
+]);
+
+export const operatorExplanationStyleSourceSchema = z.enum([
+  "project-default",
+  "agents-md-default",
+  "project-brief-default",
+  "fallback"
+]);
+
 export const DEFAULT_VALUE_HEARTBEAT_QUESTIONS = [
   "Did the project become more usable, understandable, reliable, or closer to its stated goal?",
   "Is the next engineering step still the highest-value direction?",
@@ -41,6 +55,7 @@ export const valueHeartbeatPreferenceSchema = z.object({
 export const storedPreferencesSchema = z.object({
   continuationBehavior: continuationBehaviorSchema.optional(),
   governanceIntensity: governanceIntensitySchema.optional(),
+  operatorExplanationStyle: operatorExplanationStyleSchema.optional(),
   valueHeartbeatQuestions: z.array(z.string().min(1)).min(1).optional(),
   projectCharterGate: z.object({
     declinedSetup: z.boolean().default(false),
@@ -59,14 +74,30 @@ export const resolvedGovernanceIntensityPreferenceSchema = z.object({
   governanceIntensitySource: governanceIntensitySourceSchema
 });
 
+export const resolvedOperatorExplanationStylePreferenceSchema = z.object({
+  operatorExplanationStyle: operatorExplanationStyleSchema,
+  operatorExplanationStyleSource: operatorExplanationStyleSourceSchema
+});
+
 export const preferencesSchema = z.object({
   projectDefault: continuationBehaviorSchema.nullable(),
   globalDefault: continuationBehaviorSchema.nullable(),
   governanceIntensityDefault: governanceIntensitySchema.nullable().optional(),
   agentsMdGovernanceDefault: governanceIntensitySchema.nullable().optional(),
+  operatorExplanationStyleDefault: operatorExplanationStyleSchema
+    .nullable()
+    .optional(),
+  agentsMdOperatorExplanationStyleDefault: operatorExplanationStyleSchema
+    .nullable()
+    .optional(),
+  projectBriefOperatorExplanationStyleDefault: operatorExplanationStyleSchema
+    .nullable()
+    .optional(),
   valueHeartbeat: valueHeartbeatPreferenceSchema.optional(),
   resolved: resolvedContinuationPreferenceSchema,
-  resolvedGovernance: resolvedGovernanceIntensityPreferenceSchema.optional()
+  resolvedGovernance: resolvedGovernanceIntensityPreferenceSchema.optional(),
+  resolvedOperatorExplanation:
+    resolvedOperatorExplanationStylePreferenceSchema.optional()
 });
 
 export type ContinuationBehavior = z.infer<typeof continuationBehaviorSchema>;
@@ -77,6 +108,12 @@ export type ContinuationBehaviorSource = z.infer<
 >;
 export type GovernanceIntensitySource = z.infer<
   typeof governanceIntensitySourceSchema
+>;
+export type OperatorExplanationStyle = z.infer<
+  typeof operatorExplanationStyleSchema
+>;
+export type OperatorExplanationStyleSource = z.infer<
+  typeof operatorExplanationStyleSourceSchema
 >;
 export type ValueHeartbeatPreference = z.infer<
   typeof valueHeartbeatPreferenceSchema
@@ -134,6 +171,39 @@ export function resolveGovernanceIntensity(
   });
 }
 
+export function resolveOperatorExplanationStyle(
+  projectDefault?: OperatorExplanationStyle | null,
+  agentsMdDefault?: OperatorExplanationStyle | null,
+  projectBriefDefault?: OperatorExplanationStyle | null,
+  fallback: OperatorExplanationStyle = "balanced"
+) {
+  if (projectDefault) {
+    return resolvedOperatorExplanationStylePreferenceSchema.parse({
+      operatorExplanationStyle: projectDefault,
+      operatorExplanationStyleSource: "project-default"
+    });
+  }
+
+  if (agentsMdDefault) {
+    return resolvedOperatorExplanationStylePreferenceSchema.parse({
+      operatorExplanationStyle: agentsMdDefault,
+      operatorExplanationStyleSource: "agents-md-default"
+    });
+  }
+
+  if (projectBriefDefault) {
+    return resolvedOperatorExplanationStylePreferenceSchema.parse({
+      operatorExplanationStyle: projectBriefDefault,
+      operatorExplanationStyleSource: "project-brief-default"
+    });
+  }
+
+  return resolvedOperatorExplanationStylePreferenceSchema.parse({
+    operatorExplanationStyle: fallback,
+    operatorExplanationStyleSource: "fallback"
+  });
+}
+
 export function createValueHeartbeatPreference(
   projectQuestions?: string[] | null
 ): ValueHeartbeatPreference {
@@ -156,18 +226,31 @@ export function createPreferences(
   fallback: ContinuationBehavior = "ask-every-time",
   governanceIntensityDefault?: GovernanceIntensity | null,
   agentsMdGovernanceDefault?: GovernanceIntensity | null,
-  valueHeartbeatQuestions?: string[] | null
+  valueHeartbeatQuestions?: string[] | null,
+  operatorExplanationStyleDefault?: OperatorExplanationStyle | null,
+  agentsMdOperatorExplanationStyleDefault?: OperatorExplanationStyle | null,
+  projectBriefOperatorExplanationStyleDefault?: OperatorExplanationStyle | null
 ): Preferences {
   return preferencesSchema.parse({
     projectDefault: projectDefault ?? null,
     globalDefault: globalDefault ?? null,
     governanceIntensityDefault: governanceIntensityDefault ?? null,
     agentsMdGovernanceDefault: agentsMdGovernanceDefault ?? null,
+    operatorExplanationStyleDefault: operatorExplanationStyleDefault ?? null,
+    agentsMdOperatorExplanationStyleDefault:
+      agentsMdOperatorExplanationStyleDefault ?? null,
+    projectBriefOperatorExplanationStyleDefault:
+      projectBriefOperatorExplanationStyleDefault ?? null,
     valueHeartbeat: createValueHeartbeatPreference(valueHeartbeatQuestions),
     resolved: resolveContinuationBehavior(projectDefault, globalDefault, fallback),
     resolvedGovernance: resolveGovernanceIntensity(
       governanceIntensityDefault,
       agentsMdGovernanceDefault
+    ),
+    resolvedOperatorExplanation: resolveOperatorExplanationStyle(
+      operatorExplanationStyleDefault,
+      agentsMdOperatorExplanationStyleDefault,
+      projectBriefOperatorExplanationStyleDefault
     )
   });
 }
