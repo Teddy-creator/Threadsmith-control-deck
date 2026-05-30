@@ -259,6 +259,71 @@ Use `下一内部 gate` for these transitions if they need to be named. Reserve
 `下一 phase 预览` for closeout or a genuine new phase. This avoids presenting
 reviewer, verifier, or closeout as a fresh user decision.
 
+## Adaptive Work Session Rule
+
+A work session is a bounded group of related actions inside the current phase.
+It keeps Threadsmith from turning every small implementation move into a new
+micro-phase, while preserving planner, executor, reviewer, verifier, closeout,
+and hygiene gates.
+
+Use work-session continuation when:
+
+- the operator accepted the current direction;
+- the next 2-4 actions touch the same subsystem and accepted goal;
+- no unapproved consumer surface, product semantics change, provider default,
+  credential, release, public sync, or destructive action appears;
+- verification can remain `narrow` or `standard`;
+- truth can be written at the session boundary without hiding a blocker.
+
+Do not bundle work into a work session when the next action changes product
+semantics, exposes a new UI route / API endpoint / CLI command / public
+integration, changes provider defaults, requires credentials, publishes,
+merges, tags, deletes, resets, migrates data, contradicts committed truth, or
+repairs a failed verification whose path is uncertain.
+
+Short approvals such as "同意，请使用 Threadsmith 推进" may continue an accepted
+work session until a natural stop. If the user asks for one explicit role or one
+explicit action, honor that narrower request.
+
+## Closeout Tier Rule
+
+Choose the smallest closeout tier that preserves orientation and safety:
+
+- `lite`: small or low-risk work. Include changed, verification, truth, next,
+  and risk only when material.
+- `standard`: normal bounded implementation. Include result, changed
+  capability, verification, truth, remaining risk, and next phase.
+- `audit`: release, PR / merge, public docs, destructive operations,
+  architecture boundaries, provider routing, security, or cross-agent state.
+  Use the full Threadsmith Output Contract skeleton.
+
+Full skeleton output is still mandatory for audit events and major phase
+boundaries. Small accepted work may use `lite` when no stop gate or durable
+route change exists.
+
+## Gap Check Budget Rule
+
+Gap checks prevent wrong work; they must not replace work.
+
+Default: one gap check per work session. If a gap check already selected an
+implementation path, the next normal action is implementation, not another gap
+check, unless verification failed, scope changed, product direction changed,
+release / destructive / public risk appeared, provider routing changed, or
+committed truth contradicts repo evidence.
+
+## Product / User-Value Heartbeat Rule
+
+After three consecutive governance-heavy accepted sessions without a heartbeat,
+recommend one lightweight value check at the next phase boundary or
+work-session closeout. Count `standard` and `audit` closeouts as
+governance-heavy; `lite` closeouts do not increment the counter.
+
+The heartbeat is advisory. It asks whether the project became more usable,
+understandable, reliable, playable, or closer to its stated goal, and whether
+the next local engineering step is still highest value. It must not rewrite
+acceptance, force a direction change, or interrupt an accepted implementation
+path unless a real stop gate appears.
+
 ## Full Governance Speed Rule
 
 Full governance means role-complete, not approval-heavy.

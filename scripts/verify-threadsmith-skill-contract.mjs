@@ -45,9 +45,38 @@ const checks = [
   },
   {
     file: "SKILL.md",
+    label: "adaptive work session mode is documented",
+    patterns: [
+      /## Adaptive Work Session Mode/,
+      /bounded group of related actions inside the current phase/,
+      /larger than a single role gate and smaller than a new phase/,
+      /next 2-4 actions/,
+      /consumer surface/,
+      /product semantics/,
+      /provider default/,
+      /Work-Session Truth Writeback/
+    ]
+  },
+  {
+    file: "SKILL.md",
+    label: "gap budget and value heartbeat are documented",
+    patterns: [
+      /## Gap Check Budget/,
+      /one gap check by default/,
+      /next normal action should\s+be implementation/,
+      /## Product \/ User-Value Heartbeat/,
+      /three consecutive governance-heavy accepted sessions/,
+      /The heartbeat is advisory/
+    ]
+  },
+  {
+    file: "SKILL.md",
     label: "output matrix and orientation sections are required",
     patterns: [
       /## Output Matrix/,
+      /`lite`/,
+      /`standard`/,
+      /`audit`/,
       /## Closeout Output Gate/,
       /If any two of these signals are present/,
       /commit, PR, merge, tag, release, durable truth writeback, packet update, or\s+closeout artifact/,
@@ -213,6 +242,19 @@ const checks = [
     ]
   },
   {
+    file: "references/action-contracts.md",
+    label: "adaptive work-session action rules are documented",
+    patterns: [
+      /## Adaptive Work Session Rule/,
+      /2-4 actions/,
+      /new UI route \/ API endpoint \/ CLI command/,
+      /## Closeout Tier Rule/,
+      /## Gap Check Budget Rule/,
+      /## Product \/ User-Value Heartbeat Rule/,
+      /standard` and `audit` closeouts/
+    ]
+  },
+  {
     file: "references/role-contracts.md",
     label: "role transition table is documented",
     patterns: [
@@ -367,6 +409,23 @@ const checks = [
       /Verifier may write evidence and verification result/,
       /Closeout may record accepted state/,
       /Hygiene may refresh derived packets/
+    ]
+  },
+  {
+    file: "references/runtime-contract.md",
+    label: "work-session writeback and context budget are documented",
+    patterns: [
+      /Work-session writeback shape/,
+      /\.threadsmith\/active-work\.json/,
+      /\.threadsmith\/acceptance-state\.json/,
+      /\.threadsmith\/context\/current-packet\.json/,
+      /## Governance Intensity Preference/,
+      /`light`/,
+      /`standard`/,
+      /`audit-heavy`/,
+      /audit stop gates cannot be downgraded/,
+      /## Context Packet Current-State Budget/,
+      /recent 3-5 accepted slices/
     ]
   },
   {

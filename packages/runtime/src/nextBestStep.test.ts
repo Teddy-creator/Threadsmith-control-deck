@@ -222,6 +222,7 @@ describe("selectNextBestStep", () => {
     });
 
     expect(before.primary.actionId).toBe("advance-phase");
+    expect(before.primary.nextStepKind).toBe("work-session-continue");
     expect(after.primary.actionId).not.toBe("advance-phase");
     expect(after.primary.actionId).toBe("open-current-phase");
   });
@@ -477,5 +478,128 @@ describe("selectNextBestStep", () => {
     expect(result.primary.label).toBe("审查 writeback proposal");
     expect(result.primary.expectedRoles).toEqual(["hygiene", "reviewer"]);
     expect(result.primary.stopCondition).toContain("采纳、拒绝");
+  });
+
+  it("uses gap-check when a non-bootstrap user decision is pending", () => {
+    const result = selectNextBestStep({
+      ...baseState,
+      activeWork: {
+        items: [
+          {
+            role: "planner",
+            status: "waiting",
+            taskSummary: "判断这个 slice 是否会改变产品语义",
+            requiresUserDecision: true
+          }
+        ],
+        blockerSummary: null
+      }
+    });
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("gap-check");
+    expect(result.primary.label).toBe("先做 gap check");
+  });
+
+  it("ignores stale pending decisions from roles outside the current phase owners", () => {
+    const result = selectNextBestStep({
+      ...baseState,
+      currentPhase: {
+        ...baseState.currentPhase,
+        activeOwners: ["executor"]
+      },
+      activeWork: {
+        items: [
+          {
+            role: "planner",
+            status: "waiting",
+            taskSummary: "旧的启动决策，不属于当前 executor-only phase",
+            requiresUserDecision: true
+          }
+        ],
+        blockerSummary: null
+      }
+    });
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.nextStepKind).toBe("work-session-continue");
+  });
+
+  it("continues implementation instead of chaining another gap check after a path was selected", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        previousGapCheckSelectedImplementationPath: true
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.nextStepKind).toBe("work-session-continue");
+    expect(result.primary.reason).toContain("上一轮 gap check 已经选出实现路径");
+  });
+
+  it("does not let gap-check budget override failed verification repair", () => {
+    const result = selectNextBestStep(
+      {
+        ...baseState,
+        acceptanceState: {
+          ...baseState.acceptanceState,
+          verificationStatus: "failed"
+        }
+      },
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        previousGapCheckSelectedImplementationPath: true
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.label).toBe("修复 verification 缺口");
+    expect(result.primary.nextStepKind).toBeUndefined();
+  });
+
+  it("stops for audit-required consumer surfaces instead of bundling them into a work session", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        introducesConsumerSurface: true
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.label).toBe("先确认 audit 边界");
+    expect(result.primary.reason).toContain("consumer surface");
+  });
+
+  it("recommends a value heartbeat after three consecutive governance-heavy closeouts", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        closeoutTiersSinceValueHeartbeat: ["standard", "audit", "standard"]
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.label).toBe("做一次价值 heartbeat");
   });
 });
