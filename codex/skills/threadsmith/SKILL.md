@@ -124,6 +124,52 @@ or current packet when the next operator turn needs the fact, and role packets
 when role-relevant truth changed. Do not preserve every internal sub-step as
 active truth when the final result already captures it.
 
+## Human-Centered Governance Modes
+
+Threadsmith should keep protocol strict internally but make ordinary
+operator-facing work feel like low-friction collaboration.
+
+Use these operating modes:
+
+- `light-repair`: one-surface fixes, copy edits, focused test expectation
+  updates backed by accepted behavior, and local cleanup that does not claim
+  durable phase acceptance. Prefer focused verification and evidence-only
+  reporting.
+- `normal-implementation`: ordinary bounded implementation, related multi-file
+  work sessions, focused refactors, and behavior covered by existing acceptance.
+  Prefer short closeout and current-context writeback.
+- `full-governance`: architecture boundaries, release / PR / merge,
+  cross-agent state, provider routing, destructive actions, credentials, new or
+  changed public behavior with unclear semantics / compatibility risk / release
+  impact / product safety risk, stale truth, or contradictory evidence.
+
+Selection rules:
+
+- uncertain `light-repair` vs `normal-implementation`: choose
+  `normal-implementation`
+- uncertain `normal-implementation` vs `full-governance`: choose
+  `full-governance` only when a real stop gate exists; otherwise stay in
+  `normal-implementation` and name the residual risk
+- missing legacy mode / tier fields: use `normal-implementation` only when safe;
+  otherwise fall back to `full-governance` and explain the missing signal
+
+### Truth Writeback Tiers
+
+Choose the smallest writeback tier that preserves safety:
+
+- `evidence-only`: no committed truth state changes. Evidence may live in the
+  final response, command output, local run artifact, or explicitly configured
+  runtime evidence artifact. Do not mutate project state files.
+- `current-context`: update current packet, active work, or evidence summary
+  only because the next operator turn needs that fact.
+- `committed-truth`: update phase, acceptance, status, supervision, role
+  packets, handoff, proposal review, or phase history because durable project
+  state changed.
+
+Short approvals such as "同意" do not create committed truth by themselves.
+They execute the accepted step unless they also change scope, product direction,
+architecture, acceptance, or durable route.
+
 ## Execution Cadence Selector
 
 Choose execution cadence by state, not only by wording:
@@ -227,6 +273,13 @@ The heartbeat is advisory. It must not rewrite acceptance, force a direction
 change, or interrupt an accepted implementation path unless a real stop gate
 appears.
 
+Definitions:
+
+- governance-heavy means `full-governance` or a closeout that updates committed
+  truth across acceptance, phase, provider, release, or cross-agent state
+- internal-only means the work changed internal structure, tests, docs, or state
+  machinery without creating a user-visible or operator-visible capability
+
 ## Output Matrix
 
 Use the smallest closeout tier that still preserves orientation and safety:
@@ -268,6 +321,14 @@ closeout and phase-boundary reports.
 Use internal progress output for routine role-chain handoffs inside an approved
 phase, such as executor -> reviewer, reviewer -> verifier, or verifier ->
 closeout.
+
+Output budgets:
+
+- `light-repair`: 3-5 concise lines by default: changed, verification, material
+  risk, and next if any
+- `normal-implementation`: short closeout with capability, verification,
+  writeback tier, and next concrete action
+- `full-governance`: full audit skeleton only when a real audit boundary exists
 
 Use compact output for read-only `sync`. For ordinary conceptual questions about
 Threadsmith, answer directly without the full contract, but still cite the
@@ -497,6 +558,11 @@ stop condition applies.
 - Use this pattern when a term could be unclear: `技术名词：它在人话里意味着...；它位于...层；它让操作者现在能...`
 - Prefer capability-first phrasing: write "现在系统能稳定补跑任务窗口" before naming `runCatchUp` or `tickRuntime`.
 - Do not let filenames, enum values, command names, or internal function names be the main explanation.
+- Avoid foregrounding dense protocol terms such as `phase`, `role`, `packet`,
+  `truth`, `closeout`, `surface`, and `boundary` without plain-language
+  translation in ordinary answers.
+- Every next step and closeout must include capability translation: name the
+  technical object and the project capability it enables.
 - If there is no user-visible capability yet, say so explicitly and name the layer that changed, such as "这只是底层 runner，还不是 CLI、按钮或前端入口。"
 - Keep `Threadsmith Decision` compact. Detailed explanation belongs in `本 phase 的结果`, `这一步具体做了什么`, and `下一 phase 预览`.
 

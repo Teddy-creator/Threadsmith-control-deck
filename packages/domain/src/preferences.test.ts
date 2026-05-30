@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createPreferences,
+  createValueHeartbeatPreference,
   resolveContinuationBehavior,
   resolveGovernanceIntensity
 } from "./preferences.ts";
@@ -23,6 +24,8 @@ describe("resolveContinuationBehavior", () => {
     expect(resolved.resolved.continuationBehaviorSource).toBe("fallback");
     expect(resolved.resolvedGovernance?.governanceIntensity).toBe("standard");
     expect(resolved.resolvedGovernance?.governanceIntensitySource).toBe("fallback");
+    expect(resolved.valueHeartbeat?.source).toBe("fallback");
+    expect(resolved.valueHeartbeat?.questions[0]).toContain("usable");
   });
 
   it("resolves governance intensity from project default before AGENTS.md soft defaults", () => {
@@ -45,5 +48,16 @@ describe("resolveContinuationBehavior", () => {
     expect(resolved.resolvedGovernance?.governanceIntensitySource).toBe(
       "agents-md-default"
     );
+  });
+
+  it("keeps project-specific value heartbeat questions configurable", () => {
+    const heartbeat = createValueHeartbeatPreference([
+      "Did the project move closer to the intended user experience?"
+    ]);
+
+    expect(heartbeat.source).toBe("project-default");
+    expect(heartbeat.questions).toEqual([
+      "Did the project move closer to the intended user experience?"
+    ]);
   });
 });

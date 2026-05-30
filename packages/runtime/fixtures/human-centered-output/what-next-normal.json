@@ -1,0 +1,13 @@
+{
+  "id": "what-next-normal",
+  "description": "User asks what is next during an ordinary accepted implementation path.",
+  "expected": {
+    "actionId": "advance-phase",
+    "operatingMode": "normal-implementation",
+    "writebackTier": "current-context",
+    "verificationLevel": "standard",
+    "outputBudget": "standard",
+    "nextStepKind": "work-session-continue"
+  },
+  "capabilityMustContain": "当前已接受"
+}

@@ -14,6 +14,9 @@ import type { ContextRecoverySignal } from "./contextRecovery.ts";
 export type {
   ActionRecommendation,
   NextStepKind,
+  OperatingMode,
+  WritebackTier,
+  RuntimeVerificationLevel,
   NextBestStepDecision,
   RuntimeActionId
 } from "./nextBestStepModel.ts";
@@ -27,6 +30,10 @@ export interface AdaptiveWorkSessionSignals {
   auditStopReason?: string;
   introducesConsumerSurface?: boolean;
   changesProductSemantics?: boolean;
+  lightRepair?: boolean;
+  lightRepairReason?: string;
+  legacyMetadataMissing?: boolean;
+  legacyMetadataSafe?: boolean;
 }
 
 function appendIfMissing(base: string, fragment: string) {
@@ -109,6 +116,39 @@ function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknow
     state.acceptanceState.verificationStatus !== "failed" &&
     state.acceptanceState.reviewStatus !== "review-blocked"
   );
+}
+
+function normalImplementationMetadata(capabilityTranslation: string) {
+  return {
+    operatingMode: "normal-implementation" as const,
+    writebackTier: "current-context" as const,
+    verificationLevel: "standard" as const,
+    outputBudget: "standard" as const,
+    affectedLayer: "runtime recommendation",
+    capabilityTranslation
+  };
+}
+
+function fullGovernanceMetadata(capabilityTranslation: string) {
+  return {
+    operatingMode: "full-governance" as const,
+    writebackTier: "committed-truth" as const,
+    verificationLevel: "release" as const,
+    outputBudget: "audit" as const,
+    affectedLayer: "governance boundary",
+    capabilityTranslation
+  };
+}
+
+function lightRepairMetadata(capabilityTranslation: string) {
+  return {
+    operatingMode: "light-repair" as const,
+    writebackTier: "evidence-only" as const,
+    verificationLevel: "narrow" as const,
+    outputBudget: "lite" as const,
+    affectedLayer: "focused repair",
+    capabilityTranslation
+  };
 }
 
 function isBootstrapDecisionStage(
@@ -403,6 +443,40 @@ export function selectNextBestStep(
 
   const pendingUserDecision = findPendingUserDecision(state);
 
+  if (
+    adaptiveSignals.legacyMetadataMissing &&
+    adaptiveSignals.legacyMetadataSafe === false
+  ) {
+    return {
+      primary: recommendation(
+        "open-current-phase",
+        "先按 legacy 安全边界确认",
+        "当前项目缺少 operating mode / writeback tier 等新版元数据，而且不能安全判断为普通实现；先回到 full-governance 边界确认，避免把旧项目误降级。",
+        ["planner", "hygiene"],
+        "缺失的 mode / tier 信号已被确认，或本轮动作被拆成安全的下一步。",
+        fullGovernanceMetadata(
+          "旧项目缺字段时不会被静默降级；系统先确认边界，再决定能否轻量推进。"
+        )
+      ),
+      alternatives: [
+        recommendation(
+          "run-hygiene",
+          "先运行 hygiene",
+          "如果缺失来自 stale packet 或旧 truth，hygiene 可以先重新锚定。",
+          ["hygiene"],
+          "legacy truth 与当前动作边界已经重新对齐。"
+        ),
+        recommendation(
+          "create-handoff",
+          "创建 legacy handoff",
+          "如果要交给新线程判断，先打包当前旧项目状态。",
+          ["hygiene"],
+          "已经存在一个标明 legacy 风险的 continuation packet。"
+        )
+      ]
+    };
+  }
+
   if (pendingUserDecision && isBootstrapDecisionStage(state, latestRun, latestPhaseRun)) {
     return {
       primary: recommendation(
@@ -440,7 +514,12 @@ export function selectNextBestStep(
         `当前存在需要判断的开放决策：${pendingUserDecision.taskSummary}。先确认它是否改变范围、验收或产品语义，再决定能否进入 work session。`,
         [pendingUserDecision.role],
         "开放决策已被确认、排除或转成明确的实现路径。",
-        "gap-check"
+        {
+          nextStepKind: "gap-check",
+          ...fullGovernanceMetadata(
+            "开放决策先被确认边界，避免把可能改变范围或产品语义的决定误当成普通实现。"
+          )
+        }
       ),
       alternatives: [
         recommendation(
@@ -529,7 +608,10 @@ export function selectNextBestStep(
         "先确认 audit 边界",
         `${auditStopReason(adaptiveSignals)} 这类动作不能降级成轻量 work session，需要先确认 phase contract、验收和 stop condition。`,
         ["planner"],
-        "audit 边界已经确认，或者该动作被拆成安全的后续 phase。"
+        "audit 边界已经确认，或者该动作被拆成安全的后续 phase。",
+        fullGovernanceMetadata(
+          "高风险动作先回到审计边界，确保不会把公共行为、发布或状态风险混进普通实现。"
+        )
       ),
       alternatives: [
         recommendation(
@@ -649,7 +731,12 @@ export function selectNextBestStep(
         "最近已经连续完成三次 governance-heavy closeout。现在适合轻量确认：项目是否更可用、更可靠或更接近目标，以及下一步继续深挖工程是否仍然最高价值。",
         ["planner"],
         "操作者已接受、跳过或完成这次 value heartbeat，下一步方向重新对齐。",
-        "value-heartbeat"
+        {
+          nextStepKind: "value-heartbeat",
+          ...normalImplementationMetadata(
+            "连续治理后先确认项目价值方向，避免一直做内部工程而忘记用户或操作者能感受到什么。"
+          )
+        }
       ),
       alternatives: [
         recommendation(
@@ -658,7 +745,12 @@ export function selectNextBestStep(
           "如果操作者已经明确接受当前实现路径，heartbeat 不能打断已接受工作，可以继续推进。",
           ["planner", "executor", "reviewer"],
           "当前 work session 到达自然停点。",
-          "work-session-continue"
+          {
+            nextStepKind: "work-session-continue",
+            ...normalImplementationMetadata(
+              "已接受的实现路径继续推进，不因为提醒机制而重新打断。"
+            )
+          }
         ),
         recommendation(
           "create-handoff",
@@ -674,16 +766,30 @@ export function selectNextBestStep(
   return {
     primary: recommendation(
       "advance-phase",
-      canContinueWorkSession(state, pendingUserDecision)
+      adaptiveSignals.lightRepair
+        ? "执行轻量修复"
+        : canContinueWorkSession(state, pendingUserDecision)
         ? "继续当前 work session"
         : "推进当前 phase",
-      adaptiveSignals.previousGapCheckSelectedImplementationPath
+      adaptiveSignals.lightRepair
+        ? adaptiveSignals.lightRepairReason?.trim() ||
+          "这是一个不声明 durable phase acceptance 的窄修复；下一步应做 focused change 和 narrow verification。"
+        : adaptiveSignals.previousGapCheckSelectedImplementationPath
         ? "上一轮 gap check 已经选出实现路径，且当前没有失败验证、范围变化或 audit stop；下一步应该进入实现，而不是再做一次 gap check。"
         : "这是当前活跃项目里价值最高、且没有被阻塞的下一步。",
       ["planner", "executor", "reviewer"],
       "当前 slice 到达待评审或待验证状态。",
-      canContinueWorkSession(state, pendingUserDecision)
-        ? "work-session-continue"
+      adaptiveSignals.lightRepair
+        ? lightRepairMetadata(
+            "小修复只需要证明局部行为正确，不把它升级成完整阶段验收。"
+          )
+        : canContinueWorkSession(state, pendingUserDecision)
+        ? {
+            nextStepKind: "work-session-continue",
+            ...normalImplementationMetadata(
+              "当前已接受的实现链可以继续推进到自然停点，而不是重新包装成新阶段。"
+            )
+          }
         : undefined
     ),
     alternatives: [

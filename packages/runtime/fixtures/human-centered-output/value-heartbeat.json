@@ -1,0 +1,16 @@
+{
+  "id": "value-heartbeat",
+  "description": "Repeated governance-heavy work should recommend a value heartbeat.",
+  "signals": {
+    "closeoutTiersSinceValueHeartbeat": ["standard", "audit", "standard"]
+  },
+  "expected": {
+    "actionId": "open-current-phase",
+    "operatingMode": "normal-implementation",
+    "writebackTier": "current-context",
+    "verificationLevel": "standard",
+    "outputBudget": "standard",
+    "nextStepKind": "value-heartbeat"
+  },
+  "capabilityMustContain": "连续治理"
+}

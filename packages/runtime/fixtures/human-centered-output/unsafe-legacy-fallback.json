@@ -1,0 +1,16 @@
+{
+  "id": "unsafe-legacy-fallback",
+  "description": "Unsafe missing legacy metadata must fall back to full governance.",
+  "signals": {
+    "legacyMetadataMissing": true,
+    "legacyMetadataSafe": false
+  },
+  "expected": {
+    "actionId": "open-current-phase",
+    "operatingMode": "full-governance",
+    "writebackTier": "committed-truth",
+    "verificationLevel": "release",
+    "outputBudget": "audit"
+  },
+  "capabilityMustContain": "旧项目缺字段"
+}

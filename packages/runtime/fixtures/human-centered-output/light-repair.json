@@ -1,0 +1,16 @@
+{
+  "id": "light-repair",
+  "description": "A small repair should stay evidence-only and narrow.",
+  "signals": {
+    "lightRepair": true,
+    "lightRepairReason": "只修正文案 typo，不声明 durable phase acceptance。"
+  },
+  "expected": {
+    "actionId": "advance-phase",
+    "operatingMode": "light-repair",
+    "writebackTier": "evidence-only",
+    "verificationLevel": "narrow",
+    "outputBudget": "lite"
+  },
+  "capabilityMustContain": "小修复"
+}
