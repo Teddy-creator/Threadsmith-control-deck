@@ -359,12 +359,41 @@ Use one writeback tier per action:
 
 - `evidence-only`: no committed truth state changes; evidence may live in the
   final response, command output, local run artifact, or explicitly configured
-  runtime evidence artifact
+  runtime evidence artifact. Prefer ignored/temp paths; if ignored status is
+  unknown, label the artifact as an `untracked artifact risk`.
 - `current-context`: update current packet, active work, or evidence summary
   only because the next operator turn needs that fact
 - `committed-truth`: update phase, acceptance, status, supervision, role
   packets, handoff, proposal review, or phase history because durable project
   state changed
+
+Writeback file allowlist:
+
+- `evidence-only`: default to 0 `.threadsmith` state-file writes. Use final
+  response, command output, test output, or ignored/temp local artifact.
+- `current-context`: may update only next-turn context/evidence such as
+  `.threadsmith/context/current-packet.json`,
+  `.threadsmith/context/evidence-summary.json`, or `.threadsmith/active-work.json`
+  when that fact affects the next action.
+- `committed-truth`: may update durable files such as
+  `.threadsmith/current-phase.json`, `.threadsmith/acceptance-state.json`,
+  `.threadsmith/project-status.json`, project brief/roadmap/supervision, role
+  packets, handoff/routing files, or `.threadsmith/history/phases.jsonl` only
+  when those surfaces actually changed.
+
+Do not create optional context files solely to satisfy a tier, and do not rewrite
+role packets when they only restate current packet facts.
+
+Runtime recommendations should include surface metadata when determinable:
+
+- `surfaceAudience`: `internal`, `developer`, `operator`, or `user_public`
+- `workVisibility`: `internal`, `developer_visible`, `operator_visible`, or
+  `user_visible`
+
+`operator` surfaces may continue inside an approved scope when local,
+reversible, and not changing long-term workflow semantics. Upgrade them to
+`full-governance` when they create a long-lived operator/public entry point,
+alter defaults, affect compatibility, or could be mistaken for public behavior.
 
 Short approvals do not create committed truth by themselves. They execute the
 accepted step unless they also change scope, product direction, architecture,
@@ -531,14 +560,17 @@ When the gate triggers, do not use a compact prose closeout like:
 ```
 
 That shape loses the operator orientation contract. The same content must be
-placed under `本 phase 的结果`, `这一步具体做了什么`, `这一步解决的问题`,
-`验证`, `下一 phase 预览`, and `你需要审核的点`.
+placed under `一句话结论`, `本 phase 的结果`, `这一步具体做了什么`,
+`这一步解决的问题`, `验证`, `下一 phase 预览`, and `你需要审核的点`.
 
 The Threadsmith closeout contract overrides ordinary concise final-answer style.
 
-Use this exact field skeleton. Do not satisfy the rule with section headings
-and free-form paragraphs only:
+Use this exact human-first field skeleton. Do not satisfy the rule with section
+headings and free-form paragraphs only:
 
+- `一句话结论`: 1-2 Chinese sentences explaining what capability changed, where
+  the work stopped, and what the operator needs to approve next. Do not start
+  a closeout with protocol fields.
 - `本 phase 的结果`: `phase 名称`, `result`, `交付物`, `结果一句话`, and
   `架构影响`.
 - `这一步具体做了什么`: `Before`, `Changed`, `After`, and `Not changed`.
@@ -549,6 +581,8 @@ and free-form paragraphs only:
   `Why now`, `Questions`, `Deliverables`, `Non-goals`, `Done when`, and
   `Stop condition`.
 - `你需要审核的点`: only route, scope, non-goal, or acceptance decisions.
+- `Threadsmith Decision`: compact protocol footer only: `mode`, `source layer`,
+  `role-chain status`, and `active gate or stop condition`.
 
 The narrative should be concrete enough that the operator can answer:
 
@@ -562,6 +596,11 @@ The narrative should be concrete enough that the operator can answer:
 Avoid vague labels such as "continue optimization" or "improve workflow" unless
 they are immediately translated into questions, deliverables, and done-when
 criteria.
+
+When multiple next-step options are reasonable, recommend one first and explain
+the tradeoff in the required fields. Do not output only `Option A` / `Option B`
+bullets without `Why now`, `Deliverables`, and `Done when`; that makes the
+operator decode the plan instead of reviewing it.
 
 ## Operator Translation Rule
 
@@ -585,9 +624,24 @@ For each important technical object, answer:
 - what the operator or system can do now because this object exists;
 - whether it is already user-facing or still only an internal foundation.
 
-`Threadsmith Decision` should stay compact and may contain protocol fields.
-The explanatory burden belongs in `本 phase 的结果`, `这一步具体做了什么`,
+`Threadsmith Decision` should stay compact, appear at the end, and contain only
+the minimum protocol fields needed for auditability. The explanatory burden
+belongs in `一句话结论`, `本 phase 的结果`, `这一步具体做了什么`,
 `这一步解决的问题`, and `下一 phase 预览`.
+
+`operatorExplanationStyle` may be `concise`, `balanced`, `teaching`, or
+`detailed`. It changes explanation depth only; it must not change safety gates,
+verification level, or writeback tier.
+
+Durable truth timestamps use new-write-only UTC ISO 8601 with milliseconds
+(`YYYY-MM-DDTHH:mm:ss.SSSZ`). Do not bulk-rewrite legacy timestamps solely for
+normalization.
+
+Before recommending commands such as
+`npm run threadsmith:autopilot -- continue <project-root>`, check the target
+repo first, then Threadsmith control deck, then global command availability. If
+availability cannot be safely checked, provide the manual equivalent instead of
+presenting the command as executable.
 
 ## Next-Step Continuity Rule
 

@@ -70,7 +70,13 @@ const checks = [
       /### Truth Writeback Tiers/,
       /`evidence-only`/,
       /`current-context`/,
-      /`committed-truth`/
+      /`committed-truth`/,
+      /Writeback file allowlist/,
+      /untracked artifact risk/,
+      /Do not create optional context files/,
+      /Runtime recommendations should include surface metadata/,
+      /surfaceAudience/,
+      /workVisibility/
     ]
   },
   {
@@ -118,10 +124,13 @@ const checks = [
       /当前 stop reason/,
       /Compact sync output/,
       /Conceptual answer/,
+      /human-first order/,
+      /### 一句话结论/,
       /### 本 phase 的结果/,
       /### 这一步具体做了什么/,
       /### 下一 phase 预览/,
-      /### 你需要审核的点/
+      /### 你需要审核的点/,
+      /### Threadsmith Decision/
     ]
   },
   {
@@ -130,9 +139,7 @@ const checks = [
     patterns: [
       /render this exact skeleton/,
       /do not omit required labels/,
-      /project state:/,
-      /current phase state:/,
-      /acceptance state:/,
+      /先用 1-2 句中文说明/,
       /phase 名称:/,
       /交付物:/,
       /结果一句话:/,
@@ -150,7 +157,10 @@ const checks = [
       /Questions/,
       /Deliverables/,
       /Non-goals/,
-      /Done when/
+      /Done when/,
+      /Do not output only `Option A` \/ `Option B`/,
+      /Keep this section last and compact/,
+      /Do not include long project summaries/
     ]
   },
   {
@@ -161,7 +171,10 @@ const checks = [
       /Every dense technical noun/,
       /技术名词：它在人话里意味着/,
       /capability-first phrasing/,
-      /Do not let filenames, enum values, command names, or internal function names be the main explanation/
+      /Do not let filenames, enum values, command names, or internal function names be the main explanation/,
+      /operatorExplanationStyle/,
+      /new-write-only UTC ISO 8601/,
+      /manual\s+equivalent/
     ]
   },
   {
@@ -186,8 +199,9 @@ const checks = [
       /已用 Threadsmith 推进并完成/,
       /That shape loses the operator orientation contract/,
       /overrides ordinary concise final-answer style/,
-      /exact field skeleton/,
+      /human-first field skeleton/,
       /free-form paragraphs only/,
+      /一句话结论/,
       /phase 名称/,
       /结果一句话/,
       /架构影响/,
@@ -199,7 +213,12 @@ const checks = [
       /架构\/流程缺口/,
       /未运行与风险/,
       /planner-style brief/,
-      /what changed in this phase/
+      /what changed in this phase/,
+      /Do not output only `Option A` \/ `Option B`/,
+      /Threadsmith Decision.*compact.*at the end/s,
+      /operatorExplanationStyle/,
+      /new-write-only UTC ISO 8601/,
+      /manual equivalent/
     ]
   },
   {
@@ -294,6 +313,8 @@ const checks = [
       /`evidence-only`/,
       /`current-context`/,
       /`committed-truth`/,
+      /Writeback file allowlist/,
+      /untracked artifact risk/,
       /## Output Budget Rule/,
       /## Capability Translation Rule/
     ]
@@ -318,7 +339,10 @@ const checks = [
       /does not claim durable phase\s+acceptance/,
       /verification type: unit, contract, smoke, e2e, behavior sample, or structural\s+mock evidence/,
       /mock-first evidence/,
-      /capability translation/
+      /capability translation/,
+      /Writeback tier guard/,
+      /creating closeout reports by default/,
+      /if a durable report is created/
     ]
   },
   {
@@ -489,9 +513,20 @@ const checks = [
       /## Human-Centered Runtime Metadata/,
       /operating mode: `light-repair`, `normal-implementation`, or\s+`full-governance`/,
       /writeback tier: `evidence-only`, `current-context`, or `committed-truth`/,
+      /surface audience: `internal`, `developer`, `operator`, or `user_public`/,
+      /work visibility: `internal`, `developer_visible`, `operator_visible`, or\s+`user_visible`/,
+      /heartbeat-compatible closeout evidence/,
+      /valueHeartbeatShown/,
+      /phase history as the long-term counter source/,
       /Missing legacy metadata/,
       /full-governance` \+ `committed-truth`/,
-      /Evidence-only actions must not mutate project state files/
+      /Evidence-only actions must not mutate project state files/,
+      /Writeback file allowlist/,
+      /untracked artifact\s+risk/s,
+      /Operator comfort metadata/,
+      /operatorExplanationStyle/,
+      /Timestamp rule/,
+      /new-write-only UTC ISO 8601/
     ]
   },
   {

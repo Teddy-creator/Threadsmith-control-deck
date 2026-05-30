@@ -159,12 +159,42 @@ Choose the smallest writeback tier that preserves safety:
 
 - `evidence-only`: no committed truth state changes. Evidence may live in the
   final response, command output, local run artifact, or explicitly configured
-  runtime evidence artifact. Do not mutate project state files.
+  runtime evidence artifact. Do not mutate project state files. Prefer ignored
+  or temporary paths for local artifacts; if ignored status is unknown, label
+  it as an `untracked artifact risk`.
 - `current-context`: update current packet, active work, or evidence summary
   only because the next operator turn needs that fact.
 - `committed-truth`: update phase, acceptance, status, supervision, role
   packets, handoff, proposal review, or phase history because durable project
   state changed.
+
+Writeback file allowlist:
+
+- `evidence-only`: default to 0 `.threadsmith` state-file writes. Use final
+  response, command output, test output, or ignored/temp local artifact.
+- `current-context`: may update only next-turn context/evidence such as
+  `.threadsmith/context/current-packet.json`,
+  `.threadsmith/context/evidence-summary.json`, or `.threadsmith/active-work.json`
+  when that fact affects the next action.
+- `committed-truth`: may update durable files such as
+  `.threadsmith/current-phase.json`, `.threadsmith/acceptance-state.json`,
+  `.threadsmith/project-status.json`, project brief/roadmap/supervision, role
+  packets, handoff/routing files, or `.threadsmith/history/phases.jsonl` only
+  when those surfaces actually changed.
+
+Do not create optional context files solely to satisfy a tier, and do not rewrite
+role packets when they only restate current packet facts.
+
+Runtime recommendations should include surface metadata when determinable:
+
+- `surfaceAudience`: `internal`, `developer`, `operator`, or `user_public`
+- `workVisibility`: `internal`, `developer_visible`, `operator_visible`, or
+  `user_visible`
+
+`operator` surfaces may continue inside an approved scope when local,
+reversible, and not changing long-term workflow semantics. Upgrade them to
+`full-governance` when they create a long-lived operator/public entry point,
+alter defaults, affect compatibility, or could be mistaken for public behavior.
 
 Short approvals such as "同意" do not create committed truth by themselves.
 They execute the accepted step unless they also change scope, product direction,
@@ -338,15 +368,16 @@ Full output must use the exact field skeleton in `Output Contract`. Do not
 satisfy full output by writing only these section headings with free-form
 paragraphs underneath.
 
-Full output sections, each with required child fields:
+Full output sections, each with required child fields. Use human-first order:
 
-1. `Threadsmith Decision`
+1. `一句话结论`
 2. `本 phase 的结果`
 3. `这一步具体做了什么`
 4. `这一步解决的问题`
 5. `验证`
 6. `下一 phase 预览`
 7. `你需要审核的点`
+8. `Threadsmith Decision`
 
 Internal progress output:
 
@@ -501,19 +532,8 @@ When using the full output, render this exact skeleton. Keep answers concise,
 but do not omit required labels. If a field has no content, write `none` or
 `not run` with the reason.
 
-### Threadsmith Decision
-- mode: `sync`, `drive`, `continuous`, or `recover`
-- accepted previous recommendation: yes / no
-- source layer: committed truth / role packet / Context Packet / repo evidence / chat memory
-- project state:
-- current phase state:
-- acceptance state:
-- selected role and role packet status:
-- role-chain status: internal continuing / stopped at closeout / blocked
-- action taken now or blocking gate:
-- last completed step:
-- next best step:
-- active gate or stop condition:
+### 一句话结论
+- 先用 1-2 句中文说明：这一步到底让项目多了什么能力、现在停在哪里、下一步要用户审核什么。不要从 protocol field 开场。
 
 ### 本 phase 的结果
 - phase 名称:
@@ -541,12 +561,26 @@ but do not omit required labels. If a field has no content, write `none` or
 ### 下一 phase 预览
 - Phase：候选 phase 名称
 - continuity: new / continue / consolidate / gap-check / handoff / blocked
-- Why now：为什么现在做这一步，不做会卡在哪里
-- Questions：这一 phase 要回答哪些具体问题
+- Why now：为什么现在做这一步，不做会卡在哪里；必须说明它接的是上一 phase 的哪个结果
+- Questions：这一 phase 要回答哪些具体问题；不要只写“继续检查”
 - Deliverables：会产出什么，不要只写“优化”或“继续推进”；每个交付物都要说明它对操作者或系统能力的意义
 - Non-goals：明确不会做什么
 - Done when：怎么判断完成
 - Stop condition：遇到什么情况必须停下或让用户决策
+
+If there are multiple options, pick one recommendation first and explain the
+tradeoff in the same fields. Do not output only `Option A` / `Option B` bullets
+without `Why now`, `Deliverables`, and `Done when`.
+
+### Threadsmith Decision
+- mode: `sync`, `drive`, `continuous`, or `recover`
+- source layer: committed truth / role packet / Context Packet / repo evidence / chat memory
+- role-chain status: internal continuing / stopped at closeout / blocked
+- active gate or stop condition:
+
+Keep this section last and compact. Do not include long project summaries,
+full role lists, last-step details, or next-step explanations here. Put those
+in the human-facing sections above.
 
 Only use this section for a real next phase or phase-boundary closeout. If the
 next action is merely reviewer, verifier, or closeout inside the current phase,
@@ -564,7 +598,26 @@ stop condition applies.
 - Every next step and closeout must include capability translation: name the
   technical object and the project capability it enables.
 - If there is no user-visible capability yet, say so explicitly and name the layer that changed, such as "这只是底层 runner，还不是 CLI、按钮或前端入口。"
-- Keep `Threadsmith Decision` compact. Detailed explanation belongs in `本 phase 的结果`, `这一步具体做了什么`, and `下一 phase 预览`.
+- Keep `Threadsmith Decision` compact and at the end. Detailed explanation belongs in `一句话结论`, `本 phase 的结果`, `这一步具体做了什么`, and `下一 phase 预览`.
+
+Explanation style preference:
+
+- `operatorExplanationStyle`: `concise`, `balanced`, `teaching`, or `detailed`
+- source priority: project preferences, AGENTS.md, project brief/supervision,
+  then Threadsmith default `balanced`
+- this changes explanation depth only; it must not change safety gates,
+  verification level, or writeback tier
+
+Timestamp and command comfort:
+
+- durable truth timestamps use new-write-only UTC ISO 8601 with milliseconds
+  (`YYYY-MM-DDTHH:mm:ss.SSSZ`). Do not bulk-rewrite legacy timestamps solely for
+  normalization.
+- before recommending repo commands such as
+  `npm run threadsmith:autopilot -- continue <project-root>`, verify the command
+  exists in the target repo, then Threadsmith control deck, then global command
+  lookup. If availability cannot be safely checked, provide the manual
+  equivalent instead of presenting the command as executable.
 
 If `accepted previous recommendation` is `yes`, this section must describe the
 step being executed now or the blocking gate. It must not repeat the same

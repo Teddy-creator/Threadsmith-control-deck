@@ -17,6 +17,8 @@ export type {
   OperatingMode,
   WritebackTier,
   RuntimeVerificationLevel,
+  SurfaceAudience,
+  WorkVisibility,
   NextBestStepDecision,
   RuntimeActionId
 } from "./nextBestStepModel.ts";
@@ -30,10 +32,43 @@ export interface AdaptiveWorkSessionSignals {
   auditStopReason?: string;
   introducesConsumerSurface?: boolean;
   changesProductSemantics?: boolean;
+  surfaceAudience?: SurfaceAudience;
+  workVisibility?: WorkVisibility;
+  changesWorkflowSemantics?: boolean;
+  createsLongLivedOperatorOrPublicEntry?: boolean;
+  changesDefaultBehavior?: boolean;
+  compatibilityRisk?: boolean;
+  publicMisuseRisk?: boolean;
   lightRepair?: boolean;
   lightRepairReason?: string;
   legacyMetadataMissing?: boolean;
   legacyMetadataSafe?: boolean;
+}
+
+function defaultVisibilityForAudience(
+  surfaceAudience: SurfaceAudience
+): WorkVisibility {
+  switch (surfaceAudience) {
+    case "developer":
+      return "developer_visible";
+    case "operator":
+      return "operator_visible";
+    case "user_public":
+      return "user_visible";
+    case "internal":
+    default:
+      return "internal";
+  }
+}
+
+function resolveSurfaceMetadata(signals: AdaptiveWorkSessionSignals = {}) {
+  const surfaceAudience = signals.surfaceAudience ?? "internal";
+
+  return {
+    surfaceAudience,
+    workVisibility:
+      signals.workVisibility ?? defaultVisibilityForAudience(surfaceAudience)
+  };
 }
 
 function appendIfMissing(base: string, fragment: string) {
@@ -77,7 +112,14 @@ function isAuditStopRequired(signals: AdaptiveWorkSessionSignals) {
   return Boolean(
     signals.requiresAuditStop ||
       signals.introducesConsumerSurface ||
-      signals.changesProductSemantics
+      signals.changesProductSemantics ||
+      signals.surfaceAudience === "user_public" ||
+      (signals.surfaceAudience === "operator" &&
+        (signals.changesWorkflowSemantics ||
+          signals.createsLongLivedOperatorOrPublicEntry ||
+          signals.changesDefaultBehavior ||
+          signals.compatibilityRisk ||
+          signals.publicMisuseRisk))
   );
 }
 
@@ -92,6 +134,14 @@ function auditStopReason(signals: AdaptiveWorkSessionSignals) {
 
   if (signals.changesProductSemantics) {
     return "下一步会改变 product semantics，必须先停在 phase 边界确认。";
+  }
+
+  if (signals.surfaceAudience === "user_public") {
+    return "下一步会影响 user/public surface，必须先确认兼容性、验收和 stop condition。";
+  }
+
+  if (signals.surfaceAudience === "operator") {
+    return "下一步会改变 operator surface 的长期用法或默认行为，必须先确认 workflow 语义。";
   }
 
   return "下一步触发 audit stop gate，必须先确认边界。";
@@ -118,23 +168,35 @@ function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknow
   );
 }
 
-function normalImplementationMetadata(capabilityTranslation: string) {
+function normalImplementationMetadata(
+  capabilityTranslation: string,
+  surfaceAudience: SurfaceAudience = "internal",
+  workVisibility: WorkVisibility = defaultVisibilityForAudience(surfaceAudience)
+) {
   return {
     operatingMode: "normal-implementation" as const,
     writebackTier: "current-context" as const,
     verificationLevel: "standard" as const,
     outputBudget: "standard" as const,
+    surfaceAudience,
+    workVisibility,
     affectedLayer: "runtime recommendation",
     capabilityTranslation
   };
 }
 
-function fullGovernanceMetadata(capabilityTranslation: string) {
+function fullGovernanceMetadata(
+  capabilityTranslation: string,
+  audience: SurfaceAudience = "operator",
+  visibility: WorkVisibility = "operator_visible"
+) {
   return {
     operatingMode: "full-governance" as const,
     writebackTier: "committed-truth" as const,
     verificationLevel: "release" as const,
     outputBudget: "audit" as const,
+    surfaceAudience: audience,
+    workVisibility: visibility,
     affectedLayer: "governance boundary",
     capabilityTranslation
   };
@@ -146,9 +208,42 @@ function lightRepairMetadata(capabilityTranslation: string) {
     writebackTier: "evidence-only" as const,
     verificationLevel: "narrow" as const,
     outputBudget: "lite" as const,
+    surfaceAudience: "internal" as const,
+    workVisibility: "internal" as const,
     affectedLayer: "focused repair",
     capabilityTranslation
   };
+}
+
+function auditStopMetadata(
+  signals: AdaptiveWorkSessionSignals,
+  capabilityTranslation: string
+) {
+  if (signals.introducesConsumerSurface || signals.changesProductSemantics) {
+    return fullGovernanceMetadata(
+      capabilityTranslation,
+      "user_public",
+      "user_visible"
+    );
+  }
+
+  if (signals.surfaceAudience === "user_public") {
+    return fullGovernanceMetadata(
+      capabilityTranslation,
+      "user_public",
+      signals.workVisibility ?? "user_visible"
+    );
+  }
+
+  if (signals.surfaceAudience === "operator") {
+    return fullGovernanceMetadata(
+      capabilityTranslation,
+      "operator",
+      signals.workVisibility ?? "operator_visible"
+    );
+  }
+
+  return fullGovernanceMetadata(capabilityTranslation);
 }
 
 function isBootstrapDecisionStage(
@@ -609,7 +704,8 @@ export function selectNextBestStep(
         `${auditStopReason(adaptiveSignals)} 这类动作不能降级成轻量 work session，需要先确认 phase contract、验收和 stop condition。`,
         ["planner"],
         "audit 边界已经确认，或者该动作被拆成安全的后续 phase。",
-        fullGovernanceMetadata(
+        auditStopMetadata(
+          adaptiveSignals,
           "高风险动作先回到审计边界，确保不会把公共行为、发布或状态风险混进普通实现。"
         )
       ),
@@ -734,7 +830,9 @@ export function selectNextBestStep(
         {
           nextStepKind: "value-heartbeat",
           ...normalImplementationMetadata(
-            "连续治理后先确认项目价值方向，避免一直做内部工程而忘记用户或操作者能感受到什么。"
+            "连续治理后先确认项目价值方向，避免一直做内部工程而忘记用户或操作者能感受到什么。",
+            "operator",
+            "operator_visible"
           )
         }
       ),
@@ -763,6 +861,8 @@ export function selectNextBestStep(
     };
   }
 
+  const surfaceMetadata = resolveSurfaceMetadata(adaptiveSignals);
+
   return {
     primary: recommendation(
       "advance-phase",
@@ -787,7 +887,9 @@ export function selectNextBestStep(
         ? {
             nextStepKind: "work-session-continue",
             ...normalImplementationMetadata(
-              "当前已接受的实现链可以继续推进到自然停点，而不是重新包装成新阶段。"
+              "当前已接受的实现链可以继续推进到自然停点，而不是重新包装成新阶段。",
+              surfaceMetadata.surfaceAudience,
+              surfaceMetadata.workVisibility
             )
           }
         : undefined

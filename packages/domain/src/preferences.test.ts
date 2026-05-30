@@ -3,7 +3,8 @@ import {
   createPreferences,
   createValueHeartbeatPreference,
   resolveContinuationBehavior,
-  resolveGovernanceIntensity
+  resolveGovernanceIntensity,
+  resolveOperatorExplanationStyle
 } from "./preferences.ts";
 
 describe("resolveContinuationBehavior", () => {
@@ -24,6 +25,12 @@ describe("resolveContinuationBehavior", () => {
     expect(resolved.resolved.continuationBehaviorSource).toBe("fallback");
     expect(resolved.resolvedGovernance?.governanceIntensity).toBe("standard");
     expect(resolved.resolvedGovernance?.governanceIntensitySource).toBe("fallback");
+    expect(resolved.resolvedOperatorExplanation?.operatorExplanationStyle).toBe(
+      "balanced"
+    );
+    expect(
+      resolved.resolvedOperatorExplanation?.operatorExplanationStyleSource
+    ).toBe("fallback");
     expect(resolved.valueHeartbeat?.source).toBe("fallback");
     expect(resolved.valueHeartbeat?.questions[0]).toContain("usable");
   });
@@ -59,5 +66,37 @@ describe("resolveContinuationBehavior", () => {
     expect(heartbeat.questions).toEqual([
       "Did the project move closer to the intended user experience?"
     ]);
+  });
+
+  it("resolves operator explanation style from project before AGENTS.md and project brief", () => {
+    const resolved = resolveOperatorExplanationStyle(
+      "teaching",
+      "detailed",
+      "concise"
+    );
+
+    expect(resolved.operatorExplanationStyle).toBe("teaching");
+    expect(resolved.operatorExplanationStyleSource).toBe("project-default");
+  });
+
+  it("uses AGENTS.md explanation style before project brief defaults", () => {
+    const resolved = createPreferences(
+      "smart-continuation",
+      null,
+      "ask-every-time",
+      null,
+      null,
+      null,
+      null,
+      "teaching",
+      "concise"
+    );
+
+    expect(resolved.resolvedOperatorExplanation?.operatorExplanationStyle).toBe(
+      "teaching"
+    );
+    expect(
+      resolved.resolvedOperatorExplanation?.operatorExplanationStyleSource
+    ).toBe("agents-md-default");
   });
 });

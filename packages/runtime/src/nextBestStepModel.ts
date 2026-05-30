@@ -26,12 +26,26 @@ export type RuntimeVerificationLevel = "narrow" | "standard" | "release";
 
 export type OutputBudget = "lite" | "standard" | "audit";
 
+export type SurfaceAudience =
+  | "internal"
+  | "developer"
+  | "operator"
+  | "user_public";
+
+export type WorkVisibility =
+  | "internal"
+  | "developer_visible"
+  | "operator_visible"
+  | "user_visible";
+
 export interface RecommendationMetadata {
   nextStepKind?: NextStepKind;
   operatingMode?: OperatingMode;
   writebackTier?: WritebackTier;
   verificationLevel?: RuntimeVerificationLevel;
   outputBudget?: OutputBudget;
+  surfaceAudience?: SurfaceAudience;
+  workVisibility?: WorkVisibility;
   affectedLayer?: string;
   capabilityTranslation?: string;
 }
@@ -43,6 +57,8 @@ export interface ActionRecommendation {
   writebackTier?: WritebackTier;
   verificationLevel?: RuntimeVerificationLevel;
   outputBudget?: OutputBudget;
+  surfaceAudience?: SurfaceAudience;
+  workVisibility?: WorkVisibility;
   affectedLayer?: string;
   capabilityTranslation?: string;
   label: string;

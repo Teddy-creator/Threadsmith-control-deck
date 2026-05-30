@@ -9,7 +9,9 @@
     "operatingMode": "full-governance",
     "writebackTier": "committed-truth",
     "verificationLevel": "release",
-    "outputBudget": "audit"
+    "outputBudget": "audit",
+    "surfaceAudience": "user_public",
+    "workVisibility": "user_visible"
   },
   "capabilityMustContain": "高风险动作"
 }

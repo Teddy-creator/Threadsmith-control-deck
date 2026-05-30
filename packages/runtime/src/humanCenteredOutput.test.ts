@@ -15,6 +15,8 @@ interface Fixture {
     writebackTier: string;
     verificationLevel: string;
     outputBudget: string;
+    surfaceAudience?: string;
+    workVisibility?: string;
     nextStepKind?: string;
   };
   capabilityMustContain: string;
