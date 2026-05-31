@@ -104,9 +104,11 @@ Examples:
   existing consumer, and close out once
 - single-role drive: the user asks specifically for reviewer only, verifier
   only, or "do not implement"
-- stop-gate fallback: adding a CLI command, API endpoint, UI route, provider
+- stop-gate fallback: adding a user-public CLI / API / UI route, provider
   default, public sync, tag, publish, migration, delete, or reset must pause for
-  operator review
+  operator review. Developer-only local CLI / docs / harness helpers may stay in
+  the work session when local, reversible, clearly non-public, and inside the
+  accepted scope.
 
 ### Work-Session Truth Writeback
 
@@ -314,23 +316,65 @@ Definitions:
 
 Use the smallest closeout tier that still preserves orientation and safety:
 
-- `lite`: small or low-risk work. Required fields: changed, verification, truth
-  (`updated`, `unchanged`, or `skipped with reason`), next, and optional risk.
-- `standard`: normal bounded implementation. Required fields: result, changed
-  capability, verification, truth, remaining risk, and next phase.
+- `daily-progress`: ordinary `light-repair` or `normal-implementation` work
+  inside approved scope. Use the compact Progress Card.
+- `lite`: small or low-risk work. Required fields: changed, verification,
+  next, and optional risk.
+- `standard`: normal bounded implementation. Prefer Progress Card unless a real
+  boundary needs the full skeleton.
 - `audit`: release, PR / merge, public docs, destructive operations,
   architecture boundaries, provider routing, security, or cross-agent state. Use
   the full Threadsmith Output Contract skeleton.
 
-Use boundary full output for `recover`, bootstrap, audit closeout, accepted
-phases, phase-boundary reports, and any response that changes durable truth in a
-way that affects route, scope, acceptance, release, or cross-agent state.
+Use boundary full output for `recover`, bootstrap, audit closeout, release /
+PR / merge / destructive / provider / public behavior / cross-agent boundaries,
+and any response that changes durable truth in a way that affects route, scope,
+acceptance, release, or cross-agent state.
+
+### Daily Progress Card
+
+Use Daily Progress when no hard safety / recover / audit gate is active and the
+work is inside an approved scope.
+
+```text
+本轮完成：
+- 新增/修复了什么能力。
+
+关键改动：
+- 只列关键代码、文档、测试或命令。
+
+验证：
+- 跑了什么，结果是什么。
+- 没跑什么，有什么风险。
+
+记录状态：
+- updated / unchanged / skipped only when durable writeback changed or omission would confuse the operator.
+
+下一步：
+- 建议做什么。
+- 为什么现在做它。
+- 什么情况需要停下来问你。
+
+需要你决定：
+- 只有真正改变路线、边界、验收、真实数据、provider、发布或破坏性操作时才出现。
+```
+
+Do not show `Threadsmith Decision` in daily progress output.
+
+Output selection precedence:
+
+1. recover / audit gates and hard stop conditions
+2. explicit full audit request, or direct explanation without execution
+3. explicit compact answer request only when no hard gate is active
+4. daily progress eligibility
+5. ordinary sync / drive / continuous output defaults
 
 ## Closeout Output Gate
 
 Before writing the final response, check whether the current action crossed a
-phase or slice boundary. If any two of these signals are present, the response
-is a closeout or phase-boundary report and must use boundary full output:
+phase or slice boundary. If any two of these signals are present, and Daily
+Progress is not eligible, the response is a closeout or phase-boundary report
+and must use boundary full output:
 
 - the work is described as completed, accepted, closed out, or ready for the
   next phase
@@ -346,7 +390,8 @@ and "下一步建议...". Those sentences may appear inside the required full
 output fields, but they cannot replace the skeleton.
 
 Threadsmith output rules override the default concise Codex final style for
-closeout and phase-boundary reports.
+audit closeout and real phase-boundary reports. Daily Progress overrides the
+full skeleton for ordinary approved work.
 
 Use internal progress output for routine role-chain handoffs inside an approved
 phase, such as executor -> reviewer, reviewer -> verifier, or verifier ->

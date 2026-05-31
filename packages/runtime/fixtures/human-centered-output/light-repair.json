@@ -11,6 +11,9 @@
     "writebackTier": "evidence-only",
     "verificationLevel": "narrow",
     "outputBudget": "lite",
+    "outputShape": "progress-card",
+    "rolePacketPolicy": "skip-daily",
+    "writebackStatusVisibility": "omit",
     "surfaceAudience": "internal",
     "workVisibility": "internal"
   },

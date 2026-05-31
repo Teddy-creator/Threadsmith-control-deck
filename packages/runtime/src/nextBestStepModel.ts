@@ -26,6 +26,12 @@ export type RuntimeVerificationLevel = "narrow" | "standard" | "release";
 
 export type OutputBudget = "lite" | "standard" | "audit";
 
+export type OutputShape = "progress-card" | "audit-skeleton" | "compact";
+
+export type RolePacketPolicy = "skip-daily" | "refresh-durable";
+
+export type WritebackStatusVisibility = "omit" | "optional" | "required";
+
 export type SurfaceAudience =
   | "internal"
   | "developer"
@@ -44,6 +50,9 @@ export interface RecommendationMetadata {
   writebackTier?: WritebackTier;
   verificationLevel?: RuntimeVerificationLevel;
   outputBudget?: OutputBudget;
+  outputShape?: OutputShape;
+  rolePacketPolicy?: RolePacketPolicy;
+  writebackStatusVisibility?: WritebackStatusVisibility;
   surfaceAudience?: SurfaceAudience;
   workVisibility?: WorkVisibility;
   affectedLayer?: string;
@@ -57,6 +66,9 @@ export interface ActionRecommendation {
   writebackTier?: WritebackTier;
   verificationLevel?: RuntimeVerificationLevel;
   outputBudget?: OutputBudget;
+  outputShape?: OutputShape;
+  rolePacketPolicy?: RolePacketPolicy;
+  writebackStatusVisibility?: WritebackStatusVisibility;
   surfaceAudience?: SurfaceAudience;
   workVisibility?: WorkVisibility;
   affectedLayer?: string;

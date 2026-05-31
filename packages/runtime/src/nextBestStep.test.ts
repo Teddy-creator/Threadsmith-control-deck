@@ -654,6 +654,28 @@ describe("selectNextBestStep", () => {
     expect(result.primary.workVisibility).toBe("developer_visible");
   });
 
+  it("stops when developer-labeled work has user-visible impact", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        surfaceAudience: "developer",
+        workVisibility: "user_visible"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.operatingMode).toBe("full-governance");
+    expect(result.primary.outputShape).toBe("audit-skeleton");
+    expect(result.primary.surfaceAudience).toBe("developer");
+    expect(result.primary.workVisibility).toBe("user_visible");
+    expect(result.primary.reason).toContain("user-visible behavior");
+  });
+
   it("lets local operator surfaces continue when they do not change workflow semantics", () => {
     const result = selectNextBestStep(
       baseState,
@@ -730,6 +752,106 @@ describe("selectNextBestStep", () => {
     expect(result.primary.actionId).toBe("open-current-phase");
     expect(result.primary.nextStepKind).toBe("value-heartbeat");
     expect(result.primary.operatingMode).toBe("normal-implementation");
-    expect(result.primary.label).toBe("做一次价值 heartbeat");
+    expect(result.primary.label).toBe("做一次价值 checkpoint");
+  });
+
+  it("continues a bounded work bundle with daily progress metadata", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        workBundleCandidate: true,
+        workBundleActionCount: 3,
+        surfaceAudience: "developer"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.label).toBe("继续当前 work bundle");
+    expect(result.primary.outputShape).toBe("progress-card");
+    expect(result.primary.rolePacketPolicy).toBe("skip-daily");
+    expect(result.primary.writebackStatusVisibility).toBe("optional");
+    expect(result.primary.surfaceAudience).toBe("developer");
+  });
+
+  it("turns an exhausted rolling bundle into a value checkpoint", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        rollingCloseoutAuthorized: true,
+        workBundleCandidate: true,
+        workBundleActionCount: 4
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.outputShape).toBe("progress-card");
+    expect(result.primary.label).toBe("做一次价值 checkpoint");
+  });
+
+  it("does not keep stretching a work bundle past the action budget", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        workBundleCandidate: true,
+        workBundleActionCount: 5
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.label).toBe("做一次价值 checkpoint");
+  });
+
+  it("uses a value checkpoint after repeated internal-only work", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        repeatedInternalOnlyCount: 3
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.outputShape).toBe("progress-card");
+    expect(result.primary.reason).toContain("内部工程");
+  });
+
+  it("uses a value checkpoint after repeated gap checks", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        repeatedGapChecks: true
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.reason).toContain("gap check");
   });
 });

@@ -184,6 +184,16 @@ Writeback tier guard:
 - `committed-truth`: update acceptance/status/supervision/phase history only
   when durable project state changed.
 
+Daily role packet sparsening:
+
+- do not rewrite planner / executor / reviewer / verifier / closeout packets for
+  ordinary Progress Cards.
+- refresh full role packets only for handoff, recovery, full-governance,
+  cross-agent work, release / public docs, major architecture decisions, or
+  explicit operator request.
+- if skipped packet facts are needed for the next turn, write current-context or
+  evidence-summary instead.
+
 Forbidden writes:
 
 - new implementation scope

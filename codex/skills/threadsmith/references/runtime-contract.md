@@ -319,6 +319,9 @@ deterministic from state:
 - surface audience: `internal`, `developer`, `operator`, or `user_public`
 - work visibility: `internal`, `developer_visible`, `operator_visible`, or
   `user_visible`
+- output shape: `progress-card`, `audit-skeleton`, or `compact`
+- role packet policy: `skip-daily` or `refresh-durable`
+- writeback status visibility: `omit`, `optional`, or `required`
 
 For heartbeat-compatible closeout evidence, record these fields when available:
 
