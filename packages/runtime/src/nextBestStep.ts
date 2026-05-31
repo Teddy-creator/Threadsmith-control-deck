@@ -19,6 +19,7 @@ export type {
   RuntimeVerificationLevel,
   SurfaceAudience,
   WorkVisibility,
+  RolePacketPolicy,
   NextBestStepDecision,
   RuntimeActionId
 } from "./nextBestStepModel.ts";
@@ -39,6 +40,11 @@ export interface AdaptiveWorkSessionSignals {
   changesDefaultBehavior?: boolean;
   compatibilityRisk?: boolean;
   publicMisuseRisk?: boolean;
+  workBundleCandidate?: boolean;
+  workBundleActionCount?: number;
+  rollingCloseoutAuthorized?: boolean;
+  repeatedGapChecks?: boolean;
+  repeatedInternalOnlyCount?: number;
   lightRepair?: boolean;
   lightRepairReason?: string;
   legacyMetadataMissing?: boolean;
@@ -113,6 +119,7 @@ function isAuditStopRequired(signals: AdaptiveWorkSessionSignals) {
     signals.requiresAuditStop ||
       signals.introducesConsumerSurface ||
       signals.changesProductSemantics ||
+      signals.workVisibility === "user_visible" ||
       signals.surfaceAudience === "user_public" ||
       (signals.surfaceAudience === "operator" &&
         (signals.changesWorkflowSemantics ||
@@ -140,6 +147,10 @@ function auditStopReason(signals: AdaptiveWorkSessionSignals) {
     return "下一步会影响 user/public surface，必须先确认兼容性、验收和 stop condition。";
   }
 
+  if (signals.workVisibility === "user_visible") {
+    return "下一步虽然入口不一定是 public surface，但结果已经会影响 user-visible behavior，必须先确认兼容性、验收和 stop condition。";
+  }
+
   if (signals.surfaceAudience === "operator") {
     return "下一步会改变 operator surface 的长期用法或默认行为，必须先确认 workflow 语义。";
   }
@@ -158,6 +169,19 @@ function hasThreeConsecutiveGovernanceHeavyCloseouts(
   );
 }
 
+function shouldRecommendValueCheckpoint(signals: AdaptiveWorkSessionSignals) {
+  return (
+    hasThreeConsecutiveGovernanceHeavyCloseouts(
+      signals.closeoutTiersSinceValueHeartbeat
+    ) ||
+    (signals.repeatedInternalOnlyCount ?? 0) >= 3 ||
+    Boolean(signals.repeatedGapChecks) ||
+    (signals.workBundleCandidate && (signals.workBundleActionCount ?? 0) > 4) ||
+    (signals.rollingCloseoutAuthorized &&
+      (signals.workBundleActionCount ?? 0) >= 4)
+  );
+}
+
 function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknown) {
   return (
     !pendingUserDecision &&
@@ -171,13 +195,17 @@ function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknow
 function normalImplementationMetadata(
   capabilityTranslation: string,
   surfaceAudience: SurfaceAudience = "internal",
-  workVisibility: WorkVisibility = defaultVisibilityForAudience(surfaceAudience)
+  workVisibility: WorkVisibility = defaultVisibilityForAudience(surfaceAudience),
+  rolePacketPolicy: RolePacketPolicy = "skip-daily"
 ) {
   return {
     operatingMode: "normal-implementation" as const,
     writebackTier: "current-context" as const,
     verificationLevel: "standard" as const,
     outputBudget: "standard" as const,
+    outputShape: "progress-card" as const,
+    rolePacketPolicy,
+    writebackStatusVisibility: "optional" as const,
     surfaceAudience,
     workVisibility,
     affectedLayer: "runtime recommendation",
@@ -195,6 +223,9 @@ function fullGovernanceMetadata(
     writebackTier: "committed-truth" as const,
     verificationLevel: "release" as const,
     outputBudget: "audit" as const,
+    outputShape: "audit-skeleton" as const,
+    rolePacketPolicy: "refresh-durable" as const,
+    writebackStatusVisibility: "required" as const,
     surfaceAudience: audience,
     workVisibility: visibility,
     affectedLayer: "governance boundary",
@@ -208,6 +239,9 @@ function lightRepairMetadata(capabilityTranslation: string) {
     writebackTier: "evidence-only" as const,
     verificationLevel: "narrow" as const,
     outputBudget: "lite" as const,
+    outputShape: "progress-card" as const,
+    rolePacketPolicy: "skip-daily" as const,
+    writebackStatusVisibility: "omit" as const,
     surfaceAudience: "internal" as const,
     workVisibility: "internal" as const,
     affectedLayer: "focused repair",
@@ -232,6 +266,14 @@ function auditStopMetadata(
       capabilityTranslation,
       "user_public",
       signals.workVisibility ?? "user_visible"
+    );
+  }
+
+  if (signals.workVisibility === "user_visible") {
+    return fullGovernanceMetadata(
+      capabilityTranslation,
+      signals.surfaceAudience ?? "user_public",
+      "user_visible"
     );
   }
 
@@ -815,18 +857,14 @@ export function selectNextBestStep(
     };
   }
 
-  if (
-    hasThreeConsecutiveGovernanceHeavyCloseouts(
-      adaptiveSignals.closeoutTiersSinceValueHeartbeat
-    )
-  ) {
+  if (shouldRecommendValueCheckpoint(adaptiveSignals)) {
     return {
       primary: recommendation(
         "open-current-phase",
-        "做一次价值 heartbeat",
-        "最近已经连续完成三次 governance-heavy closeout。现在适合轻量确认：项目是否更可用、更可靠或更接近目标，以及下一步继续深挖工程是否仍然最高价值。",
+        "做一次价值 checkpoint",
+        "最近的推进已经连续偏向内部工程、治理或 gap check。现在适合轻量确认：继续工程深挖，还是切到用户可见价值、产品体验或验证质量。",
         ["planner"],
-        "操作者已接受、跳过或完成这次 value heartbeat，下一步方向重新对齐。",
+        "操作者已接受、跳过或完成这次 value checkpoint，下一步方向重新对齐。",
         {
           nextStepKind: "value-heartbeat",
           ...normalImplementationMetadata(
@@ -862,28 +900,39 @@ export function selectNextBestStep(
   }
 
   const surfaceMetadata = resolveSurfaceMetadata(adaptiveSignals);
+  const canBundle =
+    adaptiveSignals.workBundleCandidate &&
+    (adaptiveSignals.workBundleActionCount ?? 1) <= 4;
+  const nextLabel = adaptiveSignals.lightRepair
+    ? "执行轻量修复"
+    : canBundle
+    ? adaptiveSignals.rollingCloseoutAuthorized
+      ? "继续 rolling work bundle"
+      : "继续当前 work bundle"
+    : canContinueWorkSession(state, pendingUserDecision)
+    ? "继续当前 work session"
+    : "推进当前 phase";
+  const nextReason = adaptiveSignals.lightRepair
+    ? adaptiveSignals.lightRepairReason?.trim() ||
+      "这是一个不声明 durable phase acceptance 的窄修复；下一步应做 focused change 和 narrow verification。"
+    : adaptiveSignals.previousGapCheckSelectedImplementationPath
+    ? "上一轮 gap check 已经选出实现路径，且当前没有失败验证、范围变化或 audit stop；下一步应该进入实现，而不是再做一次 gap check。"
+    : canBundle
+    ? "下一组动作仍在同一 work bundle 内，适合用 Progress Card 连续推进，而不是拆成新的 phase approval。"
+    : "这是当前活跃项目里价值最高、且没有被阻塞的下一步。";
 
   return {
     primary: recommendation(
       "advance-phase",
-      adaptiveSignals.lightRepair
-        ? "执行轻量修复"
-        : canContinueWorkSession(state, pendingUserDecision)
-        ? "继续当前 work session"
-        : "推进当前 phase",
-      adaptiveSignals.lightRepair
-        ? adaptiveSignals.lightRepairReason?.trim() ||
-          "这是一个不声明 durable phase acceptance 的窄修复；下一步应做 focused change 和 narrow verification。"
-        : adaptiveSignals.previousGapCheckSelectedImplementationPath
-        ? "上一轮 gap check 已经选出实现路径，且当前没有失败验证、范围变化或 audit stop；下一步应该进入实现，而不是再做一次 gap check。"
-        : "这是当前活跃项目里价值最高、且没有被阻塞的下一步。",
+      nextLabel,
+      nextReason,
       ["planner", "executor", "reviewer"],
       "当前 slice 到达待评审或待验证状态。",
       adaptiveSignals.lightRepair
         ? lightRepairMetadata(
             "小修复只需要证明局部行为正确，不把它升级成完整阶段验收。"
           )
-        : canContinueWorkSession(state, pendingUserDecision)
+        : canBundle || canContinueWorkSession(state, pendingUserDecision)
         ? {
             nextStepKind: "work-session-continue",
             ...normalImplementationMetadata(

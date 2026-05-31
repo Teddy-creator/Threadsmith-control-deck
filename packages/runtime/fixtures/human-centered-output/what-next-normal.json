@@ -7,6 +7,9 @@
     "writebackTier": "current-context",
     "verificationLevel": "standard",
     "outputBudget": "standard",
+    "outputShape": "progress-card",
+    "rolePacketPolicy": "skip-daily",
+    "writebackStatusVisibility": "optional",
     "surfaceAudience": "internal",
     "workVisibility": "internal",
     "nextStepKind": "work-session-continue"

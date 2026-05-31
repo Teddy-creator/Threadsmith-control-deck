@@ -10,6 +10,9 @@
     "writebackTier": "committed-truth",
     "verificationLevel": "release",
     "outputBudget": "audit",
+    "outputShape": "audit-skeleton",
+    "rolePacketPolicy": "refresh-durable",
+    "writebackStatusVisibility": "required",
     "surfaceAudience": "user_public",
     "workVisibility": "user_visible"
   },

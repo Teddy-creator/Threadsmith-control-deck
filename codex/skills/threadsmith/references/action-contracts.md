@@ -276,10 +276,12 @@ Use work-session continuation when:
 - truth can be written at the session boundary without hiding a blocker.
 
 Do not bundle work into a work session when the next action changes product
-semantics, exposes a new UI route / API endpoint / CLI command / public
-integration, changes provider defaults, requires credentials, publishes,
+semantics, exposes a new user-public UI route / API endpoint / CLI command /
+public integration, changes provider defaults, requires credentials, publishes,
 merges, tags, deletes, resets, migrates data, contradicts committed truth, or
-repairs a failed verification whose path is uncertain.
+repairs a failed verification whose path is uncertain. Developer-only local CLI
+or docs helpers may remain bundled when they are reversible, non-public, and
+inside the accepted scope.
 
 Short approvals such as "同意，请使用 Threadsmith 推进" may continue an accepted
 work session until a natural stop. If the user asks for one explicit role or one
@@ -508,10 +510,48 @@ Boundary full output is required for:
 
 - `recover`
 - bootstrap
-- closeout
-- accepted phases
-- phase-boundary reports
+- audit closeout
+- release / PR / merge / destructive / provider / public behavior /
+  cross-agent boundaries
+- phase-boundary reports that are not eligible for Daily Progress
 - any response that writes or proposes durable truth changes
+
+Daily Progress output is required for ordinary `light-repair` or
+`normal-implementation` work inside approved scope when no hard safety /
+recover / audit gate is active.
+
+Daily Progress Card shape:
+
+```text
+本轮完成：
+- ...
+
+关键改动：
+- ...
+
+验证：
+- ...
+
+记录状态：
+- updated / unchanged / skipped only when useful.
+
+下一步：
+- ...
+
+需要你决定：
+- only when there is a real route, scope, acceptance, data, provider, release,
+  destructive, or product boundary decision.
+```
+
+Do not show `Threadsmith Decision` in Daily Progress output.
+
+Output selection precedence:
+
+1. recover / audit gates and hard stop conditions
+2. explicit full audit request, or direct explanation without execution
+3. explicit compact answer request only when no hard gate is active
+4. daily progress eligibility
+5. ordinary sync / drive / continuous output defaults
 
 Internal progress output is enough for routine role-chain handoffs inside an
 approved phase:
@@ -535,14 +575,15 @@ do not write `.threadsmith/`, and label the source layer for factual claims.
 
 ## Phase Narrative Rule
 
-For closeout, accepted phases, or any response that introduces the next phase,
-Threadsmith must produce a phase narrative, not only a protocol status list.
+For audit closeout, major accepted phases, or any non-daily-progress response
+that introduces the next phase, Threadsmith must produce a phase narrative, not
+only a protocol status list.
 
 ### Closeout Output Gate
 
 Before finalizing the response, check whether the action crossed a durable
-phase or slice boundary. If any two closeout signals are present, boundary full
-output is mandatory:
+phase or slice boundary. If any two closeout signals are present and Daily
+Progress is not eligible, boundary full output is mandatory:
 
 - completed, accepted, closed out, or ready for next phase
 - commit, PR, merge, release, tag, truth writeback, packet update, or closeout

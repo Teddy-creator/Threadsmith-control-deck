@@ -10,6 +10,9 @@
     "writebackTier": "current-context",
     "verificationLevel": "standard",
     "outputBudget": "standard",
+    "outputShape": "progress-card",
+    "rolePacketPolicy": "skip-daily",
+    "writebackStatusVisibility": "optional",
     "surfaceAudience": "operator",
     "workVisibility": "operator_visible",
     "nextStepKind": "value-heartbeat"
