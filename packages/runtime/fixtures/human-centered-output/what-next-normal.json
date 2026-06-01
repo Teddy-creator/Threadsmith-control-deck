@@ -10,6 +10,13 @@
     "outputShape": "progress-card",
     "rolePacketPolicy": "skip-daily",
     "writebackStatusVisibility": "optional",
+    "workType": "capability",
+    "concreteNextStep": {
+      "target": "current accepted implementation surface",
+      "objective": "continue the accepted project capability toward a natural verification point",
+      "verification": "run the relevant focused checks for the touched package or contract",
+      "stopCondition": "stop for public/user-facing semantics, provider/default changes, destructive action, failed verification, stale truth, or release/merge work"
+    },
     "surfaceAudience": "internal",
     "workVisibility": "internal",
     "nextStepKind": "work-session-continue"

@@ -18,6 +18,16 @@ interface Fixture {
     outputShape?: string;
     rolePacketPolicy?: string;
     writebackStatusVisibility?: string;
+    workType?: string;
+    diagnosticSupportCapability?: string;
+    diagnosticStreakCount?: number;
+    diagnosticBudgetOverrideReason?: string;
+    concreteNextStep?: {
+      target: string;
+      objective: string;
+      verification: string;
+      stopCondition: string;
+    };
     surfaceAudience?: string;
     workVisibility?: string;
     nextStepKind?: string;

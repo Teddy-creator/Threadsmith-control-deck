@@ -13,6 +13,13 @@
     "outputShape": "audit-skeleton",
     "rolePacketPolicy": "refresh-durable",
     "writebackStatusVisibility": "required",
+    "workType": "governance",
+    "concreteNextStep": {
+      "target": "phase contract / governance boundary",
+      "objective": "高风险动作先回到审计边界，确保不会把公共行为、发布或状态风险混进普通实现。",
+      "verification": "confirm scope, acceptance, and release/audit evidence before execution",
+      "stopCondition": "operator approval is required before crossing this stop gate"
+    },
     "surfaceAudience": "user_public",
     "workVisibility": "user_visible"
   },

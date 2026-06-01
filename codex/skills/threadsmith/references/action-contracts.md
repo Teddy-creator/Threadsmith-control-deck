@@ -545,6 +545,22 @@ Daily Progress Card shape:
 
 Do not show `Threadsmith Decision` in Daily Progress output.
 
+Daily next-step recommendations, phase previews, and work-bundle guidance must
+include target, objective, verification, and a compact stop condition. Do not
+output only a phase name, "continue optimization", "do evidence review", or
+"improve quality". If files are unknown before inspection, name the first
+inspection target and expected edit area.
+
+When a phase, slice, or work-bundle name is technical or English-heavy, keep the
+stable internal name and add one plain-language meaning in the operator's current
+language. Direct explanation answers may stay shorter and should explain first
+when the operator is confused.
+
+Educational interrupts take precedence over execution. If the operator asks
+"什么意思", "what does this mean", "I'm lost", "explain", or "why are we doing
+this", answer the question before pushing the next step. Do not treat the
+question itself as continuation approval.
+
 Output selection precedence:
 
 1. recover / audit gates and hard stop conditions
@@ -572,6 +588,68 @@ Compact sync output is enough for read-only status refresh:
 Direct conceptual answers are allowed when the user asks how Threadsmith works
 or asks for clarification. In that case, do not force the full workflow report,
 do not write `.threadsmith/`, and label the source layer for factual claims.
+
+## Concrete Value Loop Rule
+
+Threadsmith recommendations should be concrete, value-oriented, and low-noise.
+Runtime may carry work-type metadata, but operator-facing output must not show
+`workType` or diagnostic streak counts as protocol fields unless debug/audit
+detail is requested.
+
+Primary work-type priority:
+
+1. recovery / governance gate
+2. project capability with user-visible, operator-visible, developer-visible, or
+   clear internal platform value
+3. diagnostic supporting a named capability
+4. verification
+5. maintenance
+
+Named capabilities must point to a concrete project ability, interface, user
+flow, validation loop, or product behavior. "Improve quality", "improve
+stability", and "continue optimization" do not count unless tied to a target and
+validation loop.
+
+Diagnostic budget:
+
+- first and second consecutive diagnostic / report / evidence slices may
+  continue when they name the supported capability
+- the third consecutive diagnostic slice must trigger a concrete capability
+  recommendation or a value checkpoint
+- ordinary regression confidence counts against the budget
+- failed regression, audit / release / recovery gates may override the budget,
+  but the output must name the gate or reason
+- counter source is phase history / closeout metadata first, then current packet
+  or evidence summary; do not rely on model memory
+
+Evidence semantics:
+
+- evidence review is a developer observation tool, not a product-entity judge
+- provider / integration probes are compatibility evidence, not stable behavior
+  quality proof
+- fixture / mock evidence proves structure or regression behavior
+- failed, incompatible, or blocked evidence must be stated directly
+
+Project value-loop authority order:
+
+1. project-defined constitution / authority order, including AGENTS.md when
+   present
+2. committed Threadsmith truth
+3. project preferences / communication profile
+4. project brief / roadmap / current phase
+5. inferred fallback
+
+If value sources conflict, use a lightweight sanity check for minor
+inconsistency and recovery for explicit, contradictory, or execution-boundary
+conflicts.
+
+Work bundles should group 2-4 related ordinary Threadsmith actions. Each action
+should be one line by default and include target / objective / verification.
+Long-running bundles may emit a lightweight progress update without becoming a
+stop gate.
+
+Recommendation is not approval. If a stop gate exists, a strong recommendation
+still requires operator approval before execution.
 
 ## Phase Narrative Rule
 
