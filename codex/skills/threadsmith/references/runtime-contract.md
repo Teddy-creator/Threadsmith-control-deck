@@ -322,6 +322,27 @@ deterministic from state:
 - output shape: `progress-card`, `audit-skeleton`, or `compact`
 - role packet policy: `skip-daily` or `refresh-durable`
 - writeback status visibility: `omit`, `optional`, or `required`
+- work type: `capability`, `diagnostic`, `governance`, `maintenance`, or
+  `verification`
+- diagnostic streak count: optional durable counter for recent consecutive
+  diagnostic / report / evidence slices
+- diagnostic support capability: optional concrete capability that a diagnostic
+  slice supports
+
+Work type selection priority:
+
+1. recovery / governance gate
+2. project capability with user-visible, operator-visible, developer-visible, or
+   clear internal platform value
+3. diagnostic supporting a named capability
+4. verification
+5. maintenance
+
+Work type metadata is a routing signal. Do not show it to the operator by
+default. Missing legacy work type is safe when the surrounding mode/tier/surface
+signals are safe; infer it from context where possible. New metadata fields must
+be optional or have safe defaults, and any `.threadsmith` state migration must
+be documented.
 
 For heartbeat-compatible closeout evidence, record these fields when available:
 

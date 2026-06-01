@@ -32,6 +32,13 @@ export type RolePacketPolicy = "skip-daily" | "refresh-durable";
 
 export type WritebackStatusVisibility = "omit" | "optional" | "required";
 
+export type WorkType =
+  | "capability"
+  | "diagnostic"
+  | "governance"
+  | "maintenance"
+  | "verification";
+
 export type SurfaceAudience =
   | "internal"
   | "developer"
@@ -44,6 +51,13 @@ export type WorkVisibility =
   | "operator_visible"
   | "user_visible";
 
+export interface ConcreteNextStep {
+  target: string;
+  objective: string;
+  verification: string;
+  stopCondition: string;
+}
+
 export interface RecommendationMetadata {
   nextStepKind?: NextStepKind;
   operatingMode?: OperatingMode;
@@ -53,6 +67,11 @@ export interface RecommendationMetadata {
   outputShape?: OutputShape;
   rolePacketPolicy?: RolePacketPolicy;
   writebackStatusVisibility?: WritebackStatusVisibility;
+  workType?: WorkType;
+  diagnosticSupportCapability?: string;
+  diagnosticStreakCount?: number;
+  diagnosticBudgetOverrideReason?: string;
+  concreteNextStep?: ConcreteNextStep;
   surfaceAudience?: SurfaceAudience;
   workVisibility?: WorkVisibility;
   affectedLayer?: string;
@@ -69,6 +88,11 @@ export interface ActionRecommendation {
   outputShape?: OutputShape;
   rolePacketPolicy?: RolePacketPolicy;
   writebackStatusVisibility?: WritebackStatusVisibility;
+  workType?: WorkType;
+  diagnosticSupportCapability?: string;
+  diagnosticStreakCount?: number;
+  diagnosticBudgetOverrideReason?: string;
+  concreteNextStep?: ConcreteNextStep;
   surfaceAudience?: SurfaceAudience;
   workVisibility?: WorkVisibility;
   affectedLayer?: string;

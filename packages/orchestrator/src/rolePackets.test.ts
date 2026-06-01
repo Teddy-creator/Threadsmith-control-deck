@@ -358,7 +358,7 @@ describe("rolePackets", () => {
         {
           kind: "artifact",
           path: ".threadsmith/phase-runs/phase-run-1/evidence-bundle.json",
-          title: "phase evidence bundle / standard"
+          title: `phase evidence bundle / ${evidenceBundle?.verification.recommendedLevel}`
         }
       ])
     );

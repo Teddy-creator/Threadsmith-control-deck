@@ -361,6 +361,32 @@ work is inside an approved scope.
 
 Do not show `Threadsmith Decision` in daily progress output.
 
+Daily next-step recommendations must be concrete. In Progress Cards, phase
+previews, and work-bundle recommendations, include:
+
+- target: file group, module, command surface, artifact, or first inspection area
+- objective: the capability or decision this action unlocks
+- verification: command, test, fixture, review check, or evidence type
+- stop condition: compact standard gate such as public/user-facing semantics,
+  provider changes or default behavior changes, destructive action, failed
+  verification, stale truth, release/merge, or a real route/scope decision
+
+Do not output only a phase name, "continue optimization", "do evidence review",
+or "improve quality". If exact files are not known before inspection, name the
+first inspection target and expected edit area instead of pretending certainty.
+
+When a phase, slice, or work-bundle name is technical or English-heavy, keep the
+stable name and add one plain-language meaning in the operator's current
+language. Example: `Phase: Provider Behavior Evidence Review v1`; `Meaning:
+look for repeated, stalled, or context-lost output patterns`.
+
+Educational interrupts come first. If the operator says they are confused, asks
+"什么意思", "what does this mean", "I'm lost", "explain", or "why are we doing
+this", explain before pushing the next step. Do not automatically start
+execution after an explanation unless the operator already approved the current
+phase / continuous run and no new stop gate appears; the confusion question
+itself is not continuation approval.
+
 Output selection precedence:
 
 1. recover / audit gates and hard stop conditions
@@ -368,6 +394,78 @@ Output selection precedence:
 3. explicit compact answer request only when no hard gate is active
 4. daily progress eligibility
 5. ordinary sync / drive / continuous output defaults
+
+### Concrete Value Loop
+
+Threadsmith should act like a low-noise progress engine, not a report generator.
+Runtime recommendations may carry work-type metadata, but operator-facing output
+must not show labels such as `workType: diagnostic` unless debug/audit detail is
+requested.
+
+Primary work-type priority:
+
+1. recovery / governance gate
+2. project capability with user-visible, operator-visible, developer-visible, or
+   clear internal platform value
+3. diagnostic supporting a named capability
+4. verification
+5. maintenance
+
+Named capabilities must point to a concrete project ability, interface, user
+flow, validation loop, or product behavior. Abstract labels such as "improve
+quality" or "improve stability" do not count unless tied to a target and
+validation loop.
+
+Diagnostic budget:
+
+- first and second consecutive diagnostic / report / evidence slices may
+  continue when they name the supported capability
+- the third consecutive diagnostic slice must trigger a concrete capability
+  recommendation or a value checkpoint
+- ordinary regression confidence counts against the budget
+- failed regression, audit / release / recovery gates may override the budget,
+  but the output must name the gate or reason
+- diagnostic streak counts must come from phase history, closeout metadata,
+  current packet, or evidence summary; do not rely on model memory or show
+  streak counts as protocol metadata by default
+
+Evidence semantics:
+
+- evidence review is a developer observation tool, not a product-entity judge
+- provider / integration probes are compatibility evidence, not stable behavior
+  quality proof
+- fixture / mock evidence proves structure or regression behavior
+- failed, incompatible, or blocked evidence must be stated directly
+
+Project value-loop authority order:
+
+1. project-defined constitution / authority order, including AGENTS.md when
+   present
+2. committed Threadsmith truth
+3. project preferences / communication profile
+4. project brief / roadmap / current phase
+5. inferred fallback: user-visible value, product experience, or validation
+   quality
+
+If value sources conflict, use a lightweight sanity check for minor
+inconsistency and recovery for explicit, contradictory, or execution-boundary
+conflicts.
+
+Prefer work bundles of 2-4 related actions for ordinary Threadsmith work. Each
+action should fit on one line by default and name target / objective /
+verification. Emit a lightweight progress update for long-running bundles, such
+as bundles crossing multiple verification commands, exceeding one work bundle,
+or making several edit passes without closeout.
+
+Context-only commits should be rare. A context-only commit means it changes only
+`.threadsmith` state, handoff artifacts, or evidence summaries, not skill,
+runtime, docs, tests, or source. It must state why the context update needed its
+own commit instead of traveling with a capability, evidence, recovery, PR /
+merge, release, or handoff slice.
+
+Recommend one strongest next move when evidence clearly points to it, and give a
+value/risk reason. Recommendation is not approval: if a stop gate exists, the
+operator must approve before execution.
 
 ## Closeout Output Gate
 

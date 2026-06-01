@@ -194,6 +194,20 @@ Daily role packet sparsening:
 - if skipped packet facts are needed for the next turn, write current-context or
   evidence-summary instead.
 
+Concrete value-loop writeback:
+
+- standalone `.threadsmith` updates are reserved for stale truth, next-turn
+  dependency, handoff, recovery, proposal, PR / merge / release boundary, or
+  explicit sync/status/hygiene requests.
+- context-only commits should be rare. A context-only commit changes only
+  `.threadsmith` state, handoff artifacts, or evidence summaries; it does not
+  include skill, runtime, docs, tests, or source changes.
+- if a context-only commit is created, state why the context update needed its
+  own commit instead of traveling with a capability, evidence, recovery, PR /
+  merge, release, or handoff slice.
+- minor stale context can use current-context refresh; contradictory or
+  execution-affecting stale truth uses recovery.
+
 Forbidden writes:
 
 - new implementation scope

@@ -1,7 +1,14 @@
 import type { AgentRunRecord, ProjectState } from "@threadsmith/domain";
 import type { LatestContinuationState } from "./continuationState.ts";
 import { acceptedStateRecommendation } from "./nextBestStepAccepted.ts";
-import type { NextBestStepDecision } from "./nextBestStepModel.ts";
+import type {
+  ConcreteNextStep,
+  NextBestStepDecision,
+  RolePacketPolicy,
+  SurfaceAudience,
+  WorkType,
+  WorkVisibility
+} from "./nextBestStepModel.ts";
 import { recommendation } from "./nextBestStepModel.ts";
 import {
   createMissingPhasePauseSummary,
@@ -20,6 +27,8 @@ export type {
   SurfaceAudience,
   WorkVisibility,
   RolePacketPolicy,
+  WorkType,
+  ConcreteNextStep,
   NextBestStepDecision,
   RuntimeActionId
 } from "./nextBestStepModel.ts";
@@ -45,6 +54,10 @@ export interface AdaptiveWorkSessionSignals {
   rollingCloseoutAuthorized?: boolean;
   repeatedGapChecks?: boolean;
   repeatedInternalOnlyCount?: number;
+  workType?: WorkType;
+  diagnosticStreakCount?: number;
+  diagnosticSupportsCapability?: string;
+  diagnosticBudgetOverrideReason?: string;
   lightRepair?: boolean;
   lightRepairReason?: string;
   legacyMetadataMissing?: boolean;
@@ -176,10 +189,27 @@ function shouldRecommendValueCheckpoint(signals: AdaptiveWorkSessionSignals) {
     ) ||
     (signals.repeatedInternalOnlyCount ?? 0) >= 3 ||
     Boolean(signals.repeatedGapChecks) ||
+    (signals.workType === "diagnostic" &&
+      (signals.diagnosticStreakCount ?? 0) >= 3 &&
+      !signals.diagnosticBudgetOverrideReason?.trim()) ||
     (signals.workBundleCandidate && (signals.workBundleActionCount ?? 0) > 4) ||
     (signals.rollingCloseoutAuthorized &&
       (signals.workBundleActionCount ?? 0) >= 4)
   );
+}
+
+function concreteNextStep(
+  target: string,
+  objective: string,
+  verification: string,
+  stopCondition: string
+): ConcreteNextStep {
+  return {
+    target,
+    objective,
+    verification,
+    stopCondition
+  };
 }
 
 function canContinueWorkSession(state: ProjectState, pendingUserDecision: unknown) {
@@ -196,8 +226,20 @@ function normalImplementationMetadata(
   capabilityTranslation: string,
   surfaceAudience: SurfaceAudience = "internal",
   workVisibility: WorkVisibility = defaultVisibilityForAudience(surfaceAudience),
-  rolePacketPolicy: RolePacketPolicy = "skip-daily"
+  rolePacketPolicy: RolePacketPolicy = "skip-daily",
+  workType: WorkType = "capability",
+  extraMetadata: {
+    diagnosticSupportCapability?: string;
+    diagnosticStreakCount?: number;
+    diagnosticBudgetOverrideReason?: string;
+    concreteNextStep?: ConcreteNextStep;
+  } = {}
 ) {
+  const {
+    concreteNextStep: explicitConcreteNextStep,
+    ...restMetadata
+  } = extraMetadata;
+
   return {
     operatingMode: "normal-implementation" as const,
     writebackTier: "current-context" as const,
@@ -206,6 +248,16 @@ function normalImplementationMetadata(
     outputShape: "progress-card" as const,
     rolePacketPolicy,
     writebackStatusVisibility: "optional" as const,
+    workType,
+    ...restMetadata,
+    concreteNextStep:
+      explicitConcreteNextStep ??
+      concreteNextStep(
+        "current accepted implementation surface",
+        capabilityTranslation,
+        "run the relevant focused checks for the touched package or contract",
+        "stop for public/user-facing semantics, provider/default changes, destructive action, failed verification, stale truth, or release/merge work"
+      ),
     surfaceAudience,
     workVisibility,
     affectedLayer: "runtime recommendation",
@@ -226,6 +278,13 @@ function fullGovernanceMetadata(
     outputShape: "audit-skeleton" as const,
     rolePacketPolicy: "refresh-durable" as const,
     writebackStatusVisibility: "required" as const,
+    workType: "governance" as const,
+    concreteNextStep: concreteNextStep(
+      "phase contract / governance boundary",
+      capabilityTranslation,
+      "confirm scope, acceptance, and release/audit evidence before execution",
+      "operator approval is required before crossing this stop gate"
+    ),
     surfaceAudience: audience,
     workVisibility: visibility,
     affectedLayer: "governance boundary",
@@ -242,6 +301,13 @@ function lightRepairMetadata(capabilityTranslation: string) {
     outputShape: "progress-card" as const,
     rolePacketPolicy: "skip-daily" as const,
     writebackStatusVisibility: "omit" as const,
+    workType: "maintenance" as const,
+    concreteNextStep: concreteNextStep(
+      "focused changed surface",
+      capabilityTranslation,
+      "run narrow verification for the touched surface",
+      "stop if the repair changes durable acceptance, public behavior, or scope"
+    ),
     surfaceAudience: "internal" as const,
     workVisibility: "internal" as const,
     affectedLayer: "focused repair",
@@ -870,7 +936,18 @@ export function selectNextBestStep(
           ...normalImplementationMetadata(
             "连续治理后先确认项目价值方向，避免一直做内部工程而忘记用户或操作者能感受到什么。",
             "operator",
-            "operator_visible"
+            "operator_visible",
+            "skip-daily",
+            "governance",
+            {
+              diagnosticStreakCount: adaptiveSignals.diagnosticStreakCount,
+              concreteNextStep: concreteNextStep(
+                "project value-loop checkpoint",
+                "decide whether to continue engineering depth or shift toward concrete project capability/value",
+                "confirm the next accepted action has target, objective, verification, and stop gate",
+                "stop if value sources conflict or the next action changes route, scope, public behavior, provider/defaults, release, or destructive behavior"
+              )
+            }
           )
         }
       ),
@@ -884,7 +961,11 @@ export function selectNextBestStep(
           {
             nextStepKind: "work-session-continue",
             ...normalImplementationMetadata(
-              "已接受的实现路径继续推进，不因为提醒机制而重新打断。"
+              "已接受的实现路径继续推进，不因为提醒机制而重新打断。",
+              "internal",
+              "internal",
+              "skip-daily",
+              "capability"
             )
           }
         ),
@@ -900,6 +981,9 @@ export function selectNextBestStep(
   }
 
   const surfaceMetadata = resolveSurfaceMetadata(adaptiveSignals);
+  const primaryWorkType = adaptiveSignals.workType ?? "capability";
+  const diagnosticSupportCapability =
+    adaptiveSignals.diagnosticSupportsCapability?.trim();
   const canBundle =
     adaptiveSignals.workBundleCandidate &&
     (adaptiveSignals.workBundleActionCount ?? 1) <= 4;
@@ -917,6 +1001,8 @@ export function selectNextBestStep(
       "这是一个不声明 durable phase acceptance 的窄修复；下一步应做 focused change 和 narrow verification。"
     : adaptiveSignals.previousGapCheckSelectedImplementationPath
     ? "上一轮 gap check 已经选出实现路径，且当前没有失败验证、范围变化或 audit stop；下一步应该进入实现，而不是再做一次 gap check。"
+    : primaryWorkType === "diagnostic" && diagnosticSupportCapability
+    ? `这轮诊断只作为开发者观察线索，目的是支撑“${diagnosticSupportCapability}”；不会把证据报告本身当成产品能力。`
     : canBundle
     ? "下一组动作仍在同一 work bundle 内，适合用 Progress Card 连续推进，而不是拆成新的 phase approval。"
     : "这是当前活跃项目里价值最高、且没有被阻塞的下一步。";
@@ -938,7 +1024,27 @@ export function selectNextBestStep(
             ...normalImplementationMetadata(
               "当前已接受的实现链可以继续推进到自然停点，而不是重新包装成新阶段。",
               surfaceMetadata.surfaceAudience,
-              surfaceMetadata.workVisibility
+              surfaceMetadata.workVisibility,
+              "skip-daily",
+              primaryWorkType,
+              {
+                diagnosticSupportCapability,
+                diagnosticStreakCount: adaptiveSignals.diagnosticStreakCount,
+                diagnosticBudgetOverrideReason:
+                  adaptiveSignals.diagnosticBudgetOverrideReason,
+                concreteNextStep: concreteNextStep(
+                  primaryWorkType === "diagnostic"
+                    ? "diagnostic evidence / fixture surface"
+                    : "current accepted implementation surface",
+                  primaryWorkType === "diagnostic" && diagnosticSupportCapability
+                    ? `support the concrete capability: ${diagnosticSupportCapability}`
+                    : "continue the accepted project capability toward a natural verification point",
+                  primaryWorkType === "diagnostic"
+                    ? "run focused fixture, mock, or evidence checks that prove the observation path"
+                    : "run the relevant focused checks for the touched package or contract",
+                  "stop for public/user-facing semantics, provider/default changes, destructive action, failed verification, stale truth, or release/merge work"
+                )
+              }
             )
           }
         : undefined

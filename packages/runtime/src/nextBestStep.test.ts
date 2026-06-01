@@ -566,6 +566,10 @@ describe("selectNextBestStep", () => {
     expect(result.primary.writebackTier).toBe("evidence-only");
     expect(result.primary.verificationLevel).toBe("narrow");
     expect(result.primary.outputBudget).toBe("lite");
+    expect(result.primary.workType).toBe("maintenance");
+    expect(result.primary.concreteNextStep?.target).toBe(
+      "focused changed surface"
+    );
     expect(result.primary.capabilityTranslation).toContain("小修复");
   });
 
@@ -587,6 +591,7 @@ describe("selectNextBestStep", () => {
     expect(result.primary.operatingMode).toBe("full-governance");
     expect(result.primary.writebackTier).toBe("committed-truth");
     expect(result.primary.outputBudget).toBe("audit");
+    expect(result.primary.workType).toBe("governance");
     expect(result.primary.reason).toContain("缺少 operating mode / writeback tier");
   });
 
@@ -775,7 +780,84 @@ describe("selectNextBestStep", () => {
     expect(result.primary.outputShape).toBe("progress-card");
     expect(result.primary.rolePacketPolicy).toBe("skip-daily");
     expect(result.primary.writebackStatusVisibility).toBe("optional");
+    expect(result.primary.workType).toBe("capability");
+    expect(result.primary.concreteNextStep?.target).toBe(
+      "current accepted implementation surface"
+    );
     expect(result.primary.surfaceAudience).toBe("developer");
+  });
+
+  it("classifies diagnostic work supporting a named capability without exposing it as a stop gate", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        workType: "diagnostic",
+        diagnosticStreakCount: 2,
+        diagnosticSupportsCapability: "runtime provider compatibility matrix"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.workType).toBe("diagnostic");
+    expect(result.primary.diagnosticStreakCount).toBe(2);
+    expect(result.primary.diagnosticSupportCapability).toBe(
+      "runtime provider compatibility matrix"
+    );
+    expect(result.primary.concreteNextStep?.target).toBe(
+      "diagnostic evidence / fixture surface"
+    );
+    expect(result.primary.concreteNextStep?.objective).toContain(
+      "runtime provider compatibility matrix"
+    );
+    expect(result.primary.reason).toContain("开发者观察线索");
+  });
+
+  it("turns a third diagnostic slice without an override into a value checkpoint", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        workType: "diagnostic",
+        diagnosticStreakCount: 3,
+        diagnosticSupportsCapability: "runtime provider compatibility matrix"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("open-current-phase");
+    expect(result.primary.nextStepKind).toBe("value-heartbeat");
+    expect(result.primary.workType).toBe("governance");
+    expect(result.primary.diagnosticStreakCount).toBe(3);
+  });
+
+  it("allows diagnostic budget override only when the gate reason is named", () => {
+    const result = selectNextBestStep(
+      baseState,
+      undefined,
+      null,
+      undefined,
+      undefined,
+      null,
+      {
+        workType: "diagnostic",
+        diagnosticStreakCount: 3,
+        diagnosticSupportsCapability: "release regression matrix",
+        diagnosticBudgetOverrideReason: "release gate"
+      }
+    );
+
+    expect(result.primary.actionId).toBe("advance-phase");
+    expect(result.primary.workType).toBe("diagnostic");
+    expect(result.primary.diagnosticBudgetOverrideReason).toBe("release gate");
+    expect(result.primary.nextStepKind).toBe("work-session-continue");
   });
 
   it("turns an exhausted rolling bundle into a value checkpoint", () => {

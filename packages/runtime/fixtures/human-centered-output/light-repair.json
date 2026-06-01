@@ -14,6 +14,13 @@
     "outputShape": "progress-card",
     "rolePacketPolicy": "skip-daily",
     "writebackStatusVisibility": "omit",
+    "workType": "maintenance",
+    "concreteNextStep": {
+      "target": "focused changed surface",
+      "objective": "小修复只需要证明局部行为正确，不把它升级成完整阶段验收。",
+      "verification": "run narrow verification for the touched surface",
+      "stopCondition": "stop if the repair changes durable acceptance, public behavior, or scope"
+    },
     "surfaceAudience": "internal",
     "workVisibility": "internal"
   },

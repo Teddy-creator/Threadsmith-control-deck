@@ -184,6 +184,25 @@ const checks = [
   },
   {
     file: "SKILL.md",
+    label: "concrete value loop is documented",
+    patterns: [
+      /### Concrete Value Loop/,
+      /target: file group, module, command surface, artifact, or first inspection area/,
+      /Do not output only a phase name, "continue optimization", "do evidence review",\s+or "improve quality"/,
+      /Educational interrupts come first/,
+      /confusion question\s+itself is not continuation approval/,
+      /Primary work-type priority/,
+      /project capability with user-visible, operator-visible, developer-visible, or\s+clear internal platform value/,
+      /the third consecutive diagnostic slice must trigger a concrete capability\s+recommendation or a value checkpoint/,
+      /ordinary regression confidence counts against the budget/,
+      /provider \/ integration probes are compatibility evidence/,
+      /failed, incompatible, or blocked evidence must be stated directly/,
+      /Context-only commits should be rare/,
+      /Recommendation is not approval/
+    ]
+  },
+  {
+    file: "SKILL.md",
     label: "architecture layer explanation is explicit",
     patterns: [
       /架构\/流程缺口/,
@@ -235,6 +254,23 @@ const checks = [
       /capability-first wording/,
       /what it means in plain operator language/,
       /already user-facing or still only an internal foundation/
+    ]
+  },
+  {
+    file: "references/action-contracts.md",
+    label: "concrete value loop action rules are documented",
+    patterns: [
+      /## Concrete Value Loop Rule/,
+      /target, objective, verification, and a compact stop condition/,
+      /Do not\s+output only a phase name, "continue optimization", "do evidence review", or\s+"improve quality"/,
+      /Educational interrupts take precedence over execution/,
+      /question itself as continuation approval/,
+      /Primary work-type priority/,
+      /project capability with user-visible, operator-visible, developer-visible, or\s+clear internal platform value/,
+      /third consecutive diagnostic slice must trigger a concrete capability\s+recommendation or a value checkpoint/,
+      /ordinary regression confidence counts against the budget/,
+      /provider \/ integration probes are compatibility evidence/,
+      /Recommendation is not approval/
     ]
   },
   {
@@ -524,6 +560,11 @@ const checks = [
       /output shape/,
       /role packet policy/,
       /writeback status visibility/,
+      /work type: `capability`, `diagnostic`, `governance`, `maintenance`, or\s+`verification`/,
+      /diagnostic streak count/,
+      /diagnostic support capability/,
+      /Work type selection priority/,
+      /New metadata fields must\s+be optional or have safe defaults/,
       /heartbeat-compatible closeout evidence/,
       /valueHeartbeatShown/,
       /phase history as the long-term counter source/,
@@ -536,6 +577,17 @@ const checks = [
       /operatorExplanationStyle/,
       /Timestamp rule/,
       /new-write-only UTC ISO 8601/
+    ]
+  },
+  {
+    file: "references/role-contracts.md",
+    label: "concrete value-loop writeback is documented",
+    patterns: [
+      /Concrete value-loop writeback/,
+      /standalone `.threadsmith` updates are reserved/,
+      /context-only commit changes only\s+`.threadsmith` state, handoff artifacts, or evidence summaries/s,
+      /minor stale context can use current-context refresh/,
+      /contradictory or\s+execution-affecting stale truth uses recovery/s
     ]
   },
   {
